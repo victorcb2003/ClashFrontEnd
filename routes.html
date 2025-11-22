@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Liste des routes API</title>
+  <style>
+    :root{
+      --bg:#f7f8fb;
+      --card:#ffffff;
+      --muted:#6b7280;
+      --accent:#0ea5a4;
+      --border:#e6e9ef;
+      --shadow: 0 6px 18px rgba(15,23,42,0.06);
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    body{
+      margin:0;
+      padding:32px;
+      background:var(--bg);
+      color:#0f172a;
+    }
+    .container{
+      max-width:1100px;
+      margin:0 auto;
+    }
+    header{
+      margin-bottom:20px;
+    }
+    h1{
+      margin:0 0 6px 0;
+      font-size:1.6rem;
+    }
+    p.lead{
+      margin:0;
+      color:var(--muted);
+      font-size:0.95rem;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit,minmax(320px,1fr));
+      gap:20px;
+      margin-top:24px;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:16px;
+      box-shadow:var(--shadow);
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:0.95rem;
+    }
+    thead th{
+      text-align:left;
+      font-weight:600;
+      padding:10px 8px;
+      border-bottom:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(14,165,164,0.03), transparent);
+    }
+    tbody td{
+      padding:10px 8px;
+      border-bottom:1px dashed var(--border);
+      vertical-align:top;
+    }
+    .method{
+      font-weight:700;
+      padding:6px 10px;
+      border-radius:8px;
+      display:inline-block;
+      text-transform:uppercase;
+      font-size:0.78rem;
+      letter-spacing:0.03em;
+    }
+    .POST{ background:#e6fffa; color:#065f5b; }
+    .GET { background:#eff6ff; color:#1e3a8a; }
+    .PUT { background:#fff7ed; color:#7c2d12; }
+    .DELETE { background:#ffeff0; color:#7f1d1d; }
+
+    .endpoint{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;
+      font-size:0.92rem;
+      color:#0b1220;
+      word-break:break-all;
+    }
+
+    footer{
+      margin-top:20px;
+      color:var(--muted);
+      font-size:0.9rem;
+      text-align:center;
+    }
+
+    @media (max-width:520px){
+      body{ padding:16px; }
+      thead th:last-child, tbody td:last-child{ display:block; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Documentation — Routes API</h1>
+    </header>
+    <a href ="./home">home</a>
+    <div class="grid">
+
+      <!-- Équipe -->
+      <section class="card" aria-labelledby="equipe-title">
+        <h2 id="equipe-title">Équipe — <small>/api/equipe</small></h2>
+        <table>
+          <thead>
+            <tr><th>Méthode</th><th>Endpoint</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="method POST">POST</span></td><td class="endpoint">/api/equipe/addJoueur</td></tr>
+            <tr><td><span class="method DELETE">DELETE</span></td><td class="endpoint">/api/equipe/removeJoueur</td></tr>
+            <tr><td><span class="method PUT">PUT</span></td><td class="endpoint">/api/equipe/rename</td></tr>
+            <tr><td><span class="method POST">POST</span></td><td class="endpoint">/api/equipe/create</td></tr>
+            <tr><td><span class="method GET">GET</span></td><td class="endpoint">/api/equipe/info/:id</td></tr>
+            <tr><td><span class="method GET">GET</span></td><td class="endpoint">/api/equipe/findAll</td></tr>
+            <tr><td><span class="method DELETE">DELETE</span></td><td class="endpoint">/api/equipe/delete</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Groupe -->
+      <section class="card" aria-labelledby="groupe-title">
+        <h2 id="groupe-title">Groupe — <small>/api/groupe</small></h2>
+        <table>
+          <thead>
+            <tr><th>Méthode</th><th>Endpoint</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="method POST">POST</span></td><td class="endpoint">/api/groupe/add</td></tr>
+            <tr><td><span class="method DELETE">DELETE</span></td><td class="endpoint">/api/groupe/remove</td></tr>
+            <tr><td><span class="method PUT">PUT</span></td><td class="endpoint">/api/groupe/rename</td></tr>
+            <tr><td><span class="method POST">POST</span></td><td class="endpoint">/api/groupe/create</td></tr>
+            <tr><td><span class="method GET">GET</span></td><td class="endpoint">/api/groupe/info/:id</td></tr>
+            <tr><td><span class="method DELETE">DELETE</span></td><td class="endpoint">/api/groupe/delete</td></tr>
+            <tr><td><span class="method POST">POST</span></td><td class="endpoint">/api/groupe/messageCreate</td></tr>
+            <tr><td><span class="method GET">GET</span></td><td class="endpoint">/api/groupe/messageFindAll/:id</td></tr>
+            <tr><td><span class="method PUT">PUT</span></td><td class="endpoint">/api/groupe/messageUpdate</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Joueur -->
+      <section class="card" aria-labelledby="joueur-title">
+        <h2 id="joueur-title">Joueur — <small>/api/joueur</small></h2>
+        <table>
+          <thead>
+            <tr><th>Méthode</th><th>Endpoint</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="method POST">POST</span></td><td class="endpoint">/api/joueur/create</td></tr>
+            <tr><td><span class="method GET">GET</span></td><td class="endpoint">/api/joueur/findAll</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- User -->
+      <section class="card" aria-labelledby="user-title">
+        <h2 id="user-title">User — <small>/api/user</small></h2>
+        <table>
+          <thead>
+            <tr><th>Méthode</th><th>Endpoint</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="method POST">POST</span></td><td class="endpoint">/api/user/login</td></tr>
+            <tr><td><span class="method POST">POST</span></td><td class="endpoint">/api/user/test</td></tr>
+            <tr><td><span class="method GET">GET</span></td><td class="endpoint">/api/user/info</td></tr>
+            <tr><td><span class="method PUT">PUT</span></td><td class="endpoint">/api/user/update</td></tr>
+            <tr><td><span class="method DELETE">DELETE</span></td><td class="endpoint">/api/user/delete/:id</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Match -->
+      <section class="card" aria-labelledby="match-title">
+        <h2 id="match-title">Match — <small>/api/match</small></h2>
+        <table>
+          <thead>
+            <tr><th>Méthode</th><th>Endpoint</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="method PUT">PUT</span></td><td class="endpoint">/api/match/update</td></tr>
+            <tr><td><span class="method GET">GET</span></td><td class="endpoint">/api/match/findAll/:id</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Message -->
+      <section class="card" aria-labelledby="message-title">
+        <h2 id="message-title">Message — <small>/api/message</small></h2>
+        <table>
+          <thead>
+            <tr><th>Méthode</th><th>Endpoint</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="method POST">POST</span></td><td class="endpoint">/api/message/create</td></tr>
+            <tr><td><span class="method PUT">PUT</span></td><td class="endpoint">/api/message/update</td></tr>
+            <tr><td><span class="method DELETE">DELETE</span></td><td class="endpoint">/api/message/delete/:id</td></tr>
+            <tr><td><span class="method GET">GET</span></td><td class="endpoint">/api/message/findAll/:id</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Organisateur -->
+      <section class="card" aria-labelledby="organisateur-title">
+        <h2 id="organisateur-title">Organisateur — <small>/api/organisateur</small></h2>
+        <table>
+          <thead>
+            <tr><th>Méthode</th><th>Endpoint</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="method POST">POST</span></td><td class="endpoint">/api/organisateur/create</td></tr>
+            <tr><td><span class="method GET">GET</span></td><td class="endpoint">/api/organisateur/findAll</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Selectionneur -->
+      <section class="card" aria-labelledby="selectionneur-title">
+        <h2 id="selectionneur-title">Sélectionneur — <small>/api/selectionneur</small></h2>
+        <table>
+          <thead>
+            <tr><th>Méthode</th><th>Endpoint</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="method POST">POST</span></td><td class="endpoint">/api/selectionneur/create</td></tr>
+            <tr><td><span class="method GET">GET</span></td><td class="endpoint">/api/selectionneur/findAll</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Tournois -->
+      <section class="card" aria-labelledby="tournois-title">
+        <h2 id="tournois-title">Tournois — <small>/api/tournois</small></h2>
+        <table>
+          <thead>
+            <tr><th>Méthode</th><th>Endpoint</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="method POST">POST</span></td><td class="endpoint">/api/tournois/create</td></tr>
+            <tr><td><span class="method PUT">PUT</span></td><td class="endpoint">/api/tournois/update</td></tr>
+            <tr><td><span class="method GET">GET</span></td><td class="endpoint">/api/tournois/findAll</td></tr>
+            <tr><td><span class="method DELETE">DELETE</span></td><td class="endpoint">/api/tournois/delete/:id</td></tr>
+            <tr><td><span class="method POST">POST</span></td><td class="endpoint">/api/tournois/addEquipe</td></tr>
+            <tr><td><span class="method DELETE">DELETE</span></td><td class="endpoint">/api/tournois/removeEquipe</td></tr>
+            <tr><td><span class="method POST">POST</span></td><td class="endpoint">/api/tournois/start</td></tr>
+            <tr><td><span class="method GET">GET</span></td><td class="endpoint">/api/tournois/info/:id</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+    </div>
+
+  </div>
+</body>
+</html>
