@@ -19,6 +19,8 @@
     <label for="confirmPassword">confirmPassword</label>"
     <input type="password" id="confirmPassword" name="confirmPassword" required><br><br>
     <button id="confirmBtn">Confirm</button>
+
+    <pre><code id="result"></code></pre>
 </body>
 <script>
     const urlParams = new URLSearchParams(window.location.search);
@@ -45,7 +47,7 @@
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data);
+            document.getElementById('result').innerText = JSON.stringify(data, null, 2);
         })
     });
 </script>
