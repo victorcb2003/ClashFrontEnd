@@ -7,7 +7,7 @@
 </head>
 <body>
     <nav>
-        <a href="Form.html">Form</a>
+        <a href="register.html">Form</a>
         <a href="login.html">Login</a>"
     </nav>
 
@@ -38,7 +38,7 @@
         const nom = document.getElementById('nom').value;
         const email = document.getElementById('email').value;
 
-        fetch('http://clashofleagues.fr/api/form/', {
+        fetch('https://clashofleagues.fr/api/form/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

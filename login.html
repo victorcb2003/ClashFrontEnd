@@ -6,8 +6,8 @@
     <title>Document</title>
 </head>
 <body>
-    <nav>
-        <a href="Form.html">Form</a>
+     <nav>
+        <a href="register.html">Form</a>
         <a href="login.html">Login</a>"
     </nav>
 
@@ -33,7 +33,7 @@
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
 
-        fetch('http://clashofleagues.fr/api/user/login', {
+        fetch('https://clashofleagues.fr/api/user/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
