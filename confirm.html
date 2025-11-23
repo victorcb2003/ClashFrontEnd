@@ -10,5 +10,43 @@
         <a href="register.html">Form</a>
         <a href="login.html">Login</a>"
     </nav>
+
+    <p id="token"></p>
+
+    <label for="password">password</label>"
+    <input type="password" id="password" name="password" required><br><br>
+
+    <label for="confirmPassword">confirmPassword</label>"
+    <input type="password" id="confirmPassword" name="confirmPassword" required><br><br>
+    <button id="confirmBtn">Confirm</button>
 </body>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    document.getElementById('token').innerText = `Token: ${token}`;
+
+    const confirmBtn = document.getElementById('confirmBtn');
+
+    confirmBtn.addEventListener('click', async () => {
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        if (password !== confirmPassword) {
+            alert("Passwords do not match!");
+            return;
+        }
+
+        fetch('https://clashofleagues.fr/api/form/confirm', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ token, password }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        })
+    });
+</script>
 </html>
