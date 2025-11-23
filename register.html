@@ -24,14 +24,15 @@
 
         <label for="type">type:</label>
 
-        <input type="submit" value="Login">
         <select id="type" name="type">
-            <option value="Joueur">Player</option>
-            <option value="Selectionneur">Coach</option>
-            <option value="Organisateur">Manager</option>
+            <option value="Joueurs">Joueur</option>
+            <option value="Selectionneurs">Selectionneur</option>
+            <option value="Organisateurs">Organisateur</option>
         </select><br><br>
 
-        <p id="message"></p>
+        <input type="submit" value="Login">
+
+         <pre><code id="result"></code></pre>
     </form>
 </body>
 <script>
@@ -45,7 +46,6 @@
         const nom = document.getElementById('nom').value;
         const email = document.getElementById('email').value;
         const type = document.getElementById('type').value;
-        type+="s"
 
         fetch('https://clashofleagues.fr/api/form/', {
             method: 'POST',
@@ -56,7 +56,7 @@
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data);
+            document.getElementById('result').innerText = JSON.stringify(data, null, 2);
         })
     });
 </script>
