@@ -12,10 +12,10 @@
 <script>
     fetch('https://clashofleagues.fr/api/user/test', {
         method: 'GET',
+        credentials: 'include',
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
         },
-        credentials: 'include' // Include cookies in the request
     })
     .then(response => response.json())
     .then(data => {

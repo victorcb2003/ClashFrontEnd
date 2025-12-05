@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClashOfLeagues</title>
+</head>
+<body>
+     <nav>
+        <a href="register.html">Form</a>
+        <a href="login.html">Login</a>
+    </nav>
+    <button>Logout</button>
+
+    <pre><code id="result"></code></pre>
+</body>
+<script>
+    const logout = document.querySelector("button")
+
+    logout.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        fetch('https://clashofleagues.fr/api/user/logout', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('result').innerText = JSON.stringify(data, null, 2);
+        })
+    })
+</script>
+</html>
