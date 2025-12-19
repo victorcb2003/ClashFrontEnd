@@ -1,11 +1,15 @@
-import './App.css'
+import { Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import About from "./pages/Login";
 
 function App() {
 
   return (
-    <p className='text-red-800'> Salut !
-    </p>
-  )
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<About />} />
+    </Routes>
+  );
 }
 
 export default App
