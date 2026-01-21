@@ -1,18 +1,20 @@
 import { useNavigate } from "react-router-dom"
-import Header from "../components/Header"
+import Sidebar from "../components/Sidebar.jsx"
 
 function Home() {
-
     const navigate = useNavigate()
 
     return (
-        <>
-            <span className="background" />
-            <Header />
-            <p className='text-red-800'> Salut !</p>
-            <button onClick={() => navigate("/login")}>incroyable</button>
-            <button onClick={() => navigate("/register")}>incroyable2</button>
-        </>
+        <div className="flex">
+            <Sidebar />
+            <div className="flex-1 items-center justify-center flex flex-col h-screen">
+                <span className="background" />
+                <p className='text-red-800'>Cieleuhhhhhhhhh</p>
+                <button onClick={() => navigate("/login")}>Magicienneuhhhhhhhhhhh</button>
+                <br />
+                <button onClick={() => navigate("/register")}>Parisienneuhhhhhhhhhh</button>
+            </div>
+        </div>
     )
 }
 
