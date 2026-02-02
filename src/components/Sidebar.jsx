@@ -12,6 +12,7 @@ import {
   FaSignInAlt
 } from 'react-icons/fa';
 import { IoMailSharp } from "react-icons/io5";
+import { getUser, logout } from '../services/authService';
 
 function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,9 +21,8 @@ function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
 
-
   useEffect(() => {
-    if (!["/login", "/register", "/", "/confirm", "/home"].includes(location.pathname)) {
+    if (!["/login", "/register", "/", "/confirm"].includes(location.pathname)) {
       fetchData()
     }
   }, [])
@@ -46,8 +46,13 @@ function Sidebar() {
     { icon: FaGamepad, text: 'Matches', path: './' },
   ];
 
-  const handleLogout = () => {
-    console.log('Déconnexion');
+  const handleLogout = async () => {
+    try {
+      const response = await logout();
+      console.log(response)
+    } catch (err) {
+      console.log(err)
+    }
     navigate('/login');
   };
 
@@ -80,9 +85,7 @@ function Sidebar() {
                 >
                   <Icon className="text-xl min-w-[20px]" />
                   {isOpen && (
-                    <span className="ml-4 text-base font-medium whitespace-nowrap">
-                      {item.text}
-                    </span>
+                    <span className="ml-4 text-base font-medium whitespace-nowrap">{item.text}</span>
                   )}
                 </div>
               );
@@ -92,8 +95,7 @@ function Sidebar() {
         {isConnected ?
           <div
             onClick={handleLogout}
-            className={`flex items-center h-14 cursor-pointer transition-all text-orange-700 hover:bg-red-100 hover:text-red-600 border-t border-orange-300 ${isOpen ? 'px-6' : 'justify-center'
-              }`}
+            className={`flex items-center h-14 cursor-pointer transition-all text-orange-700 hover:bg-red-100 hover:text-red-600 border-t border-orange-300 ${isOpen ? 'px-6' : 'justify-center'}`}
           >
             <FaSignOutAlt className="text-xl min-w-[20px]" />
             {isOpen && (

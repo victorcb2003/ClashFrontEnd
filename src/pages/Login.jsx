@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { login } from "../services/authService";
 import Sidebar from "../components/Sidebar";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
 
@@ -17,6 +19,7 @@ function Login() {
                 password: password,
             })
             console.log(response)
+            navigate('/home')
         } catch (error) {
             console.error(error)
         }

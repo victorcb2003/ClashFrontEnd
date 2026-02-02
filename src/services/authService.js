@@ -1,9 +1,10 @@
 export const baseUrl = "https://clashofleagues.fr/api"
-import axios from "axios";
+import axios from "axios"
+axios.defaults.withCredentials = true
 
-export const getUser = async (userId) => {
+export const getUser = async () => {
     try {
-        const response = await axios.get(`${baseUrl}/user/${userId}`)
+        const response = await axios.get(`${baseUrl}/user/me`)
 
         return response.data
     } catch (error) {
@@ -30,6 +31,17 @@ export const login = async (data) => {
         return response.data
     } catch (error) {
         console.error("Erreur lors de la connexion :", error)
+        throw error
+    }
+}
+
+export const logout = async () => {
+    try {
+        const response = await axios.get(`${baseUrl}/user/logout`)
+
+        return response.data
+    } catch (error) {
+        console.error("Erreur lors de la récupération du user :", error)
         throw error
     }
 }
