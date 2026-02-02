@@ -10,12 +10,7 @@ function Header() {
     const navigate = useNavigate()
     const location = useLocation()
 
-    useEffect(() => {
-        if (!["/login", "/register", "/", "/confirm", "/home"].includes(location.pathname)) {
-            setCanBurger(false)
-            fetchData()
-        }
-    }, [])
+    
 
     const fetchData = async () => {
         try {

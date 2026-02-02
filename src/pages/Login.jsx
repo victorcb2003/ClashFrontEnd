@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Header from "../components/Header"
 import { login } from "../services/authService";
+import Sidebar from "../components/Sidebar";
 
 function Login() {
 
@@ -27,8 +27,8 @@ function Login() {
             <div className="absolute bottom-0 top-0 w-full z-0 pointer-events-none">
                 <img src="/Clashofleague2.png" alt="" className="fixed w-full h-full object-cover blur-md opacity-50 z-0" />
             </div>
+            <Sidebar />
             <div className="z-10 opacity-100 relative h-full">
-                <Header />
                 <div className="h-full flex justify-center mt-36">
                     <form onSubmit={handleSubmit} className="h-[400px] w-[350px] rounded-2xl bg-orange-50 border-2 border-orange-300 p-8 flex flex-col gap-4 justify-center items-center">
                         <p className="text-2xl text-orange-600 font-bold underline">Connexion</p>

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
-import Header from "../components/Header"
 import { useState } from "react";
 import { formSignUp } from "../services/authService";
+import Sidebar from "../components/Sidebar";
 
 function Register() {
 
@@ -51,7 +51,7 @@ function Register() {
                 <img src="/Clashofleague2.png" alt="" className="fixed w-full h-full object-cover blur-md opacity-50 z-0" />
             </div>
             <div className="z-10 opacity-100 relative h-full">
-                <Header />
+                <Sidebar />
                 <div className="h-full flex justify-center mt-16">
                     <div className="h-[550px] w-[350px] rounded-2xl bg-orange-50 border-2 border-orange-300 p-8 flex flex-col gap-8 justify-center items-center">
                         <p className="text-2xl text-orange-600 font-bold underline">Inscription</p>
