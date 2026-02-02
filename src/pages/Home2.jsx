@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom"
 import Calendar from "../components/Calendar"
 import MatchSummaryCard from "../components/MatchSummaryCard"
 import NewsCard from "../components/NewsCard"
+import Sidebar from "../components/Sidebar"
 
 function Home() {
 
@@ -13,7 +14,8 @@ function Home() {
                 <div className="absolute bottom-0 top-0 w-full z-0 pointer-events-none">
                     <img src="/Clashofleague2.png" alt="" className="fixed w-full h-full object-cover blur-md opacity-50 z-0" />
                 </div>
-                <div className="z-10 opacity-100 relative h-full w-full">
+                <Sidebar />
+                <div className="z-10 opacity-100 relative h-full w-full pl-16">
                     <div className="flex flex-col p-4 w-full">
                         <Calendar className="p-2" />
                         <div className="flex justify-center opacity-25">
