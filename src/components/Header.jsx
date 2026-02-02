@@ -6,11 +6,13 @@ import { getUser } from "../services/authService";
 function Header() {
 
     const [user, setUser] = useState(null)
+    const [canBurger, setCanBurger] = useState(true)
     const navigate = useNavigate()
     const location = useLocation()
 
     useEffect(() => {
-        if (!["/login", "/register"].includes(location.pathname)) {
+        if (!["/login", "/register", "/", "/confirm", "/home"].includes(location.pathname)) {
+            setCanBurger(false)
             fetchData()
         }
     }, [])
@@ -27,7 +29,7 @@ function Header() {
     return (
         <div className="h-16 bg-orange-100 border-b border-orange-300 flex justify-between items-center px-8 w-full z-10">
             <div> {/* Left */}
-                { !["/login", "/register"].includes(location.pathname) &&
+                { canBurger &&
                     <RxHamburgerMenu className="text-orange-600 p-1.5 rounded-full bg-orange-50 border-orange-400 w-[36px] h-[36px] border-2 cursor-pointer transition-all hover:text-orange-100 hover:bg-orange-300 hover:border-orange-500 hover:rotate-90" />
                 }
             </div>
