@@ -10,7 +10,7 @@ function Home() {
 
     return (
         <>
-            <div className="relative w-full bg-orange-50">
+            <div className="relative w-full bg-orange-50 min-h-[100vh]">
                 <div className="absolute bottom-0 top-0 w-full z-0 pointer-events-none">
                     <img src="/Clashofleague2.png" alt="" className="fixed w-full h-full object-cover blur-md opacity-50 z-0" />
                 </div>
