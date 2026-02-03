@@ -42,7 +42,7 @@ function Sidebar() {
     { icon: FaCalendarAlt, text: 'Calendrier', path: './' },
     { icon: FaNewspaper, text: 'Actus', path: './' },
     { icon: FaUsers, text: 'Équipe', path: './' },
-    { icon: FaTrophy, text: 'Tournois', path: './' },
+    { icon: FaTrophy, text: 'Tournois', path: '/tournois' },
     { icon: FaGamepad, text: 'Matches', path: './' },
   ];
 
@@ -66,7 +66,7 @@ function Sidebar() {
         className={`h-screen bg-orange-100 border-r border-orange-300 text-orange-800 fixed left-0 top-0 transition-all duration-300 ease-in-out z-20 flex flex-col ${isOpen ? 'w-64' : 'w-16'}`}>
         <div className={`flex items-center h-14 cursor-pointer transition-all text-orange-900 hover:bg-red-100 hover:text-red-600 border-t border-orange-300 ${isOpen ? 'px-6' : 'px-5'}`} >
           <RxHamburgerMenu className={`text-xl min-w-[20px] transition-all duration-300 ${isOpen ? "rotate-90" : ""}`} />
-          <span className={`ml-4 text-xl font-medium whitespace-nowrap transition-all  ${isOpen ? "opacity-100" : "opacity-0 "}`}>Clash of League</span>
+          <span className={`ml-4 text-xl font-medium whitespace-nowrap transition-all pointer-events-none ${isOpen ? "opacity-100" : "opacity-0 "}`}>Clash of League</span>
         </div>
         <nav className="flex-1 py-4">
           {isConnected &&
@@ -81,12 +81,10 @@ function Sidebar() {
                   className={`flex items-center h-14 cursor-pointer transition-all ${active
                     ? 'bg-orange-500 text-white'
                     : 'text-orange-700 hover:bg-orange-200 hover:text-orange-800'
-                    } ${isOpen ? 'px-6' : 'justify-center'}`}
+                    } ${isOpen ? 'px-6' : 'px-5'}`}
                 >
                   <Icon className="text-xl min-w-[20px]" />
-                  {isOpen && (
-                    <span className="ml-4 text-base font-medium whitespace-nowrap">{item.text}</span>
-                  )}
+                    <span className={`ml-4 text-base font-medium whitespace-nowrap transition-all ${isOpen ? "opacity-100" : "opacity-0 "}`}>{item.text}</span>
                 </div>
               );
             })
@@ -95,14 +93,10 @@ function Sidebar() {
         {isConnected ?
           <div
             onClick={handleLogout}
-            className={`flex items-center h-14 cursor-pointer transition-all text-orange-700 hover:bg-red-100 hover:text-red-600 border-t border-orange-300 ${isOpen ? 'px-6' : 'justify-center'}`}
+            className={`flex items-center h-14 cursor-pointer transition-all text-orange-700 hover:bg-red-100 hover:text-red-600 border-t border-orange-300 ${isOpen ? 'px-6' : 'px-5'}`}
           >
             <FaSignOutAlt className="text-xl min-w-[20px]" />
-            {isOpen && (
-              <span className="ml-4 text-base font-medium whitespace-nowrap">
-                Déconnexion
-              </span>
-            )}
+              <span className={`ml-4 text-base font-medium whitespace-nowrap transition-all pointer-events-none ${isOpen ? "opacity-100" : "opacity-0  "}`}>Déconnexion</span>
           </div>
           :
           <>
@@ -111,14 +105,14 @@ function Sidebar() {
               className={`flex items-center h-14 cursor-pointer transition-all text-orange-700 hover:bg-red-100 hover:text-red-600 border-t border-orange-300 ${isOpen ? 'px-6' : 'px-5'}`}
             >
               <FaSignInAlt className="text-xl min-w-[20px]" />
-              <span className={`ml-4 text-base font-medium whitespace-nowrap transition-all  ${isOpen ? "opacity-100" : "opacity-0 "}`}>Connexion</span>
+              <span className={`ml-4 text-base font-medium whitespace-nowrap transition-all pointer-events-none ${isOpen ? "opacity-100" : "opacity-0 "}`}>Connexion</span>
             </div>
             <div
               onClick={() => navigate('/register')}
               className={`flex items-center h-14 cursor-pointer transition-all text-orange-700 hover:bg-red-100 hover:text-red-600 ${isOpen ? 'px-6' : 'px-5'}`}
             >
               <IoMailSharp className="text-xl min-w-[20px]" />
-              <span className={`ml-4 text-base font-medium whitespace-nowrap transition-all  ${isOpen ? "opacity-100" : "opacity-0 "}`}>S'inscrire</span>
+              <span className={`ml-4 text-base font-medium whitespace-nowrap transition-all pointer-events-none ${isOpen ? "opacity-100" : "opacity-0 "}`}>S'inscrire</span>
             </div>
           </>
         }
