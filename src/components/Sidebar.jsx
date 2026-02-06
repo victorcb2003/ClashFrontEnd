@@ -63,10 +63,17 @@ function Sidebar() {
         onMouseEnter={() => setIsOpen(true)}
         onMouseLeave={() => setIsOpen(false)}
         className={`h-screen bg-orange-100 border-r border-orange-300 text-orange-800 fixed left-0 top-0 transition-all duration-300 ease-in-out z-20 flex flex-col ${isOpen ? 'w-64' : 'w-16'}`}>
-        <div className={`flex items-center h-14 cursor-pointer transition-all text-orange-900 hover:bg-red-100 hover:text-red-600 border-t border-orange-300 ${isOpen ? 'px-6' : 'px-5'}`} >
-          <RxHamburgerMenu className={`text-xl min-w-[20px] transition-all duration-300 ${isOpen ? "rotate-90" : ""}`} />
-          <span className={`ml-4 text-xl font-medium whitespace-nowrap transition-all pointer-events-none ${isOpen ? "opacity-100" : "opacity-0 "}`}>Clash of League</span>
-        </div>
+        {isConnected ?
+          <div onClick={() => navigate('/home')} className={`flex items-center h-14 cursor-pointer transition-all text-orange-900 hover:bg-red-100 hover:text-red-600 border-t border-orange-300 ${isOpen ? 'px-6' : 'px-5'}`} >
+            <RxHamburgerMenu className={`text-xl min-w-[20px] transition-all duration-300 ${isOpen ? "rotate-90" : ""}`} />
+            <span className={`ml-4 text-xl font-medium whitespace-nowrap transition-all pointer-events-none ${isOpen ? "opacity-100" : "opacity-0 "}`}>Clash of League</span>
+          </div>
+          :
+          <div className={`flex items-center h-14 cursor-pointer transition-all text-orange-900 hover:bg-red-100 hover:text-red-600 border-t border-orange-300 ${isOpen ? 'px-6' : 'px-5'}`} >
+            <RxHamburgerMenu className={`text-xl min-w-[20px] transition-all duration-300 ${isOpen ? "rotate-90" : ""}`} />
+            <span className={`ml-4 text-xl font-medium whitespace-nowrap transition-all pointer-events-none ${isOpen ? "opacity-100" : "opacity-0 "}`}>Clash of League</span>
+          </div>
+        }
         <nav className="flex-1 py-4">
           {isConnected &&
             menuItems.map((item, index) => {
@@ -83,7 +90,7 @@ function Sidebar() {
                     } ${isOpen ? 'px-6' : 'px-5'}`}
                 >
                   <Icon className="text-xl min-w-[20px]" />
-                    <span className={`ml-4 text-base font-medium whitespace-nowrap transition-all ${isOpen ? "opacity-100" : "opacity-0 "}`}>{item.text}</span>
+                  <span className={`ml-4 text-base font-medium whitespace-nowrap transition-all ${isOpen ? "opacity-100" : "opacity-0 "}`}>{item.text}</span>
                 </div>
               );
             })
@@ -95,7 +102,7 @@ function Sidebar() {
             className={`flex items-center h-14 cursor-pointer transition-all text-orange-700 hover:bg-red-100 hover:text-red-600 border-t border-orange-300 ${isOpen ? 'px-6' : 'px-5'}`}
           >
             <FaSignOutAlt className="text-xl min-w-[20px]" />
-              <span className={`ml-4 text-base font-medium whitespace-nowrap transition-all pointer-events-none ${isOpen ? "opacity-100" : "opacity-0  "}`}>Déconnexion</span>
+            <span className={`ml-4 text-base font-medium whitespace-nowrap transition-all pointer-events-none ${isOpen ? "opacity-100" : "opacity-0  "}`}>Déconnexion</span>
           </div>
           :
           <>

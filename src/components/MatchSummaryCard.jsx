@@ -78,7 +78,7 @@ function MatchSummaryCard() {
                         <div className="flex mt-2 justify-center items-center">
                             <div className="relative">
                                 <div className="absolute right-0 bottom-0 -top-4">
-                                    <div className="flex flex-col text-gray-700 text-sm mr-4 h-[40px] overflow-y-scroll px-1 text-right w-[20vw]">
+                                    <div className="flex flex-col text-gray-700 text-sm mr-4 h-[40px] overflow-y-scroll px-1 text-right sm:w-[80px] xl:w-[20vw] md:w-[100px] lg:w-[15vw]">
                                         <p>Buteur 1 20:56</p>
                                     </div>
                                 </div>
@@ -98,7 +98,7 @@ function MatchSummaryCard() {
                             </div>
                             <div className="relative">
                                 <div className="absolute -top-4 bottom-0">
-                                    <div className="flex flex-col text-gray-700 text-sm ml-4 h-[40px] overflow-y-scroll px-1 w-[20vw]">
+                                    <div className="flex flex-col text-gray-700 text-sm ml-4 h-[60px] overflow-y-scroll px-1 sm:w-[80px] xl:w-[20vw] md:w-[100px] lg:w-[15vw]">
                                         <p>Buteur 1 20:56</p>
                                         <p>Buteur 2 20:56</p>
                                         <p>Buteur 3 20:56</p>
