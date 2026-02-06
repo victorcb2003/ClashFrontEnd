@@ -49,6 +49,7 @@ export default function Match() {
     }
 
     function addBut(id, n) {
+        console.log(id,n)
         setShowAddBut(n)
         setForm({ Equipe_id: id, User_id : 0, Type_but : 0, date_heure : "" })
     }
@@ -131,6 +132,28 @@ export default function Match() {
         showSuccess(response.data.message)
     }
 
+    function showError(errors) {
+        if (errors.length == 0) return
+        setTimer(null)
+        setError(errors)
+        setTimer(
+            setTimeout(() => {
+                setError(null)
+            }, 5000)
+        )
+    }
+
+    function showSuccess(sucess) {
+        if (success.length == 0) return
+        setTimer(null)
+        setError(success)
+        setTimer(
+            setTimeout(() => {
+                setError(null)
+            }, 5000)
+        )
+    }
+
     // Match
     useEffect(() => {
         (async () => {
@@ -202,6 +225,10 @@ export default function Match() {
             }
         })();
     }, [match])
+
+    useEffect(()=>{
+        console.log(showAddBut)
+    },[showAddBut])
 
     return (
         <>
@@ -344,11 +371,14 @@ export default function Match() {
                                                                 onChange={e => setForm({ ...form, date_heure: e.target.value })}
                                                             />
                                                             <input type="submit" />
+                                                            <button onClick={()=>setShowAddBut(false)}>
+                                                                <MdClose/>
+                                                            </button>
                                                         </form>
                                                     </td>
                                                 ) : (
                                                     <td>
-                                                        <button onClick={() => { addBut(equipe2.id, 1) }}>
+                                                        <button onClick={() => { addBut(equipe1.id, 1) }}>
                                                             <IoMdAdd />
                                                         </button>
                                                     </td>
@@ -395,7 +425,6 @@ export default function Match() {
                                                     <td>
                                                         <form onSubmit={(e) => handleSubmitBut(e)}>
                                                             <select
-                                                                value={form.User_id}
                                                                 defaultValue={"Selectionner un Joueur"}
                                                                 name="butteur"
                                                                 onChange={e => { setForm({ ...form, User_id: e.target.value }) }}
@@ -411,7 +440,6 @@ export default function Match() {
                                                             </select>
                                                             <select
                                                                 name="type"
-                                                                value={form.Type_But}
                                                                 onChange={e => setForm({ ...form, Type_But: e.target.value })}
                                                                 defaultValue={"Type de but"}
                                                             >
@@ -430,6 +458,9 @@ export default function Match() {
                                                                 onChange={(e) => {setForm({ ...form, date_heure: e.target.value })}}
                                                             />
                                                             <input type="submit" />
+                                                            <button onClick={()=>setShowAddBut(false)}>
+                                                                <MdClose/>
+                                                            </button>
                                                         </form>
                                                     </td>
                                                 ) : (
