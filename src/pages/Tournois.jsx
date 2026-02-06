@@ -28,9 +28,9 @@ function Tournois() {
     const fetchData = async () => {
         try {
             const user = await getUser()
-            setCurrentUser(user)
+            setCurrentUser(user.user[0])
             const response = await getTournaments()
-            filterTournaments(response, user)
+            filterTournaments(response, user.user[0])
             await fetchMatchesForTournaments(response)
         } catch (err) {
             console.log(err)
@@ -62,7 +62,7 @@ function Tournois() {
         const future = []
 
         tournamentsList.forEach(t => {
-            const isMine = t.Organisateurs[0].id === user?.id
+            const isMine = t.Organisateurs[0].id === user.id
             const startDate = new Date(t.date_debut)
 
             if (isMine) {
@@ -96,10 +96,6 @@ function Tournois() {
     const handleModal = () => {
         setModalOpen(prev => !prev)
     }
-
-    useEffect(() => {
-        console.log(modalDate)
-    }, [modalDate])
 
     return (
         <>
