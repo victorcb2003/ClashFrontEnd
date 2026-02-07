@@ -61,60 +61,38 @@ function MatchSummaryCard() {
         }
     }
 
-    return (
-        <>
-            {matches?.map((matche) => (
-                <div className="relative" key={matche.id}>
-                    <div className={`absolute border-l-4 border-t-4 border-r-4 px-4 py-2 border border-b-0 rounded-t-2xl w-full min-w-[380px] xl:min-w-[650px] inset-0 opacity-65 -z-10
-                        ${matche?.status == "win" ? "bg-green-50" : ""}
-                        ${matche?.status == "loose" ? "bg-red-50" : ""}
-                        ${matche?.status == "tie" ? "bg-gray-50" : ""}
-                        ${matche?.status == "win" ? "border-green-800" : ""}
-                        ${matche?.status == "loose" ? "border-red-800" : ""}
-                        ${matche?.status == "tie" ? "border-gray-800" : ""}`}
-                    />
-                    <div className={`px-4 py-2 z-10 rounded-t-2xl w-full min-w-[380px] xl:min-w-[650px]`}>
-                        <p>Nom de tournoi</p>
-                        <div className="flex mt-2 justify-center items-center">
-                            <div className="relative">
-                                <div className="absolute right-0 bottom-0 -top-4">
-                                    <div className="flex flex-col text-gray-700 text-sm mr-4 h-[40px] overflow-y-scroll px-1 text-right w-[20vw]">
-                                        <p>Buteur 1 20:56</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="flex flex-col">
-                                <div className="flex gap-2">
-                                    <img src="/Clashofleague.png" alt="equipe1" className="w-12" />
-                                    <p className="font-bold text-4xl">{matche?.score1}</p>
-                                </div>
-                            </div>
-                            <p className="font-bold text-4xl pb-4">-</p>
-                            <div className="flex flex-col">
-                                <div className="flex gap-2">
-                                    <p className="font-bold text-4xl">{matche?.score2}</p>
-                                    <img src="/Clashofleague.png" alt="equipe2" className="w-12" />
-                                </div>
-                            </div>
-                            <div className="relative">
-                                <div className="absolute -top-4 bottom-0">
-                                    <div className="flex flex-col text-gray-700 text-sm ml-4 h-[40px] overflow-y-scroll px-1 w-[20vw]">
-                                        <p>Buteur 1 20:56</p>
-                                        <p>Buteur 2 20:56</p>
-                                        <p>Buteur 3 20:56</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="flex justify-center gap-20 pb-4">
-                            <p className="text-lg w-1/2 text-right">{matche?.equipe1?.name}</p>
-                            <p className="text-lg w-1/2">{matche?.equipe2?.name}</p>
-                        </div>
-                    </div>
-                </div>
-            ))}
-        </>
-    )
+     return (
+    <div className="space-y-4">
+      {matches.map((m) => (
+        <div
+          key={m.id}
+          className={`backdrop-blur-md rounded-xl border p-4 shadow-lg text-white ${statusStyle(m.status)}`}
+        >
+          <p className="text-sm text-white/70 mb-2">Nom du tournoi</p>
+
+          <div className="flex justify-center items-center gap-6">
+            <div className="text-right w-1/3">{m.equipe1.name}</div>
+
+            <div className="flex items-center gap-3">
+              <img src="/Clashofleague.png" className="w-10" />
+              <span className="text-4xl font-bold">{m.score1}</span>
+              <span className="text-2xl">-</span>
+              <span className="text-4xl font-bold">{m.score2}</span>
+              <img src="/Clashofleague.png" className="w-10" />
+            </div>
+
+            <div className="text-left w-1/3">{m.equipe2.name}</div>
+          </div>
+
+          <div className="mt-2 text-center text-sm text-white/70">
+            {m.status === "win" && "Victoire"}
+            {m.status === "loose" && "Défaite"}
+            {m.status === "tie" && "Match nul"}
+          </div>
+        </div>
+      ))}
+    </div>
+  )
 }
 
 export default MatchSummaryCard

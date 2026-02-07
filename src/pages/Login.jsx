@@ -1,16 +1,14 @@
-import { useState } from "react";
-import { login } from "../services/authService";
-import Sidebar from "../components/Sidebar";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react"
+import { login } from "../services/authService"
+import Sidebar from "../components/Sidebar"
+import { useNavigate } from "react-router-dom"
 
 function Login() {
-
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const navigate = useNavigate();
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const navigate = useNavigate()
 
     const handleSubmit = async (e) => {
-
         e.preventDefault()
 
         try {
@@ -19,33 +17,68 @@ function Login() {
                 password: password,
             })
             console.log(response)
-            navigate('/home')
+            navigate("/home")
         } catch (error) {
             console.error(error)
         }
     }
 
     return (
-        <div className="relative h-[100vh] w-full bg-orange-50 overflow-y-hidden">
-            <div className="absolute bottom-0 top-0 w-full z-0 pointer-events-none">
-                <img src="/Clashofleague2.png" alt="" className="fixed w-full h-full object-cover blur-md opacity-50 z-0" />
-            </div>
-            <Sidebar />
-            <div className="z-10 opacity-100 relative h-full">
-                <div className="h-full flex justify-center mt-36">
-                    <form onSubmit={handleSubmit} className="h-[400px] w-[350px] rounded-2xl bg-orange-50 border-2 border-orange-300 p-8 flex flex-col gap-4 justify-center items-center">
-                        <p className="text-2xl text-orange-600 font-bold underline">Connexion</p>
-                        <div className="flex flex-col justify-center gap-2 mt-8">
-                            <p className="text-lg">Email :</p>
-                            <input type="email" required name="email" id="email" onChange={(e) => setEmail(e.target.value)} className="rounded-md px-1.5 py-0.5 text-md border-orange-300 focus:border-orange-400 border-2" placeholder="Email..." />
-                        </div>
-                        <div className="flex flex-col justify-center gap-2 mb-4">
-                            <p className="text-lg">Mot de passe :</p>
-                            <input type="password" required name="password" id="password" onChange={(e) => setPassword(e.target.value)} className="rounded-md px-1.5 py-0.5 text-md border-orange-300 focus:border-orange-400 border-2" placeholder="Mot de passe..." />
-                        </div>
-                        <button type="submit" className="rounded-md border-2 bg-orange-300 cursor-pointer transition-all hover:bg-orange-400 px-4 py-1 hover:text-white border-transparent hover:border-orange-600">Se connecter</button>
-                    </form>
+        <div className="relative h-screen w-full overflow-hidden">
+            <div className="absolute inset-0 z-0">
+                <div className="absolute inset-0 z-0 pointer-events-none">
+                    <img
+                        src="/Pelouse.png"
+                        alt="background"
+                        className="fixed w-full h-full object-cover brightness-70"
+                    />
                 </div>
+            </div>
+
+            <Sidebar />
+
+            <div className="relative z-10 h-full flex justify-center items-center">
+                <form
+                    onSubmit={handleSubmit}
+                    className="h-[420px] w-[360px] rounded-2xl bg-white/90 backdrop-blur border border-green-500/30 p-8 flex flex-col gap-4 justify-center items-center shadow-xl"
+                >
+                    <p className="text-2xl text-green-600 font-bold mb-4">
+                        Connexion
+                    </p>
+
+                    <div className="flex flex-col justify-center gap-2 w-full">
+                        <label className="text-sm text-neutral-700">Email</label>
+                        <input
+                            type="email"
+                            required
+                            name="email"
+                            id="email"
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="rounded-md px-3 py-2 text-md border border-neutral-300 focus:border-green-500 focus:outline-none"
+                            placeholder="Email..."
+                        />
+                    </div>
+
+                    <div className="flex flex-col justify-center gap-2 w-full">
+                        <label className="text-sm text-neutral-700">Mot de passe</label>
+                        <input
+                            type="password"
+                            required
+                            name="password"
+                            id="password"
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="rounded-md px-3 py-2 text-md border border-neutral-300 focus:border-green-500 focus:outline-none"
+                            placeholder="Mot de passe..."
+                        />
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="mt-4 w-full rounded-md bg-green-600 text-white font-semibold py-2 hover:bg-green-700 transition"
+                    >
+                        Se connecter
+                    </button>
+                </form>
             </div>
         </div>
     )
