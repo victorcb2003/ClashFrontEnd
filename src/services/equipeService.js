@@ -1,6 +1,6 @@
 import axios from "axios";
 axios.defaults.withCredentials = true;
-export const baseUrl = "https://clashofleagues.fr/api/equipe";
+export const baseUrl = "http://localhost:8080/api/equipe";
 
 export const createEquipe = async (data) => {
     // data = {nom : "nom"}
@@ -65,7 +65,7 @@ export const infoEquipe = async (data) => {
     //data {Equipe_id : Equipe_id }
     try {
         const response = await axios.get(
-            `${baseUrl}/info/${data.Equipes_id}`
+            `${baseUrl}/${data.Equipe_id}`
         );
 
         return response.data;
@@ -90,13 +90,31 @@ export const addjoueurEquipe = async (data) => {
     }
 };
 
+export const findAllJoueur = async (data) =>{
+    
+    try{
+        const response = await axios.get(
+            `http://localhost:8080/api/joueur/findAll`
+        )
+
+        return response.data;
+    }
+    catch(err){
+        console.error(err.error)
+    }
+}
+
 export const removejoueurEquipe = async (data) => {
     //data {Equipe_id : Equipe_id, Joueur_id : "Joueur_id" }
     try {
-        const response = await axios.post(
+        const response = await axios.delete(
             `${baseUrl}/removeJoueur`, 
-            data
+            {data}
         );
+
+        // const response = await axios.delete(
+        //     `${baseUrl}/removeJoueur/?Equipe_id=${data.Equipe_id}&Joueur_id=${data.Joueur_id}`, 
+        // );
 
         return response.data;
     } catch (error) {

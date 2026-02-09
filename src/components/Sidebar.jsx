@@ -38,11 +38,11 @@ function Sidebar() {
   }
 
   const menuItems = [
-    { icon: FaUser, text: 'Profil', path: './' },
-    { icon: FaCalendarAlt, text: 'Calendrier', path: './' },
-    { icon: FaUsers, text: 'Équipe', path: './' },
+    { icon: FaUser, text: 'Profil', path: '/' },
+    { icon: FaCalendarAlt, text: 'Calendrier', path: '/' },
+    { icon: FaUsers, text: 'Équipe', path: '/equipe' },
     { icon: FaTrophy, text: 'Tournois', path: '/tournois' },
-    { icon: FaGamepad, text: 'Matches', path: './' },
+    { icon: FaGamepad, text: 'Matches', path: '/' },
   ];
 
   const handleLogout = async () => {
