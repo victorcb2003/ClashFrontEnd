@@ -137,7 +137,7 @@ function Tournois() {
                         </div>
                     }
                 </div>
-                <div className="absolute inset-0 bg-black/60" />
+                <div className="absolute inset-0 bg-black/60" /> </div>
 
             <Sidebar />
 
