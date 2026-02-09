@@ -123,7 +123,12 @@ function Tournois() {
                                 />
                             ))}
                         </div>
+
                     )}
+
+                    <div className="flex justify-center items-center">
+                        <button onClick={() => handleModal()} className="px-3 py-1 rounded-md border-2 border-green-600 bg-green-100 text-green-800 font-semibold">Créer un évenement</button>
+                    </div>
 
                     {myTournaments.length > 0 && currentTournaments.length > 0 && (
                         <span className="block my-10 border-b border-green-500/40 w-4/5 mx-auto" />
