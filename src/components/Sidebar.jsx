@@ -103,9 +103,7 @@ function Sidebar() {
                   ${isOpen ? 'px-6' : 'px-5'}`}
                 >
                   <Icon className="text-xl min-w-[20px]" />
-                  <span className={`ml-4 text-base font-medium whitespace-nowrap transition-all ${isOpen ? "opacity-100" : "opacity-0"}`}>
-                    {item.text}
-                  </span>
+                  <span className={`ml-4 text-base font-medium whitespace-nowrap transition-all ${isOpen ? "opacity-100" : "opacity-0 "}`}>{item.text}</span>
                 </div>
               );
             })
@@ -122,9 +120,7 @@ function Sidebar() {
             ${isOpen ? 'px-6' : 'px-5'}`}
           >
             <FaSignOutAlt className="text-xl min-w-[20px]" />
-            <span className={`ml-4 text-base font-medium whitespace-nowrap transition-all pointer-events-none ${isOpen ? "opacity-100" : "opacity-0"}`}>
-              Déconnexion
-            </span>
+            <span className={`ml-4 text-base font-medium whitespace-nowrap transition-all pointer-events-none ${isOpen ? "opacity-100" : "opacity-0  "}`}>Déconnexion</span>
           </div>
         ) : (
           <>

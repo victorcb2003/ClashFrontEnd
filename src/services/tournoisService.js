@@ -1,6 +1,6 @@
 import axios from "axios";
 axios.defaults.withCredentials = true;
-export const baseUrl = "https://clashofleagues.fr/api/tournois";
+const baseUrl = "https://clashofleagues.fr/api/tournois";
 
 export const getTournaments = async () => {
     try {
@@ -13,3 +13,32 @@ export const getTournaments = async () => {
     }
 };
 
+export const findTournoisById = async (id) => {
+
+    try {
+        const response = await axios.get(
+            `${baseUrl}/${id}`
+        );
+
+        return response;
+    } catch (error) {
+        console.error("Erreur lors de la creation de l'equipe :", error);
+        throw error;
+    }
+}
+
+export const createTournois = async (data) => {
+    // data = {nom : "nom", date : "YYYY-MM-DD", lieu : "lieu" }
+
+    try {
+        const response = await axios.post(
+            `${baseUrl}/create`,
+            data,
+        );
+
+        return response;
+    } catch (error) {
+        console.error("Erreur lors de la creation de l'equipe :", error);
+        throw error;
+    }
+}
