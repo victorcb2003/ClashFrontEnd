@@ -5,40 +5,37 @@ import NewsCard from "../components/NewsCard"
 import Sidebar from "../components/Sidebar"
 
 function Home() {
+  const navigate = useNavigate()
 
-    const navigate = useNavigate()
+  return (
+    <div className="relative w-full min-h-screen">
+        <Sidebar />
 
-    return (
-        <>
-            <div className="relative w-full bg-orange-50 min-h-[100vh]">
-                <div className="absolute bottom-0 top-0 w-full z-0 pointer-events-none">
-                    <img src="/Clashofleague2.png" alt="" className="fixed w-full h-full object-cover blur-md opacity-50 z-0" />
-                </div>
-                <Sidebar />
-                <div className="z-10 opacity-100 relative h-full w-full pl-16">
-                    <div className="flex flex-col p-4 w-full">
-                        <Calendar className="p-2" />
-                        <div className="flex justify-center opacity-25">
-                            <span className="my-4 border-2 rounded-full border-orange-700 w-4/5" />
-                        </div>
-                        <div className="p-2 hidden w-full gap-4 lg:flex">
-                            <div className="flex flex-col gap-2 w-2/3">
-                                <MatchSummaryCard />
-                            </div>
-                            <div className="flex flex-col w-1/3">
-                                <NewsCard />
-                            </div>
-                        </div>
-                        <div className="p-2 flex flex-col w-full lg:hidden">
-                            <div className="flex flex-col gap-2 w-full">
-                                <MatchSummaryCard />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </>
-    )
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <img
+          src="/Pelouse.png"
+          alt="background"
+          className="fixed w-full h-full object-cover brightness-70"
+        />
+      </div>
+      
+      <div className="relative z-10 ml-16 p-6 space-y-6">
+        <div className="w-full">
+          <Calendar />
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 space-y-4">
+            <MatchSummaryCard />
+          </div>
+          <div>
+            <NewsCard />
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  )
 }
 
 export default Home

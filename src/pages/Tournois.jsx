@@ -99,40 +99,72 @@ function Tournois() {
 
     return (
         <>
-            <div className="relative w-full bg-orange-50 min-h-[100vh]">
-                <div className="absolute bottom-0 top-0 w-full z-0 pointer-events-none">
-                    <img src="/Clashofleague2.png" alt="" className="fixed w-full h-full object-cover blur-md opacity-50 z-0" />
+            <div className="relative min-h-screen w-full overflow-hidden">
+                <div className="absolute inset-0 z-0 pointer-events-none">
+                    <img
+                        src="/Pelouse.png"
+                        alt="background"
+                        className="fixed w-full h-full object-cover brightness-70"
+                    />
                 </div>
                 <Sidebar />
-                <div className="z-10 opacity-100 relative h-full w-full pl-16">
-                    <div className="flex flex-col gap-4 px-12 py-2">
-                        <p className="font-bold text-xl text-orange-700">Mes tournois :</p>
-                        {myTournaments.map((tournament) => (
-                            <TournamentSummaryCard key={tournament.id} tournament={tournament} />
-                        ))}
-                        <div className="flex justify-center items-center">
-                            <button onClick={() => handleModal()} className="px-3 py-1 rounded-md border-2 border-green-600 bg-green-100 text-green-800 font-semibold">Créer un évenement</button>
+                <div className="absolute inset-0 bg-black/60" />
+
+                <div className="relative z-10 min-h-screen w-full pl-16 py-6">
+                    {myTournaments.length > 0 && (
+                        <div className="flex flex-col gap-4 px-12 py-4">
+                            <p className="font-bold text-2xl text-green-400">
+                                Mes tournois
+                            </p>
+                            {myTournaments.map((tournament) => (
+                                <TournamentSummaryCard
+                                    key={tournament.id}
+                                    tournament={tournament}
+                                />
+                            ))}
                         </div>
+
+                    )}
+
+                    <div className="flex justify-center items-center">
+                        <button onClick={() => handleModal()} className="px-3 py-1 rounded-md border-2 border-green-600 bg-green-100 text-green-800 font-semibold">Créer un évenement</button>
                     </div>
-                    {currentTournaments.length > 0 && <span className="pt-6 mb-6 border-b-2 border-r-0 border-l-0 border-t-0 border-orange-500 w-4/5 flex justify-center mx-auto" />}
-                    {currentTournaments.length > 0 &&
-                        <div className="flex flex-col gap-4 px-12 py-2">
-                            <p className="font-bold text-xl text-orange-700">Tournois actuelle :</p>
+
+                    {myTournaments.length > 0 && currentTournaments.length > 0 && (
+                        <span className="block my-10 border-b border-green-500/40 w-4/5 mx-auto" />
+                    )}
+                    {currentTournaments.length > 0 && (
+                        <div className="flex flex-col gap-4 px-12 py-4">
+                            <p className="font-bold text-2xl text-green-400">
+                                Tournois en cours
+                            </p>
                             {currentTournaments.map((tournament) => (
-                                <TournamentSummaryCard tournament={tournament} />
+                                <TournamentSummaryCard
+                                    key={tournament.id}
+                                    tournament={tournament}
+                                />
                             ))}
                         </div>
-                    }
-                    {futurTournaments.length > 0 && currentTournaments.length > 0 && <span className="pt-6 mb-6 border-b-2 border-r-0 border-l-0 border-t-0 border-orange-500 w-4/5 flex justify-center mx-auto" />}
-                    {futurTournaments.length > 0 &&
-                        <div className="flex flex-col gap-4 px-12 py-2">
-                            <p className="font-bold text-xl text-orange-700">Tournois à venir :</p>
-                            {futurTournaments.map((tournament, key) => (
-                                <TournamentSummaryCard tournament={tournament} key={key} />
+                    )}
+
+                    {futurTournaments.length > 0 && currentTournaments.length > 0 && (
+                        <span className="block my-10 border-b border-green-500/40 w-4/5 mx-auto" />
+                    )}
+                    {futurTournaments.length > 0 && (
+                        <div className="flex flex-col gap-4 px-12 py-4">
+                            <p className="font-bold text-2xl text-green-400">
+                                Tournois à venir
+                            </p>
+                            {futurTournaments.map((tournament) => (
+                                <TournamentSummaryCard
+                                    key={tournament.id}
+                                    tournament={tournament}
+                                />
                             ))}
                         </div>
-                    }
+                    )}
                 </div>
+
             </div>
             <ModalLayout isOpen={modalOpen} handleModal={handleModal}>
                 <div className="w-[450px] min-w-[380px] bg-orange-50 border-2 border-orange-200 shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center">
@@ -160,9 +192,11 @@ function Tournois() {
                         </div>
                     </form>
                 </div>
-            </ModalLayout>
+
+            </ModalLayout >
         </>
     )
 }
+
 
 export default Tournois

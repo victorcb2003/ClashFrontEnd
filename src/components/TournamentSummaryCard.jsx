@@ -12,7 +12,7 @@ function TournamentSummaryCard({ tournament }) {
          />
          <div className={`px-4 py-2 z-10 rounded-t-2xl w-full min-w-[380px] xl:min-w-[650px] flex flex-col items-center`}>
             <p className="font-semibold text-xl" style={{ color: `hsl(${(tournament.id * 32) % 255}, 80%, 18%)` }} >{tournament.nom}</p>
-            <p className="text-sm text-gray-600">Débute le: {new Date(tournament.date).toLocaleDateString('fr-FR')} au {tournament.lieu}</p>
+            <p className="text-sm text-white">Débute le: {new Date(tournament.date).toLocaleDateString('fr-FR')} au {tournament.lieu}</p>
             <div className="flex mt-2 justify-center items-center">
                
             </div>

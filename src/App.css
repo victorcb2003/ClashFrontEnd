@@ -1,3 +1,29 @@
 i {
     color: hsla(0, 85%, 47%, 0.647);
 }
+
+.table-but{
+    width: 100%;
+}
+
+.table-but tr .table-but td{
+    width: 50%;
+    text-align: center;
+}
+
+.table-but td{
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.table-but tbody tr{
+    display: flex;
+    flex-direction: column;
+}
+
+.conteiner-table{
+    display: flex;
+    flex-direction: row;
+}
