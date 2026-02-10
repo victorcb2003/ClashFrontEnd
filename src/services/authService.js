@@ -27,7 +27,7 @@ export const formSignUp = async (data) => {
 export const login = async (data) => {
     try {
         const response = await axios.post(`${baseUrl}/user/login`, data)
-
+        console.log(`${baseUrl}/user/login`)
         return response.data
     } catch (error) {
         console.error("Erreur lors de la connexion :", error)
