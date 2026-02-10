@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { findAllEquipe } from "../services/equipeService"
 import { useNavigate } from "react-router-dom"
+import Sidebar from "../components/Sidebar"
 
 export default function Equipe() {
     const [equipes, setEquipes] = useState([])
@@ -15,6 +16,8 @@ export default function Equipe() {
     
     return (
         <div>
+            <Sidebar/>
+        <div className="flex-1 items-center justify-center flex flex-col h-screen">
             <h1>Equipe</h1>
             <div>
                 {equipes != [] && (
@@ -29,6 +32,7 @@ export default function Equipe() {
                     </>
                 )}
             </div>
+        </div>
         </div>
     )
 }
