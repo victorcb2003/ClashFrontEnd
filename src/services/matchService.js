@@ -1,6 +1,6 @@
 import axios from "axios";
 axios.defaults.withCredentials = true;
-const baseUrl = "http://localhost:8080/api/match";
+const baseUrl = "https://clashofleagues.fr/api/match"
 
 const matchService = {
 

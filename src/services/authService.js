@@ -1,11 +1,10 @@
-export const baseUrl = "https://clashofleagues.fr/api"
+const baseUrl = "https://clashofleagues.fr/api"
 import axios from "axios"
 axios.defaults.withCredentials = true
 
 export const getUser = async () => {
     try {
         const response = await axios.get(`${baseUrl}/user/me`)
-
         return response.data
     } catch (error) {
         console.error("Erreur lors de la récupération du user :", error)

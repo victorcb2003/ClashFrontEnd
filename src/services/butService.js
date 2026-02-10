@@ -1,6 +1,5 @@
-export const baseUrl = "http://localhost:8080/api/but"
+const baseUrl = "https://clashofleagues.fr/api/but"
 import axios from "axios";
-import { data } from "react-router-dom";
 
 const butService = {
     create: async (data) => {

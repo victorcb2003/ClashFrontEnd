@@ -1,6 +1,6 @@
 import axios from "axios";
 axios.defaults.withCredentials = true;
-const baseUrl = "https://clashofleagues.fr/api/tournois";
+const baseUrl = "https://clashofleagues.fr/api/tournois"
 
 export const getTournaments = async () => {
     try {
