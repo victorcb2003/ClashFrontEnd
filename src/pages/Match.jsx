@@ -1,8 +1,8 @@
 import Header from '../components/Header'
-import matchService from '../services/matchService'
-import equipeService from '../services/equipeService'
-import tournoisService from '../services/tournoisService'
-import butService from '../services/butService'
+import { getMatchById} from '../services/matchService'
+import {infoEquipe} from '../services/equipeService'
+import {findTournoisById} from '../services/tournoisService'
+import {createBut, deleteBut, updateBut} from '../services/butService'
 import formaDate from '../utils/formaDate'
 
 import { useState, useEffect } from 'react'
@@ -34,7 +34,7 @@ export default function Match() {
     const [timer, setTimer] = useState(null)
 
     async function handleEditLieu(){
-        const response = await matchService.updateMatch({lieu : editLieu, Match_id : matchId})
+        const response = await updateMatch({lieu : editLieu, Match_id : matchId})
 
         setEditLieu(null)
         setRefresh(!refresh)
@@ -42,7 +42,7 @@ export default function Match() {
 
     async function handleEditDate(){
         const date = new Date(editDate)
-        const response = await matchService.updateMatch({date_heure : formaDate(date),Match_id : matchId})
+        const response = await updateMatch({date_heure : formaDate(date),Match_id : matchId})
 
         setEditDate(null)
         setRefresh(!refresh)
@@ -55,7 +55,7 @@ export default function Match() {
     }
 
     async function handleDeleteBut() {
-        const reponse = await butService.delete(deleteButId)
+        const reponse = await deleteBut(deleteButId)
 
         setDeleteButId(null)
         setRefresh(!refresh)
@@ -82,7 +82,7 @@ export default function Match() {
 
         const date_heure = formaDate(date)
 
-        const response = await butService.update({ But_id: editBut.But_id, date_heure: date_heure, User_id: editBut.User_id, Type_But: editBut.Type_But, Match_id: matchId })
+        const response = await updateBut({ But_id: editBut.But_id, date_heure: date_heure, User_id: editBut.User_id, Type_But: editBut.Type_But, Match_id: matchId })
 
         setEditBut(null)
 
@@ -122,7 +122,7 @@ export default function Match() {
 
         const date_heure = formaDate(date)
 
-        const response = await butService.create({ date_heure: date_heure, User_id: form.User_id, Type_But: form.Type_But, Match_id: matchId })
+        const response = await createBut({ date_heure: date_heure, User_id: form.User_id, Type_But: form.Type_But, Match_id: matchId })
 
         setShowAddBut(false)
 
@@ -159,7 +159,7 @@ export default function Match() {
         (async () => {
 
             try {
-                const reponse = await matchService.getMatchById(matchId);
+                const reponse = await getMatchById(matchId);
                 setMatch(reponse.data.match);
             } catch (err) {
                 console.log(err)
@@ -174,7 +174,7 @@ export default function Match() {
             try {
                 if (equipe2 && equipe1 && equipe1.length != 0 && equipe2.length != 0) {
 
-                    const buts = (await butService.getButByMatch(matchId)).buts
+                    const buts = (await getButByMatch(matchId)).buts
                     setButs1([])
                     setButs2([])
 
@@ -209,13 +209,13 @@ export default function Match() {
             try {
                 if (match != null) {
                     if (match && match.Equipe1_id) {
-                        setEquipe1(await equipeService.getEquipeByID(match.Equipe1_id))
-                        setEquipe2(await equipeService.getEquipeByID(match.Equipe2_id))
+                        setEquipe1(await getEquipeByID(match.Equipe1_id))
+                        setEquipe2(await getEquipeByID(match.Equipe2_id))
                     }
                 }
                 if (match && match.Tournois_id) {
                     try {
-                        setTournois(await tournoisService.findTournoisById(match.Tournois_id))
+                        setTournois(await findTournoisById(match.Tournois_id))
                     } catch (err) {
                         console.log(err)
                     }

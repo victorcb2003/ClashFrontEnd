@@ -2,7 +2,7 @@ import Sidebar from "../components/Sidebar"
 import { useEffect, useState } from "react"
 import { createTournois, getTournaments } from "../services/tournoisService"
 import { getUser } from "../services/authService"
-import { findByTournoisId } from "../services/matchService"
+import { findTournoisById } from "../services/tournoisService"
 import { IoMdAdd } from "react-icons/io";
 import TournamentSummaryCard from "../components/TournamentSummaryCard"
 import ModalLayout from "../components/ModalLayout"
