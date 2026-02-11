@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import {
-  FaHome,
   FaUser,
   FaCalendarAlt,
   FaUsers,
@@ -38,18 +37,11 @@ function Sidebar() {
   };
 
   const menuItems = [
-<<<<<<< HEAD
-    { icon: FaUser, text: 'Profil', path: '/' },
-    { icon: FaCalendarAlt, text: 'Calendrier', path: '/' },
-    { icon: FaUsers, text: 'Équipe', path: '/equipe' },
-=======
-    { icon: FaHome, text: 'Accueil', path: '/home' },
     { icon: FaUser, text: 'Profil', path: './' },
     { icon: FaCalendarAlt, text: 'Calendrier', path: './' },
-    { icon: FaUsers, text: 'Équipe', path: './' },
->>>>>>> main
+    { icon: FaUsers, text: 'Équipe', path: '/equipe' },
     { icon: FaTrophy, text: 'Tournois', path: '/tournois' },
-    { icon: FaGamepad, text: 'Matches', path: '/' },
+    { icon: FaGamepad, text: 'Matches', path: './' },
   ];
 
   const handleLogout = async () => {
@@ -76,18 +68,9 @@ function Sidebar() {
       >
 
         {/* HEADER */}
-        <div
-          className={`flex items-center h-14 cursor-pointer transition-all 
-          text-green-100 hover:bg-green-700/40 hover:text-lime-300
-          border-b border-green-600/40
-          ${isOpen ? 'px-6' : 'px-5'}`}
-        >
-          <RxHamburgerMenu
-            className={`text-xl min-w-[20px] transition-all duration-300 ${isOpen ? "rotate-90" : ""}`}
-          />
-          <span className={`ml-4 text-xl font-semibold whitespace-nowrap transition-all pointer-events-none ${isOpen ? "opacity-100" : "opacity-0"}`}>
-            Clash of League
-          </span>
+        <div onClick={() => navigate('/home')} className={`flex items-center h-14 cursor-pointer transition-all text-green-100 hover:bg-green-700/40 hover:text-lime-300 border-b border-green-600/40 ${isOpen ? 'px-6' : 'px-5'}`} >
+          <RxHamburgerMenu className={`text-xl min-w-[20px] transition-all duration-300 ${isOpen ? "rotate-90" : ""}`} />
+          <span className={`ml-4 text-xl font-semibold whitespace-nowrap transition-all pointer-events-none ${isOpen ? "opacity-100" : "opacity-0"}`}>Clash of League</span>
         </div>
 
         {/* MENU */}

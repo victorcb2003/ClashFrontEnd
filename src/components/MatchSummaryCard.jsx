@@ -65,7 +65,7 @@ function MatchSummaryCard() {
         <>
             {matches?.map((matche) => (
                 <div className="relative" key={matche.id}>
-                    <div className={`absolute border-l-4 border-t-4 border-r-4 px-4 py-2 border border-b-0 rounded-t-2xl w-full min-w-[380px] xl:min-w-[650px] inset-0 opacity-65 -z-10
+                    <div className={`absolute border-l-4 border-t-4 border-r-4 px-4 py-2 border border-b-0 rounded-t-2xl w-full min-w-[380px] xl:min-w-[650px] inset-0 opacity-85 -z-10
                         ${matche?.status == "win" ? "bg-green-50" : ""}
                         ${matche?.status == "loose" ? "bg-red-50" : ""}
                         ${matche?.status == "tie" ? "bg-gray-50" : ""}

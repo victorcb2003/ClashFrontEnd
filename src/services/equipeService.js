@@ -46,6 +46,15 @@ export const findAllEquipe = async () => {
     }
 };
 
+export const getEquipeById = async (id) => {
+    try {
+        return (await axios.get(`${baseUrl}/${id}`)).data
+    } catch (err) {
+        console.log(err)
+    }
+
+}
+
 export const infoEquipe = async (data) => {
     //data {Equipe_id : Equipe_id }
     try {
