@@ -1,5 +1,5 @@
 import Header from '../components/Header'
-import { getMatchById} from '../services/matchService'
+import { getMatchById, updateMatch} from '../services/matchService'
 import {infoEquipe} from '../services/equipeService'
 import {findTournoisById} from '../services/tournoisService'
 import {createBut, deleteBut, getButByMatch, updateBut} from '../services/butService'
