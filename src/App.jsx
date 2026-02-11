@@ -5,6 +5,7 @@ import About from "./pages/Login";
 import Home from "./pages/Home";
 import Tournois from "./pages/Tournois";
 import Equipe from "./pages/Equipe";
+import EquipeDisplay from "./pages/EquipeDisplay";
 import Match from "./pages/Match";
 import "./App.css"
 
@@ -17,7 +18,8 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/home" element={<Home2 />} />
       <Route path="/tournois" element={<Tournois />} />
-      <Route path="/equipe/:id" element={<Equipe/>}/>
+      <Route path="/equipe/" element={<Equipe/>}/>
+      <Route path="/equipe/:id" element={<EquipeDisplay/>}/>
       <Route path="/match/:id" element={<Match/>}/>
     </Routes>
   )
