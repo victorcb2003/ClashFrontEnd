@@ -2,7 +2,7 @@ import Header from '../components/Header'
 import { getMatchById} from '../services/matchService'
 import {infoEquipe} from '../services/equipeService'
 import {findTournoisById} from '../services/tournoisService'
-import {createBut, deleteBut, updateBut} from '../services/butService'
+import {createBut, deleteBut, getButByMatch, updateBut} from '../services/butService'
 import formaDate from '../utils/formaDate'
 
 import { useState, useEffect } from 'react'
@@ -209,8 +209,8 @@ export default function Match() {
             try {
                 if (match != null) {
                     if (match && match.Equipe1_id) {
-                        setEquipe1(await getEquipeByID(match.Equipe1_id))
-                        setEquipe2(await getEquipeByID(match.Equipe2_id))
+                        setEquipe1(await infoEquipe({Equipe_id : match.Equipe1_id}))
+                        setEquipe2(await infoEquipe({Equipe_id : match.Equipe2_id}))
                     }
                 }
                 if (match && match.Tournois_id) {
@@ -225,10 +225,6 @@ export default function Match() {
             }
         })();
     }, [match])
-
-    useEffect(()=>{
-        console.log(showAddBut)
-    },[showAddBut])
 
     return (
         <>
