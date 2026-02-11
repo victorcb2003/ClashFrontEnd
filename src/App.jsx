@@ -6,6 +6,8 @@ import Home from "./pages/Home";
 import Tournois from "./pages/Tournois";
 import EquipeDisplay from "./pages/EquipeDisplay";
 import Equipe from "./pages/Equipe";
+import Match from "./pages/Match";
+import "./App.css"
 
 function App() {
 
@@ -18,6 +20,7 @@ function App() {
       <Route path="/tournois" element={<Tournois />} />
       <Route path="/equipe/:id" element={<EquipeDisplay/>}/>
       <Route path="/equipe" element={<Equipe/>}/>
+      <Route path="/match/:id" element={<Match/>}/>
     </Routes>
   )
 }

@@ -1,21 +1,6 @@
 import axios from "axios";
 axios.defaults.withCredentials = true;
-export const baseUrl = "http://localhost:8080/api/equipe";
-
-export const createEquipe = async (data) => {
-    // data = {nom : "nom"}
-    try {
-        const response = await axios.post(
-            `${baseUrl}/create`,
-            data
-        );
-
-        return response;
-    } catch (error) {
-        console.error("Erreur lors de la creation de l'equipe :", error);
-        throw error;
-    }
-};
+const baseUrl = "https://clashofleagues.fr/api/equipe"
 
 export const renameEquipe = async (data) => {
     // data = {Equipe_id : "Equipe_id",nom : "nom"}
@@ -60,6 +45,15 @@ export const findAllEquipe = async () => {
         throw error;
     }
 };
+
+export const getEquipeById = async (id) => {
+    try {
+        return (await axios.get(`${baseUrl}/${id}`)).data
+    } catch (err) {
+        console.log(err)
+    }
+
+}
 
 export const infoEquipe = async (data) => {
     //data {Equipe_id : Equipe_id }
