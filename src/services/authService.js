@@ -44,3 +44,14 @@ export const logout = async () => {
         throw error
     }
 }
+
+export const confirmMail = async (data) => {
+    try {
+        const response = await axios.post(`${baseUrl}/form/confirm`, {token: data.token, password: data.password})
+
+        return response.data
+    } catch (error) {
+        console.error("Erreur lors de la confirmation du mail", error)
+        throw error
+    }
+}
