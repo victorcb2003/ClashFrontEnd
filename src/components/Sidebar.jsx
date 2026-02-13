@@ -21,8 +21,11 @@ function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const isConfirmPage = location.pathname == "/confirmation"
+  if (isConfirmPage) return null
+
   useEffect(() => {
-    if (!["/login", "/register", "/", "/confirm"].includes(location.pathname)) {
+    if (!["/login", "/register", "/", "/confirmation"].includes(location.pathname)) {
       fetchData();
     }
   }, []);
