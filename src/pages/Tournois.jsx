@@ -43,7 +43,7 @@ function Tournois() {
 
             await Promise.all(
                 tournamentsList.map(async (t) => {
-                    const res = await findByTournoisId({ id: t.id })
+                    const res = await findTournoisById(t.id )
                     matchesByTournament[t.id] = res
                 })
             )

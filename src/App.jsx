@@ -6,8 +6,9 @@ import Home from "./pages/Home";
 import Tournois from "./pages/Tournois";
 import Equipe from "./pages/Equipe";
 import EquipeDisplay from "./pages/EquipeDisplay";
-import Match from "./pages/Match";
+import MatchDisplay from "./pages/MatchDisplay";
 import "./App.css"
+import Match from "./pages/Match";
 
 function App() {
 
@@ -20,7 +21,8 @@ function App() {
       <Route path="/tournois" element={<Tournois />} />
       <Route path="/equipe/" element={<Equipe/>}/>
       <Route path="/equipe/:id" element={<EquipeDisplay/>}/>
-      <Route path="/match/:id" element={<Match/>}/>
+      <Route path="/match/:id" element={<MatchDisplay/>}/>
+      <Route path="/match" element={<Match/>}/>
     </Routes>
   )
 }

@@ -43,7 +43,7 @@ function Sidebar() {
     { icon: FaCalendarAlt, text: 'Calendrier', path: '/' },
     { icon: FaUsers, text: 'Équipe', path: '/equipe' },
     { icon: FaTrophy, text: 'Tournois', path: '/tournois' },
-    { icon: FaGamepad, text: 'Matches', path: '/' },
+    { icon: FaGamepad, text: 'Matchs', path: '/match' },
   ];
 
   const handleLogout = async () => {
