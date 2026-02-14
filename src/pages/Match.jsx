@@ -9,6 +9,7 @@ import { getMatchById, updateMatch } from '../services/matchService';
 import { createBut, deleteBut, getButByMatch, updateBut } from '../services/butService';
 import { findTournoisById } from '../services/tournoisService';
 import { getEquipeById } from '../services/equipeService'
+import Message from '../components/Message';
 
 export default function Match() {
 

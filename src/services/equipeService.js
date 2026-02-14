@@ -1,6 +1,6 @@
 import axios from "axios";
 axios.defaults.withCredentials = true;
-const baseUrl = "https://clashofleagues.fr/api/equipe"
+const baseUrl = "http://localhost:8080/api/equipe"
 
 export const renameEquipe = async (data) => {
     // data = {Equipe_id : "Equipe_id",nom : "nom"}
