@@ -160,8 +160,8 @@ export default function MatchDisplay() {
 
             try {
                 const reponse = await getMatchById(matchId);
-                console.log(reponse.data.match)
-                setMatch(reponse.data.match);
+                console.log(reponse.data)
+                setMatch(reponse.data.match[0]);
             } catch (err) {
                 console.log(err)
             }
