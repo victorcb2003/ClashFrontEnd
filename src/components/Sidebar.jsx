@@ -94,7 +94,7 @@ function Sidebar() {
                     : 'text-green-100 hover:bg-green-700/40 hover:text-lime-300'
                   }
                   ${isOpen ? 'px-6' : 'px-5'}
-                  ${displayMessage ? "opacity-0 h-0" : "opacity-100 h-14"}`}
+                  ${displayMessage ? "opacity-0 h-0 absolute" : "opacity-100 h-14"}`}
                 >
                   <Icon className="text-xl min-w-[20px]" />
                   <span className={`ml-4 text-base font-medium whitespace-nowrap transition-all ${isOpen ? "opacity-100" : "opacity-0 "}`}>{item.text}</span>
@@ -106,7 +106,7 @@ function Sidebar() {
                 className={`flex items-center h-14 cursor-pointer transition-all text-green-100 hover:bg-green-700/40 hover:text-lime-300
                     
                   ${isOpen ? 'px-6' : 'px-5'}
-                 ${displayMessage ? "opacity-0 h-0" : "opacity-100 h-14"}`}
+                 ${displayMessage ? "opacity-0 h-0 absolute" : "opacity-100 h-14"}`}
               >
                 <IoIosMail className="text-xl min-w-[20px]" />
                 <span className={`ml-4 text-base font-medium whitespace-nowrap transition-all ${isOpen ? "opacity-100" : "opacity-0 "}`}>Messages</span>
