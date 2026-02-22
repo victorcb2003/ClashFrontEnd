@@ -127,3 +127,15 @@ export const removejoueurEquipe = async (data) => {
     }
 };
 
+export const equipeMe = async () => {
+    try {
+        const response = await axios.get(
+            `${baseUrl}/me`
+        );
+
+        return response.data;
+    } catch (error) {
+        console.error("Erreur lors du changement du nom de l'equipe :", error);
+        throw error;
+    }
+}
