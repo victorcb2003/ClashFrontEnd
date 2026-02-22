@@ -18,3 +18,12 @@ export const sendMessage = async (data) => {
         throw err
     }
 }
+
+export const deleteMessage = async (id) => {
+    try {
+        return (await axios.delete(`${baseUrl}/delete/${id}`)).data
+    } catch (err) {
+        console.log(err.error)
+        throw err
+    }
+}
