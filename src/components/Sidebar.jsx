@@ -8,7 +8,8 @@ import {
   FaTrophy,
   FaGamepad,
   FaSignOutAlt,
-  FaSignInAlt
+  FaSignInAlt,
+  FaHome
 } from 'react-icons/fa';
 import { IoIosMail } from "react-icons/io";
 import { IoMailSharp } from "react-icons/io5";

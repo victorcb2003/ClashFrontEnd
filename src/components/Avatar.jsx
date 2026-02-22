@@ -20,7 +20,7 @@ export default function Avatar({ equipe,user, size = "md", className = "" }) {
         className={`${sizeClass} rounded-full object-cover ${className}`}
       />
     )
-  } else if (!user && equipe) {
+  } else if (!user) {
     const initiales = `${equipe?.nom?.[0] || ""}${equipe?.nom?.[1] || ""}`
     return (
       <div

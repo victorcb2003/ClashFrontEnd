@@ -187,7 +187,8 @@ function Profil() {
           </div>
 
           {/* Équipes */}
-          <div className="backdrop-blur-md bg-white/20 rounded-xl border border-white/10 p-6 shadow-lg">
+          {equipe && (
+            <div className="backdrop-blur-md bg-white/20 rounded-xl border border-white/10 p-6 shadow-lg">
             <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
               <GiSoccerBall /> Équipe
             </h2>
@@ -203,6 +204,8 @@ function Profil() {
               </div>
             </div>
           </div>
+          )}
+          
         </div>
       </div>
 

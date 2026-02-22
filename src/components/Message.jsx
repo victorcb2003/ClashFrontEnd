@@ -43,7 +43,6 @@ export default function Message({ displayMessage, isOpen }) {
 
 
                 for (const message of messages) {
-                    console.log(message)
                     if (message.expediteur_id != user.user[0].id) {
                         const addMessage = {
                             id: message.id,

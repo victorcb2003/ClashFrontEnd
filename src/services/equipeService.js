@@ -1,6 +1,6 @@
 import axios from "axios";
 axios.defaults.withCredentials = true;
-const baseUrl = "http://localhost:8080/api/equipe"
+const baseUrl = "https://clashofleagues.fr/api/equipe"
 
 
 export const createEquipe = async (data) => {
@@ -104,7 +104,7 @@ export const findAllJoueur = async (data) =>{
     
     try{
         const response = await axios.get(
-            `https://clashofleagues.fr/api/joueur/findAll`
+            `${baseUrl}/joueur/findAll`
         )
 
         return response.data;
@@ -141,7 +141,7 @@ export const equipeMe = async () => {
         const response = await axios.get(
             `${baseUrl}/me`
         );
-
+        console.log(response.data)
         return response.data;
     } catch (error) {
         console.error("Erreur lors du changement du nom de l'equipe :", error);

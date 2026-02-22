@@ -1,4 +1,4 @@
-const baseUrl = "http://localhost:8080/api"
+const baseUrl = "https://clashofleagues.fr/api"
 import axios from "axios"
 axios.defaults.withCredentials = true
 
