@@ -2,6 +2,22 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 const baseUrl = "http://localhost:8080/api/equipe"
 
+
+export const createEquipe = async (data) => {
+    // data = {nom : "nom"}
+    try {
+        const response = await axios.post(
+            `${baseUrl}/create`,
+            data
+        );
+
+        return response;
+    } catch (error) {
+        console.error("Erreur lors de la creation de l'equipe :", error);
+        throw error;
+    }
+};
+
 export const renameEquipe = async (data) => {
     // data = {Equipe_id : "Equipe_id",nom : "nom"}
     try {
@@ -88,7 +104,7 @@ export const findAllJoueur = async (data) =>{
     
     try{
         const response = await axios.get(
-            `http://localhost:8080/api/joueur/findAll`
+            `https://clashofleagues.fr/api/joueur/findAll`
         )
 
         return response.data;
@@ -120,3 +136,15 @@ export const removejoueurEquipe = async (data) => {
     }
 };
 
+export const equipeMe = async () => {
+    try {
+        const response = await axios.get(
+            `${baseUrl}/me`
+        );
+
+        return response.data;
+    } catch (error) {
+        console.error("Erreur lors du changement du nom de l'equipe :", error);
+        throw error;
+    }
+}

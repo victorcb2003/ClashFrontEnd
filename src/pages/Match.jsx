@@ -1,3 +1,8 @@
+import Header from '../components/Header'
+import { getMatchById, updateMatch} from '../services/matchService'
+import {infoEquipe} from '../services/equipeService'
+import {findTournoisById} from '../services/tournoisService'
+import {createBut, deleteBut, getButByMatch, updateBut} from '../services/butService'
 import formaDate from '../utils/formaDate'
 
 import { useState, useEffect } from 'react'
@@ -223,10 +228,6 @@ export default function Match() {
             }
         })();
     }, [match])
-
-    useEffect(()=>{
-        console.log(showAddBut)
-    },[showAddBut])
 
     return (
         <>

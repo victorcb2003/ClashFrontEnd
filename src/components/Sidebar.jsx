@@ -24,8 +24,11 @@ function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const isConfirmPage = location.pathname == "/confirmation"
+  if (isConfirmPage) return null
+
   useEffect(() => {
-    if (!["/login", "/register", "/", "/confirm"].includes(location.pathname)) {
+    if (!["/login", "/register", "/", "/confirmation"].includes(location.pathname)) {
       fetchData();
     }
   }, []);
@@ -41,8 +44,9 @@ function Sidebar() {
   };
 
   const menuItems = [
-    { icon: FaUser, text: 'Profil', path: './' },
-    { icon: FaCalendarAlt, text: 'Calendrier', path: './' },
+    { icon: FaHome, text: 'Accueil', path: '/home' },
+    { icon: FaUser, text: 'Profil', path: '/profil' },
+    { icon: FaCalendarAlt, text: 'Calendrier', path: '/' },
     { icon: FaUsers, text: 'Équipe', path: '/equipe' },
     { icon: FaTrophy, text: 'Tournois', path: '/tournois' },
     { icon: FaGamepad, text: 'Matches', path: './' },
