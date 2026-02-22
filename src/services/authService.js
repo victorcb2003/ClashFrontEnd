@@ -1,4 +1,4 @@
-const baseUrl = "https://clashofleagues.fr/api"
+const baseUrl = "http://localhost:8080/api"
 import axios from "axios"
 axios.defaults.withCredentials = true
 
@@ -45,6 +45,21 @@ export const logout = async () => {
     }
 }
 
+export const infoUser = async (id) => {
+    try {
+        return (await axios.get(`${baseUrl}/user/${id}`)).data.user[0]
+    } catch(err){
+        console.error(err.error)
+    }
+}
+
+export const searchUser = async (searchTerm) => {
+    try {
+        return (await axios.get(`${baseUrl}/user/search/${searchTerm}`)).data
+    } catch(err){
+        console.error(err.error)
+    }
+}
 export const confirmMail = async (data) => {
     try {
         const response = await axios.post(`${baseUrl}/form/confirm`, {token: data.token, password: data.password})

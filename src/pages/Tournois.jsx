@@ -2,21 +2,24 @@ import Sidebar from "../components/Sidebar"
 import { useEffect, useState } from "react"
 import { createTournois, getTournaments } from "../services/tournoisService"
 import { getUser } from "../services/authService"
-import { findTournoisById } from "../services/tournoisService"
-import { IoMdAdd } from "react-icons/io";
+import { findByTournoisId } from "../services/matchService"
 import TournamentSummaryCard from "../components/TournamentSummaryCard"
 import ModalLayout from "../components/ModalLayout"
-import formaDate from "../utils/formaDate"
 
 function Tournois() {
     const [currentTournaments, setCurrentTournaments] = useState([])
     const [futurTournaments, setFuturTournaments] = useState([])
     const [myTournaments, setMyTournaments] = useState([])
+
+    const [visibleMy, setVisibleMy] = useState(5)
+    const [visibleCurrent, setVisibleCurrent] = useState(5)
+    const [visibleFuture, setVisibleFuture] = useState(5)
+
     const [currentUser, setCurrentUser] = useState(null)
     const [matches, setMatches] = useState({})
-    const [modalOpen, setModalOpen] = useState(false)
 
     // State de la modal
+    const [modalOpen, setModalOpen] = useState(false)
     const [modalNom, setModalNom] = useState("")
     const [modalDate, setModalDate] = useState("")
     const [modalLieu, setModalLieu] = useState("")
@@ -31,7 +34,7 @@ function Tournois() {
             setCurrentUser(user.user[0])
             const response = await getTournaments()
             filterTournaments(response, user.user[0])
-            await fetchMatchesForTournaments(response)
+            await fetchMatchesForTournaments(response.slice(0, 5))
         } catch (err) {
             console.log(err)
         }
@@ -48,7 +51,10 @@ function Tournois() {
                 })
             )
 
-            setMatches(matchesByTournament)
+            setMatches(prev => ({
+                ...prev,
+                ...matchesByTournament
+            }))
         } catch (err) {
             console.error("Erreur lors du chargement des matchs", err)
         }
@@ -93,6 +99,43 @@ function Tournois() {
         }
     }
 
+    const handleSeeMore = (type) => {
+        switch (type) {
+            case "My":
+                const nextVisibleMy = visibleMy + 5
+
+                const myTournamentsToFetch = myTournaments.slice(
+                    visibleMy,
+                    nextVisibleMy
+                )
+                setVisibleMy(nextVisibleMy)
+                fetchMatchesForTournaments(myTournamentsToFetch)
+                break
+            case "Current":
+                const nextVisibleCurrent = visibleCurrent + 5
+
+                const currentTournamentsToFetch = currentTournaments.slice(
+                    visibleCurrent,
+                    nextVisibleCurrent
+                )
+                setVisibleCurrent(nextVisibleCurrent)
+                fetchMatchesForTournaments(currentTournamentsToFetch)
+                break
+            case "Future":
+                const nextVisibleFuture = visibleCurrent + 5
+
+                const futureTournamentsToFetch = futurTournaments.slice(
+                    visibleFuture,
+                    nextVisibleFuture
+                )
+                setVisibleFuture(nextVisibleFuture)
+                fetchMatchesForTournaments(futureTournamentsToFetch)
+                break
+            default:
+                console.log("Wrong type")
+        }
+    }
+
     const handleModal = () => {
         setModalOpen(prev => !prev)
     }
@@ -101,31 +144,25 @@ function Tournois() {
         <>
             <div className="relative min-h-screen w-full overflow-hidden">
                 <div className="absolute inset-0 z-0 pointer-events-none">
-                    <img
-                        src="/Pelouse.png"
-                        alt="background"
-                        className="fixed w-full h-full object-cover brightness-70"
-                    />
+                    <img src="/Pelouse.png" alt="background" className="fixed w-full h-full object-cover brightness-50" />
                 </div>
                 <Sidebar />
-                <div className="absolute inset-0 bg-black/60" />
 
                 <div className="relative z-10 min-h-screen w-full pl-16 py-6">
                     {myTournaments.length > 0 && (
                         <div className="flex flex-col gap-4 px-12 py-4">
-                            <p className="font-bold text-2xl text-green-400">
-                                Mes tournois
-                            </p>
-                            {myTournaments.map((tournament) => (
-                                <TournamentSummaryCard
-                                    key={tournament.id}
-                                    tournament={tournament}
-                                />
+                            <p className="font-bold text-2xl text-green-400">Mes tournois</p>
+                            {myTournaments.slice(0, visibleMy).map((tournament) => (
+                                <TournamentSummaryCard key={tournament.id} tournament={tournament} />
                             ))}
+                            {visibleMy < myTournaments.length && (
+                                <div className="flex justify-center mt-4">
+                                    <button onClick={() => handleSeeMore("My")} className="px-4 py-2 rounded-md border border-green-500 text-green-500 hover:bg-green-100" >Voir plus</button>
+                                </div>
+                            )}
                         </div>
 
                     )}
-
                     <div className="flex justify-center items-center">
                         <button onClick={() => handleModal()} className="px-3 py-1 rounded-md border-2 border-green-600 bg-green-100 text-green-800 font-semibold">Créer un évenement</button>
                     </div>
@@ -135,15 +172,15 @@ function Tournois() {
                     )}
                     {currentTournaments.length > 0 && (
                         <div className="flex flex-col gap-4 px-12 py-4">
-                            <p className="font-bold text-2xl text-green-400">
-                                Tournois en cours
-                            </p>
-                            {currentTournaments.map((tournament) => (
-                                <TournamentSummaryCard
-                                    key={tournament.id}
-                                    tournament={tournament}
-                                />
+                            <p className="font-bold text-2xl text-green-400">Tournois en cours</p>
+                            {currentTournaments.slice(0, visibleCurrent).map((tournament) => (
+                                <TournamentSummaryCard key={tournament.id} tournament={tournament} />
                             ))}
+                            {visibleCurrent < currentTournaments.length && (
+                                <div className="flex justify-center mt-4">
+                                    <button onClick={() => handleSeeMore("Current")} className="px-4 py-2 rounded-md border border-green-500 text-green-500 hover:bg-green-100" >Voir plus</button>
+                                </div>
+                            )}
                         </div>
                     )}
 
@@ -152,15 +189,15 @@ function Tournois() {
                     )}
                     {futurTournaments.length > 0 && (
                         <div className="flex flex-col gap-4 px-12 py-4">
-                            <p className="font-bold text-2xl text-green-400">
-                                Tournois à venir
-                            </p>
-                            {futurTournaments.map((tournament) => (
-                                <TournamentSummaryCard
-                                    key={tournament.id}
-                                    tournament={tournament}
-                                />
+                            <p className="font-bold text-2xl text-green-400">Tournois à venir</p>
+                            {futurTournaments.slice(0, visibleCurrent).map((tournament) => (
+                                <TournamentSummaryCard key={tournament.id} tournament={tournament} />
                             ))}
+                            {visibleFuture < futurTournaments.length && (
+                                <div className="flex justify-center mt-4">
+                                    <button onClick={() => handleSeeMore("Future")} className="px-4 py-2 rounded-md border border-green-500 text-green-500 hover:bg-green-100" >Voir plus</button>
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>

@@ -10,6 +10,11 @@ import { useParams } from 'react-router-dom'
 import { IoMdAdd } from 'react-icons/io'
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { MdClose } from "react-icons/md";
+import { getMatchById, updateMatch } from '../services/matchService';
+import { createBut, deleteBut, getButByMatch, updateBut } from '../services/butService';
+import { findTournoisById } from '../services/tournoisService';
+import { getEquipeById } from '../services/equipeService'
+import Message from '../components/Message';
 
 export default function Match() {
 
@@ -90,8 +95,6 @@ export default function Match() {
 
         setRefresh(!refresh)
         showSuccess(response.data.message)
-
-
     }
 
     function getUserById(id) {
@@ -209,8 +212,8 @@ export default function Match() {
             try {
                 if (match != null) {
                     if (match && match.Equipe1_id) {
-                        setEquipe1(await infoEquipe({Equipe_id : match.Equipe1_id}))
-                        setEquipe2(await infoEquipe({Equipe_id : match.Equipe2_id}))
+                        setEquipe1(await getEquipeById(match.Equipe1_id))
+                        setEquipe2(await getEquipeById(match.Equipe2_id))
                     }
                 }
                 if (match && match.Tournois_id) {
