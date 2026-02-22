@@ -9,6 +9,7 @@ import EquipeDisplay from "./pages/EquipeDisplay";
 import Match from "./pages/Match";
 import "./App.css"
 import Confirmation from "./pages/Confirmation";
+import Profil from "./pages/Profil";
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
       <Route path="/equipe/:id" element={<EquipeDisplay />} />
       <Route path="/match/:id" element={<Match />} />
       <Route path="/confirmation" element={<Confirmation />} />
+      <Route path="/profil" element={<Profil/>} />
     </Routes>
   )
 }
