@@ -1,4 +1,4 @@
-const baseUrl = "http://localhost:8080/api/message"
+const baseUrl = "https://clashofleagues.fr/api/message"
 import axios from "axios"
 axios.defaults.withCredentials = true
 

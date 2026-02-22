@@ -33,6 +33,7 @@ function Tournois() {
             const user = await getUser()
             setCurrentUser(user.user[0])
             const response = await getTournaments()
+            console.log(response,user)
             filterTournaments(response, user.user[0])
             await fetchMatchesForTournaments(response.slice(0, 5))
         } catch (err) {
@@ -46,7 +47,7 @@ function Tournois() {
 
             await Promise.all(
                 tournamentsList.map(async (t) => {
-                    const res = await findByTournoisId({ id: t.id })
+                    const res = await findTournoisById(t.id )
                     matchesByTournament[t.id] = res
                 })
             )
@@ -68,7 +69,7 @@ function Tournois() {
         const future = []
 
         tournamentsList.forEach(t => {
-            const isMine = t.Organisateurs[0].id === user.id
+            const isMine = t.Organisateurs.id === user.id
             const startDate = new Date(t.date_debut)
 
             if (isMine) {
