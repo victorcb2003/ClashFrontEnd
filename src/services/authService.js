@@ -119,3 +119,26 @@ export const changePassword = async (data) => {
         throw error
     }
 }
+
+export const getVerif = async () => {
+    try {
+        const response = await axios.get(`${baseUrl}/user/verif`)
+        return response.data
+    } catch (error) {
+        console.error("Erreur lors de la récupération des vérifications", error)
+        throw error
+    }
+}
+
+export const putVerif = async (data) => {
+    try {
+        const response = await axios.put(`${baseUrl}/user/verif`, {
+            id: data.id,
+            value: data.value
+        })
+        return response.data
+    } catch (error) {
+        console.error("Erreur lors de la mise à jour de la vérification", error)
+        throw error
+    }
+}
