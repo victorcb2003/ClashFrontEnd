@@ -15,6 +15,7 @@ import { IoIosMail } from "react-icons/io";
 import { IoMailSharp } from "react-icons/io5";
 import { getUser, logout } from '../services/authService';
 import { MdOutlineSignpost } from "react-icons/md";
+import { MdAdminPanelSettings } from "react-icons/md";
 import Message from './Message';
 
 function Sidebar() {
@@ -44,7 +45,8 @@ function Sidebar() {
     }
   };
 
-  const menuItems = [
+
+  const menuItems = [ 
     { icon: FaHome, text: 'Accueil', path: '/home' },
     { icon: FaUser, text: 'Profil', path: '/profil' },
     { icon: FaCalendarAlt, text: 'Calendrier', path: '/' },
@@ -85,6 +87,21 @@ function Sidebar() {
         <nav className="flex-1 py-4">
           {isConnected &&
             <>
+              {user.user[0]?.type == "Admin" && (
+                <div
+                  onClick={() => navigate("/admin")}
+                  className={`flex items-center cursor-pointer transition-all 
+                  ${isActive("/admin")
+                    ? 'bg-lime-500/30 text-lime-300 shadow-inner'
+                    : 'text-green-100 hover:bg-green-700/40 hover:text-lime-300'
+                  }
+                  ${isOpen ? 'px-6' : 'px-5'}
+                  ${displayMessage ? "opacity-0 h-0 absolute" : "opacity-100 h-14"}`}
+                >
+                  <MdAdminPanelSettings className="text-xl min-w-[20px]" />
+                  <span className={`ml-4 text-base font-medium whitespace-nowrap transition-all ${isOpen ? "opacity-100" : "opacity-0 "}`}>Admin</span>
+                </div>
+              )}
               {menuItems.map((item, index) => {
                 const Icon = item.icon;
                 const active = isActive(item.path);

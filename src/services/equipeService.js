@@ -104,7 +104,7 @@ export const findAllJoueur = async (data) =>{
     
     try{
         const response = await axios.get(
-            `${baseUrl}/joueur/findAll`
+            `https://clashofleagues.fr/api/joueur/findAll`
         )
 
         return response.data;
@@ -121,10 +121,6 @@ export const removejoueurEquipe = async (data) => {
             `${baseUrl}/removeJoueur`, 
             {data}
         );
-
-        // const response = await axios.delete(
-        //     `${baseUrl}/removeJoueur/?Equipe_id=${data.Equipe_id}&Joueur_id=${data.Joueur_id}`, 
-        // );
 
         return response.data;
     } catch (error) {
