@@ -11,6 +11,7 @@ import "./App.css"
 import Match from "./pages/Match";
 import Confirmation from "./pages/Confirmation";
 import Profil from "./pages/Profil";
+import Admin from "./pages/Admin";
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
       <Route path="/equipe/:id" element={<EquipeDisplay />} />
       <Route path="/confirmation" element={<Confirmation />} />
       <Route path="/profil" element={<Profil/>} />
+      <Route path="/admin" element={<Admin/>} />
     </Routes>
   )
 }

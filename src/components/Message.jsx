@@ -35,7 +35,6 @@ export default function Message({ displayMessage, isOpen }) {
     }, [isSending])
 
     useEffect(() => {
-        console.log(messages)
         if (user != null) {
             (async () => {
                 const newMessageTrié = { ...(messageTrié ?? {}) }
@@ -79,12 +78,6 @@ export default function Message({ displayMessage, isOpen }) {
             })()
         }
     }, [messages])
-
-    useEffect(() => {
-        if (messageTrié!= null && messageTrié.length!=0) {
-            console.log(messageTrié)
-        }
-    }, [messageTrié])
 
     useEffect(() => {
         let isActive = true
