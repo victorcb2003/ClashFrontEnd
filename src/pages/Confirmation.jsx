@@ -46,10 +46,6 @@ function Confirmation() {
         setIsOpen(false)
     }
 
-    useEffect(() => {
-        console.log(isOpen)
-    }, [isOpen])
-
     return (
         <>
             <div className="relative w-full min-h-screen">
@@ -59,7 +55,7 @@ function Confirmation() {
                 </div>
                 <div className="relative min-h-screen z-10 space-y-6 flex justify-center items-center">
                     <div className="w-[350px] min-w-[320px] shadow-lg px-10 py-8 rounded-xl flex flex-col justify-center backdrop-blur-md text-green-50" style={{ backgroundColor: "hsla(130, 10%, 15%, 0.45)" }} >
-                        <p className="font-semibold text-xl mb-12 flex justify-center text-white">Saisissez un mot de passe</p>
+                        <p className="font-semibold text-xl mb-12 text-white">Saisissez un mot de passe</p>
                         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
 
                             <div className="flex flex-col gap-2">
