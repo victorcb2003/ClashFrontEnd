@@ -1,4 +1,5 @@
-import Conteiner from '../components/Conteiner'
+import Sidebar from '../components/Sidebar'
+import ModalLayout from '../components/ModalLayout'
 import { getMatchById, updateMatch } from '../services/matchService'
 import { infoEquipe } from '../services/equipeService'
 import { findTournoisById } from '../services/tournoisService'
@@ -27,6 +28,8 @@ export default function MatchDisplay() {
     const [editLieu, setEditLieu] = useState(null)
     const [editDate, setEditDate] = useState(null)
     const [currentUser, setCurrentUser] = useState(null)
+    const [showEditLieuModal, setShowEditLieuModal] = useState(false)
+    const [showEditDateModal, setShowEditDateModal] = useState(false)
 
     const [refresh, setRefresh] = useState(false)
     const { id: matchId } = useParams()
@@ -39,6 +42,7 @@ export default function MatchDisplay() {
         const response = await updateMatch({ lieu: editLieu, Match_id: matchId })
 
         setEditLieu(null)
+        setShowEditLieuModal(false)
         setRefresh(!refresh)
     }
 
@@ -47,6 +51,7 @@ export default function MatchDisplay() {
         const response = await updateMatch({ date_heure: formaDate(date), Match_id: matchId })
 
         setEditDate(null)
+        setShowEditDateModal(false)
         setRefresh(!refresh)
     }
 
@@ -160,7 +165,6 @@ export default function MatchDisplay() {
 
             try {
                 const reponse = await getMatchById(matchId);
-                console.log(reponse.data)
                 setMatch(reponse.data.match[0]);
             } catch (err) {
                 console.log(err)
@@ -231,394 +235,384 @@ export default function MatchDisplay() {
     useEffect(() => {
         (async () => {
             const user = await getUser()
-            console.log(user.user[0])
             setCurrentUser(user.user[0])
         })()
     }, [])
 
     return (
-        <>
-            {/* <Conteiner> */}
-            {/* <Header /> */}
-            <div className='container mx-auto mt-10'>
-                <h1 className='text-center'>Match</h1>
-                {match ? (
-                    <div>
+        <div className="relative w-full min-h-screen">
+            <Sidebar />
 
-                        {equipe1 && equipe2 && (
-                            <div>
-                                <h2>{equipe1.nom} - {equipe2.nom}</h2>
-                            </div>
-                        )}
-                        <p>
-                            <strong>Lieu:</strong>
-                            {editLieu != null ? (
-                                <>
-                                    <input type="text" value={editLieu} onChange={(e) => { setEditLieu(e.target.value) }} />
-                                    <button onClick={() => { handleEditLieu() }}>
-                                        Confirmer
-                                    </button>
-                                    <button onClick={() => { setEditLieu(null) }} >
-                                        Annuler
-                                    </button>
-                                </>
-                            ) : (
-                                <>
-                                    {match.lieu}
-                                    {currentUser && match && (match.Organisateur_id == currentUser.id || currentUser.type == "Admin") && (
-                                        <button onClick={() => { setEditLieu(match.lieu) }}>
-                                            <FaEdit />
-                                        </button>
-                                    )}
-
-                                </>
-
-                            )}
-                        </p>
-                        <p><strong>Date et Heure:</strong>
-                            {editDate != null ? (
-                                <>
-                                    <input type="datetime-local" value={editDate} onChange={(e) => { setEditDate(e.target.value) }} />
-
-                                    <button onClick={() => { handleEditDate() }}>
-                                        Confirmer
-                                    </button>
-                                    <button onClick={() => { setEditDate(null) }} >
-                                        Annuler
-                                    </button>
-                                </>
-                            ) : (
-                                <>
-                                    {new Date(match.date_heure).toLocaleString()}
-                                    {currentUser && match && (match.Organisateur_id == currentUser.id || currentUser.type == "Admin") && (
-                                        <button onClick={() => { setEditDate("") }}>
-                                            <FaEdit />
-                                        </button>
-                                    )}
-
-                                </>
-                            )}
-                        </p>
-
-
-
-
-                        {tournois != null && (
-                            <p><strong>Tournois:</strong> {tournois.nom}</p>
-                        )}
-                        <p><strong>Score : </strong>{buts1 && buts2 && (<>{buts1.length} - {buts2.length}</>)} </p>
-                        {equipe1 && equipe2 && (
-                            <div>
-                                <h3>Buts</h3>
-                                <div className='conteiner-table'>
-                                    <table className='table-but'>
-                                        <thead>
-                                            <tr>
-                                                <th>
-                                                    But de {equipe1.nom}
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                {buts1.map(but =>
-                                                    <td key={but.id}>
-                                                        <p>
-                                                            {getUserById(but.User_id)}
-                                                        </p>
-                                                        <p>
-                                                            {(new Date(but.date_heure).getTime() - new Date(match.date_heure).getTime()) / 60000}° minute
-                                                        </p>
-                                                        <p>
-                                                            {but.Type_but ? "Penalty" : "Normal"}
-                                                        </p>
-                                                        {currentUser && match && (match.Organisateur_id == currentUser.id || currentUser.type == "Admin") && (
-                                                            <div>
-
-                                                                <button onClick={() => {
-                                                                    setEditBut({
-                                                                        User_id: but.User_id,
-                                                                        date_heure: (new Date(but.date_heure).getTime() - new Date(match.date_heure).getTime()) / 60000,
-                                                                        Type_but: but.Type_but
-                                                                    })
-                                                                }}>
-                                                                    <FaEdit />
-                                                                </button>
-                                                                <button onClick={() => { setDeleteButId(but.id) }}>
-                                                                    <FaTrashAlt />
-                                                                </button>
-                                                            </div>
-                                                        )}
-
-                                                    </td>
-                                                )}
-                                                {showAddBut == 1 ? (
-                                                    <td>
-                                                        <form onSubmit={(e) => handleSubmitBut(e)}>
-                                                            <select
-                                                                defaultValue={"Selectionner un Joueur"}
-                                                                name="butteur"
-                                                                onChange={e => { setForm({ ...form, User_id: e.target.value }) }}
-                                                            >
-                                                                <option value="Selectionner un Joueur" disabled>
-                                                                    Selectionner un Joueur
-                                                                </option>
-                                                                {equipe1.Joueurs.map(joueur =>
-                                                                    <option value={joueur.id} key={joueur.id}>
-                                                                        {joueur.prenom} - {joueur.nom}
-                                                                    </option>
-                                                                )}
-                                                            </select>
-                                                            <select
-                                                                name="type"
-                                                                value={form.Type_But}
-                                                                onChange={e => setForm({ ...form, Type_But: e.target.value })}
-                                                                defaultValue={"Type de but"}
-                                                            >
-                                                                <option value="Type de but" disabled>
-                                                                    Type de but
-                                                                </option>
-                                                                <option value="0">Normal</option>
-                                                                <option value="1">Penalty</option>
-                                                            </select>
-                                                            <input
-                                                                type="number"
-                                                                min={0}
-                                                                max={200}
-                                                                placeholder='Minute du but ?'
-                                                                value={form.date_heure}
-                                                                onChange={e => setForm({ ...form, date_heure: e.target.value })}
-                                                            />
-                                                            <input type="submit" />
-                                                            <button onClick={() => setShowAddBut(false)}>
-                                                                <MdClose />
-                                                            </button>
-                                                        </form>
-                                                    </td>
-                                                ) : (
-                                                    <>
-                                                        {currentUser && match && (match.Organisateur_id == currentUser.id || currentUser.type == "Admin") && (
-                                                            <td>
-                                                                <button onClick={() => { addBut(equipe1.id, 1) }}>
-                                                                    <IoMdAdd />
-                                                                </button>
-                                                            </td>
-                                                        )}
-                                                    </>
-
-                                                )}
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <table className='table-but'>
-                                        <thead>
-                                            <tr>
-                                                <th>
-                                                    But de {equipe2.nom}
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                {buts2.map(but =>
-                                                    <td key={but.id}>
-                                                        <p>
-                                                            {getUserById(but.User_id)}
-                                                        </p>
-                                                        <p>
-                                                            {(new Date(but.date_heure).getTime() - new Date(match.date_heure).getTime()) / 60000}° minute
-                                                        </p>
-                                                        <p>
-                                                            {but.Type_But ? "Penalty" : "Normal"}
-                                                        </p>
-                                                        {currentUser && match && (match.Organisateur_id == currentUser.id || currentUser.type == "Admin") && (
-                                                            <div>
-                                                                <button onClick={() => {
-                                                                    setEditBut({
-                                                                        User_id: but.User_id,
-                                                                        date_heure: (new Date(but.date_heure).getTime() - new Date(match.date_heure).getTime()) / 60000,
-                                                                        Type_but: but.Type_but
-                                                                    })
-                                                                }}>
-                                                                    <FaEdit />
-                                                                </button>
-                                                                <button onClick={() => { setDeleteButId(but.id) }}><FaTrashAlt /></button>
-                                                            </div>
-                                                        )}
-
-                                                    </td>
-                                                )}
-                                                {showAddBut == 2 ? (
-                                                    <td>
-                                                        <form onSubmit={(e) => handleSubmitBut(e)}>
-                                                            <select
-                                                                defaultValue={"Selectionner un Joueur"}
-                                                                name="butteur"
-                                                                onChange={e => { setForm({ ...form, User_id: e.target.value }) }}
-                                                            >
-                                                                <option value="Selectionner un Joueur" disabled>
-                                                                    Selectionner un Joueur
-                                                                </option>
-                                                                {equipe2.Joueurs.map((joueur, key) =>
-                                                                    <option value={joueur.id} key={key}>
-                                                                        {joueur.nom} - {joueur.prenom}
-                                                                    </option>
-                                                                )}
-                                                            </select>
-                                                            <select
-                                                                name="type"
-                                                                onChange={e => setForm({ ...form, Type_But: e.target.value })}
-                                                                defaultValue={"Type de but"}
-                                                            >
-                                                                <option value="Type de but" disabled>
-                                                                    Type de but
-                                                                </option>
-                                                                <option value="0">Normal</option>
-                                                                <option value="1">Penalty</option>
-                                                            </select>
-                                                            <input
-                                                                type="number"
-                                                                min={0}
-                                                                max={200}
-                                                                placeholder='Minute du but ?'
-                                                                value={form.date_heure}
-                                                                onChange={(e) => { setForm({ ...form, date_heure: e.target.value }) }}
-                                                            />
-                                                            <input type="submit" />
-                                                            <button onClick={() => setShowAddBut(false)}>
-                                                                <MdClose />
-                                                            </button>
-                                                        </form>
-                                                    </td>
-                                                ) : (
-                                                    <>
-                                                        {currentUser && match && (match.Organisateur_id == currentUser.id || currentUser.type == "Admin") && (
-                                                            <td>
-                                                                <button onClick={() => { addBut(equipe2.id, 2) }}>
-                                                                    <IoMdAdd />
-                                                                </button>
-                                                            </td>
-                                                        )}
-                                                    </>
-
-                                                )}
-
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                ) : (
-                    <h2>aucun match avec cette id</h2>
-                )}
+            <div className="absolute inset-0 z-0 pointer-events-none">
+                <img
+                    src="/Pelouse.png"
+                    alt="background"
+                    className="fixed w-full h-full object-cover brightness-70"
+                />
             </div>
-            {error && (
-                <div>
-                    <div>
-                        <h3>
-                            Érreur
-                        </h3>
-                        <button onClick={() => { setTimer(null) }}>
-                            <MdClose />
-                        </button>
+
+            <div className="relative z-10 ml-16 p-6 space-y-6">
+                <div className="w-full max-w-6xl mx-auto space-y-6">
+                    <div className="backdrop-blur-md bg-white/20 rounded-xl border border-white/10 p-6 shadow-lg">
+                        <h1 className="text-3xl font-bold text-white">Match</h1>
+                        <p className="text-white/70">Détails et gestion du match</p>
                     </div>
-                    <ul>
-                        {error.map((e, index) =>
-                            <li key={index}>
-                                {e}
-                            </li>
-                        )}
-                    </ul>
-                </div>
-            )}
-            {deleteButId != null && (
-                <div>
-                    <div>
-                        <h3>
-                            Supprimer le but
-                        </h3>
-                        <button onClick={() => { setDeleteButId(null) }}>
-                            <MdClose />
-                        </button>
-                    </div>
-                    <div>
-                        <button onClick={() => { setDeleteButId(null) }}>
-                            Annuler
-                        </button>
-                        <button onClick={() => { handleDeleteBut() }}>
-                            Supprimer
-                        </button>
-                    </div>
-                </div>
-            )}
-            {editBut != null && (
-                <div>
-                    <div>
-                        <h3>
-                            Modification du but
-                        </h3>
-                        <button onClick={() => { setEditBut(null) }}>
-                            <MdClose />
-                        </button>
-                    </div>
-                    <div>
-                        <form action="">
-                            <select
-                                name="User_id" id=""
-                                value={editBut.User_id}
-                                defaultValue={editBut.User_id}
-                                onChange={(e) => { setEditBut({ ...editBut, User_id: e.target.value }) }}
-                            >
-                                {equipe1.Joueurs.filter(j => j.id == editBut.User_id).length != 0 ? (
-                                    <>
-                                        {equipe1.Joueurs.map((joueur, key) =>
-                                            <option value={joueur.id} key={key}>
-                                                {joueur.prenom} - {joueur.nom}
-                                            </option>
-                                        )}
-                                    </>
-                                ) : (
-                                    <>
-                                        {equipe2.Joueurs.map((joueur, key) =>
-                                            <option value={joueur.id} key={key}>
-                                                {joueur.prenom} - {joueur.nom}
-                                            </option>
-                                        )}
-                                    </>
+
+                    <div className="backdrop-blur-md bg-white/20 rounded-xl border border-white/10 p-6 shadow-lg text-white">
+                        {match ? (
+                            <div className="space-y-6">
+                                {equipe1 && equipe2 && (
+                                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                                        <h2 className="text-2xl font-semibold">
+                                            {equipe1.nom} <span className="text-white/60">vs</span> {equipe2.nom}
+                                        </h2>
+                                        <div className="flex items-center gap-3">
+                                            <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-white/80">Score</span>
+                                            <span className="text-3xl font-bold">
+                                                {buts1 && buts2 && (<>{buts1.length} - {buts2.length}</>)}
+                                            </span>
+                                        </div>
+                                    </div>
                                 )}
-                            </select>
-                            <select
-                                name="Type_but"
-                                defaultValue={editBut.Type_but}
-                                value={editBut.Type_but}
-                                onChange={(e) => { setEditBut({ ...editBut, Type_but: e.target.value }) }}
-                            >
-                                <option value="0">Normal</option>
-                                <option value="1">Penalty</option>
-                            </select>
-                            <input
-                                type="number"
-                                min={0}
-                                max={200}
-                                defaultValue={editBut.date_heure}
-                                value={editBut.date_heure}
-                                onChange={(e) => { setEditBut({ ...editBut, date_heure: e.target.value }) }}
-                            />
-                        </form>
+
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div className="bg-white/10 rounded-lg p-4">
+                                        <p className="text-white/70 text-sm">Lieu</p>
+                                        <div className="mt-2 flex items-center gap-2">
+                                            <span>{match.lieu || "Non défini"}</span>
+                                            {currentUser && match && (match.Organisateur_id == currentUser.id || currentUser.type == "Admin") && (
+                                                <button onClick={() => { setEditLieu(match.lieu); setShowEditLieuModal(true); }} className="rounded-md bg-white/10 px-2 py-1 text-white hover:bg-white/20">
+                                                    <FaEdit />
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div className="bg-white/10 rounded-lg p-4">
+                                        <p className="text-white/70 text-sm">Date et heure</p>
+                                        <div className="mt-2 flex items-center gap-2">
+                                            <span>{match.date_heure ? new Date(match.date_heure).toLocaleString() : "Non définie"}</span>
+                                            {currentUser && match && (match.Organisateur_id == currentUser.id || currentUser.type == "Admin") && (
+                                                <button onClick={() => { 
+                                                    const dateObj = match.date_heure ? new Date(match.date_heure) : new Date();
+                                                    const localDateTime = new Date(dateObj.getTime() - dateObj.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+                                                    setEditDate(localDateTime); 
+                                                    setShowEditDateModal(true); 
+                                                }} className="rounded-md bg-white/10 px-2 py-1 text-white hover:bg-white/20">
+                                                    <FaEdit />
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div className="bg-white/10 rounded-lg p-4">
+                                        <p className="text-white/70 text-sm">Tournois</p>
+                                        <p className="mt-2">{tournois?.nom || "Aucun"}</p>
+                                    </div>
+                                </div>
+
+                                {equipe1 && equipe2 && (
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                        <div className="bg-white/10 rounded-lg p-4 space-y-3">
+                                            <div className="flex items-center justify-between">
+                                                <h3 className="text-lg font-semibold">Buts de {equipe1.nom}</h3>
+                                                {currentUser && match && (match.Organisateur_id == currentUser.id || currentUser.type == "Admin") && showAddBut != 1 && (
+                                                    <button onClick={() => { addBut(equipe1.id, 1) }} className="rounded-md bg-white/10 px-2 py-1 text-white hover:bg-white/20">
+                                                        <IoMdAdd />
+                                                    </button>
+                                                )}
+                                            </div>
+
+                                            {buts1.map((but) => (
+                                                <div key={but.id} className="flex items-center justify-between rounded-md p-2 ">
+                                                    <div className="space-y-1">
+                                                        <p className="font-medium">{getUserById(but.User_id)}</p>
+                                                        <p className="text-sm text-white/70">
+                                                            {(new Date(but.date_heure).getTime() - new Date(match.date_heure).getTime()) / 60000}° minute • {but.Type_but ? "Penalty" : "Normal"}
+                                                        </p>
+                                                    </div>
+                                                    {currentUser && match && (match.Organisateur_id == currentUser.id || currentUser.type == "Admin") && (
+                                                        <div className="flex gap-2">
+                                                            <button onClick={() => {
+                                                                setEditBut({
+                                                                    User_id: but.User_id,
+                                                                    date_heure: (new Date(but.date_heure).getTime() - new Date(match.date_heure).getTime()) / 60000,
+                                                                    Type_but: but.Type_but
+                                                                })
+                                                            }} className="rounded-md bg-white/10 px-2 py-1 text-white hover:bg-white/20">
+                                                                <FaEdit />
+                                                            </button>
+                                                            <button onClick={() => { setDeleteButId(but.id) }} className="rounded-md bg-red-500/70 px-2 py-1 text-white hover:bg-red-600">
+                                                                <FaTrashAlt />
+                                                            </button>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        <div className="bg-white/10 rounded-lg p-4 space-y-3">
+                                            <div className="flex items-center justify-between">
+                                                <h3 className="text-lg font-semibold">Buts de {equipe2.nom}</h3>
+                                                {currentUser && match && (match.Organisateur_id == currentUser.id || currentUser.type == "Admin") && showAddBut != 2 && (
+                                                    <button onClick={() => { addBut(equipe2.id, 2) }} className="rounded-md bg-white/10 px-2 py-1 text-white hover:bg-white/20">
+                                                        <IoMdAdd />
+                                                    </button>
+                                                )}
+                                            </div>
+
+                                            {buts2.map((but) => (
+                                                <div key={but.id} className="flex items-center justify-between rounded-md p-2">
+                                                    <div className="space-y-1">
+                                                        <p className="font-medium">{getUserById(but.User_id)}</p>
+                                                        <p className="text-sm text-white/70">
+                                                            {(new Date(but.date_heure).getTime() - new Date(match.date_heure).getTime()) / 60000}° minute • {but.Type_But ? "Penalty" : "Normal"}
+                                                        </p>
+                                                    </div>
+                                                    {currentUser && match && (match.Organisateur_id == currentUser.id || currentUser.type == "Admin") && (
+                                                        <div className="flex gap-2">
+                                                            <button onClick={() => {
+                                                                setEditBut({
+                                                                    User_id: but.User_id,
+                                                                    date_heure: (new Date(but.date_heure).getTime() - new Date(match.date_heure).getTime()) / 60000,
+                                                                    Type_but: but.Type_but
+                                                                })
+                                                            }} className="rounded-md bg-white/10 px-2 py-1 text-white hover:bg-white/20">
+                                                                <FaEdit />
+                                                            </button>
+                                                            <button onClick={() => { setDeleteButId(but.id) }} className="rounded-md bg-red-500/70 px-2 py-1 text-white hover:bg-red-600">
+                                                                <FaTrashAlt />
+                                                            </button>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <h2 className="text-white/70">aucun match avec cette id</h2>
+                        )}
                     </div>
-                    <div>
-                        <button onClick={() => { setEditBut(null) }}>
-                            Annuler
-                        </button>
-                        <button onClick={() => { handleEditBut() }}>
-                            Confirmer
-                        </button>
-                    </div>
+                    <ModalLayout isOpen={showAddBut != 0} handleModal={() => setShowAddBut(0)} onClose={() => setShowAddBut(0)}>
+                        <div className="w-[450px] min-w-[380px] bg-orange-50 border-2 border-orange-200 shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center">
+                            <p className="font-semibold text-xl mb-6 flex justify-center">Ajouter un but</p>
+                            <form onSubmit={(e) => handleSubmitBut(e)} className="flex flex-col gap-6">
+                                <div className="flex flex-col gap-2">
+                                    <label className="text-md font-medium">Joueur</label>
+                                    <select
+                                        defaultValue={"Selectionner un Joueur"}
+                                        name="butteur"
+                                        required
+                                        onChange={e => { setForm({ ...form, User_id: e.target.value }) }}
+                                        className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2"
+                                    >
+                                        <option value="Selectionner un Joueur" disabled>
+                                            Selectionner un Joueur
+                                        </option>
+                                        {showAddBut == 1 ? equipe1?.Joueurs.map(joueur =>
+                                            <option value={joueur.id} key={joueur.id}>
+                                                {joueur.prenom} - {joueur.nom}
+                                            </option>
+                                        ) : equipe2?.Joueurs.map(joueur =>
+                                            <option value={joueur.id} key={joueur.id}>
+                                                {joueur.prenom} - {joueur.nom}
+                                            </option>
+                                        )}
+                                    </select>
+                                </div>
+
+                                <div className="flex flex-col gap-2">
+                                    <label className="text-md font-medium">Type de but</label>
+                                    <select
+                                        name="type"
+                                        required
+                                        value={form.Type_But}
+                                        onChange={e => setForm({ ...form, Type_But: e.target.value })}
+                                        defaultValue={"Type de but"}
+                                        className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2"
+                                    >
+                                        <option value="Type de but" disabled>
+                                            Type de but
+                                        </option>
+                                        <option value="0">Normal</option>
+                                        <option value="1">Penalty</option>
+                                    </select>
+                                </div>
+
+                                <div className="flex flex-col gap-2">
+                                    <label className="text-md font-medium">Minute du but</label>
+                                    <input
+                                        type="number"
+                                        min={0}
+                                        max={200}
+                                        required
+                                        placeholder='Minute du but...'
+                                        value={form.date_heure}
+                                        onChange={e => setForm({ ...form, date_heure: e.target.value })}
+                                        className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2"
+                                    />
+                                </div>
+
+                                <div className="flex justify-end gap-4 mt-4">
+                                    <button type="button" onClick={() => setShowAddBut(false)} className="px-4 py-2 rounded-md border border-orange-300 hover:bg-orange-100">
+                                        Annuler
+                                    </button>
+                                    <button type="submit" className="px-4 py-2 rounded-md bg-orange-500 text-white hover:bg-orange-600">
+                                        Ajouter
+                                    </button>
+                                </div>
+                            </form>
+                        </div>  
+                    </ModalLayout>
+
+                    <ModalLayout isOpen={!!error} handleModal={() => setError(null)} onClose={() => { setTimer(null) }}>
+                        <div className="w-[450px] min-w-[380px] bg-orange-50 border-2 border-orange-200 shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center">
+                            <p className="font-semibold text-xl mb-6 flex justify-center text-red-600">Erreur</p>
+                            <ul className="space-y-2 mb-6 text-slate-700">
+                                {error?.map((e, index) =>
+                                    <li key={index} className="flex items-start gap-2">
+                                        <span className="text-red-500 font-bold">•</span>
+                                        <span>{e}</span>
+                                    </li>
+                                )}
+                            </ul>
+                            <div className="flex justify-end">
+                                <button onClick={() => { setError(null); setTimer(null); }} className="px-4 py-2 rounded-md bg-orange-500 text-white hover:bg-orange-600">
+                                    OK
+                                </button>
+                            </div>
+                        </div>
+                    </ModalLayout>
+
+                    <ModalLayout isOpen={deleteButId != null} handleModal={() => setDeleteButId(null)} onClose={() => { setDeleteButId(null) }}>
+                        <div className="w-[450px] min-w-[380px] bg-orange-50 border-2 border-orange-200 shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center">
+                            <p className="font-semibold text-xl mb-6 flex justify-center">Supprimer le but</p>
+                            <p className="text-center mb-6 text-slate-700">Êtes-vous sûr de vouloir supprimer ce but ?</p>
+                            <div className="flex justify-end gap-4">
+                                <button onClick={() => { setDeleteButId(null) }} className="px-4 py-2 rounded-md border border-orange-300 hover:bg-orange-100">Annuler</button>
+                                <button onClick={() => { handleDeleteBut() }} className="px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-600">Supprimer</button>
+                            </div>
+                        </div>
+                    </ModalLayout>
+
+                    <ModalLayout isOpen={editBut != null} handleModal={() => setEditBut(null)} onClose={() => { setEditBut(null) }}>
+                        <div className="w-[450px] min-w-[380px] bg-orange-50 border-2 border-orange-200 shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center">
+                            <p className="font-semibold text-xl mb-6 flex justify-center">Modifier le but</p>
+                            <form onSubmit={(e) => { e.preventDefault(); handleEditBut(); }} className="flex flex-col gap-6">
+                                <div className="flex flex-col gap-2">
+                                    <label className="text-md font-medium">Joueur</label>
+                                    <select
+                                        name="User_id"
+                                        value={editBut?.User_id}
+                                        defaultValue={editBut?.User_id}
+                                        onChange={(e) => { setEditBut({ ...editBut, User_id: e.target.value }) }}
+                                        className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2"
+                                    >
+                                        {equipe1?.Joueurs.filter(j => j.id == editBut?.User_id).length != 0 ? (
+                                            <>
+                                                {equipe1?.Joueurs.map((joueur, key) =>
+                                                    <option value={joueur.id} key={key}>
+                                                        {joueur.prenom} - {joueur.nom}
+                                                    </option>
+                                                )}
+                                            </>
+                                        ) : (
+                                            <>
+                                                {equipe2?.Joueurs.map((joueur, key) =>
+                                                    <option value={joueur.id} key={key}>
+                                                        {joueur.prenom} - {joueur.nom}
+                                                    </option>
+                                                )}
+                                            </>
+                                        )}
+                                    </select>
+                                </div>
+
+                                <div className="flex flex-col gap-2">
+                                    <label className="text-md font-medium">Type de but</label>
+                                    <select
+                                        name="Type_but"
+                                        defaultValue={editBut?.Type_but}
+                                        value={editBut?.Type_but}
+                                        onChange={(e) => { setEditBut({ ...editBut, Type_but: e.target.value }) }}
+                                        className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2"
+                                    >
+                                        <option value="0">Normal</option>
+                                        <option value="1">Penalty</option>
+                                    </select>
+                                </div>
+
+                                <div className="flex flex-col gap-2">
+                                    <label className="text-md font-medium">Minute du but</label>
+                                    <input
+                                        type="number"
+                                        min={0}
+                                        max={200}
+                                        defaultValue={editBut?.date_heure}
+                                        value={editBut?.date_heure}
+                                        onChange={(e) => { setEditBut({ ...editBut, date_heure: e.target.value }) }}
+                                        className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2"
+                                    />
+                                </div>
+
+                                <div className="flex justify-end gap-4 mt-4">
+                                    <button type="button" onClick={() => { setEditBut(null) }} className="px-4 py-2 rounded-md border border-orange-300 hover:bg-orange-100">Annuler</button>
+                                    <button type="submit" className="px-4 py-2 rounded-md bg-orange-500 text-white hover:bg-orange-600">Confirmer</button>
+                                </div>
+                            </form>
+                        </div>
+                    </ModalLayout>
+
+                    <ModalLayout isOpen={showEditLieuModal} handleModal={() => setShowEditLieuModal(false)}>
+                        <div className="w-[450px] min-w-[380px] bg-orange-50 border-2 border-orange-200 shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center">
+                            <p className="font-semibold text-xl mb-6 flex justify-center">Modifier le lieu</p>
+                            <form onSubmit={(e) => { e.preventDefault(); handleEditLieu(); }} className="flex flex-col gap-6">
+                                <div className="flex flex-col gap-2">
+                                    <label className="text-md font-medium">Lieu du match</label>
+                                    <input 
+                                        type="text" 
+                                        required 
+                                        placeholder="Lieu du match..." 
+                                        value={editLieu || ""} 
+                                        onChange={(e) => setEditLieu(e.target.value)} 
+                                        className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2" 
+                                    />
+                                </div>
+
+                                <div className="flex justify-end gap-4 mt-4">
+                                    <button type="button" onClick={() => setShowEditLieuModal(false)} className="px-4 py-2 rounded-md border border-orange-300 hover:bg-orange-100" >Annuler</button>
+                                    <button type="submit" className="px-4 py-2 rounded-md bg-orange-500 text-white hover:bg-orange-600" >Confirmer</button>
+                                </div>
+                            </form>
+                        </div>
+                    </ModalLayout>
+
+                    <ModalLayout isOpen={showEditDateModal} handleModal={() => setShowEditDateModal(false)}>
+                        <div className="w-[450px] min-w-[380px] bg-orange-50 border-2 border-orange-200 shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center">
+                            <p className="font-semibold text-xl mb-6 flex justify-center">Modifier la date</p>
+                            <form onSubmit={(e) => { e.preventDefault(); handleEditDate(); }} className="flex flex-col gap-6">
+                                <div className="flex flex-col gap-2">
+                                    <label className="text-md font-medium">Date et heure du match</label>
+                                    <input 
+                                        type="datetime-local" 
+                                        required 
+                                        value={editDate || ""} 
+                                        onChange={(e) => setEditDate(e.target.value)} 
+                                        className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2" 
+                                    />
+                                </div>
+
+                                <div className="flex justify-end gap-4 mt-4">
+                                    <button type="button" onClick={() => setShowEditDateModal(false)} className="px-4 py-2 rounded-md border border-orange-300 hover:bg-orange-100" >Annuler</button>
+                                    <button type="submit" className="px-4 py-2 rounded-md bg-orange-500 text-white hover:bg-orange-600" >Confirmer</button>
+                                </div>
+                            </form>
+                        </div>
+                    </ModalLayout>
                 </div>
-            )}
-            {/* </Conteiner> */}
-        </>
+            </div>
+        </div>
     )
 }

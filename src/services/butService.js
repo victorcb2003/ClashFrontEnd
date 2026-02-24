@@ -1,4 +1,4 @@
-const baseUrl = "http://localhost:8080/api/but"
+const baseUrl = "https://clashofleagues.fr/api/but"
 import axios from "axios";
 
 export const createBut = async (data) => {
