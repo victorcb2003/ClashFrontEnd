@@ -210,105 +210,112 @@ function Profil() {
       </div>
 
       {/* Modal Modification profil */}
-      <ModalLayout isOpen={modalState.isOpen && modalState.type === "edit"} onClose={closeModal}>
+      <ModalLayout isOpen={modalState.isOpen && modalState.type === "edit"} handleModal={closeModal}>
         <div className="w-[450px] min-w-[380px] bg-orange-50 border-2 border-orange-200 shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center">
           <p className="font-semibold text-xl mb-6 flex justify-center">Modifier les informations</p>
           
-          <div className="space-y-3 mb-4">
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Prénom</label>
+          <form onSubmit={(e) => { e.preventDefault(); handleUpdateUser(); }} className="flex flex-col gap-6">
+            <div className="flex flex-col gap-2">
+              <label className="text-md font-medium">Prénom</label>
               <input
                 type="text"
+                required
                 value={formData.prenom || ""}
                 onChange={(e) => setFormData({ ...formData, prenom: e.target.value })}
-                className="w-full rounded-lg border border-slate-300 px-4 py-2 text-slate-700 outline-none focus:ring-2 focus:ring-orange-500"
+                className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2"
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Nom</label>
+            <div className="flex flex-col gap-2">
+              <label className="text-md font-medium">Nom</label>
               <input
                 type="text"
+                required
                 value={formData.nom || ""}
                 onChange={(e) => setFormData({ ...formData, nom: e.target.value })}
-                className="w-full rounded-lg border border-slate-300 px-4 py-2 text-slate-700 outline-none focus:ring-2 focus:ring-orange-500"
+                className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2"
               />
             </div>
-          </div>
 
-          <div className="flex justify-end gap-4 mt-8">
-            <button
-              onClick={closeModal}
-              className="px-4 py-2 rounded-md border border-orange-300 hover:bg-orange-100"
-            >
-              Annuler
-            </button>
-            <button
-              onClick={handleUpdateUser}
-              className="px-4 py-2 rounded-md bg-orange-500 text-white hover:bg-orange-600"
-            >
-              Confirmer
-            </button>
-          </div>
+            <div className="flex justify-end gap-4 mt-4">
+              <button
+                type="button"
+                onClick={closeModal}
+                className="px-4 py-2 rounded-md border border-orange-300 hover:bg-orange-100"
+              >
+                Annuler
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 rounded-md bg-orange-500 text-white hover:bg-orange-600"
+              >
+                Confirmer
+              </button>
+            </div>
+          </form>
         </div>
       </ModalLayout>
 
       {/* Modal Changement mot de passe */}
-      <ModalLayout isOpen={modalState.isOpen && modalState.type === "password"} onClose={closeModal}>
+      <ModalLayout isOpen={modalState.isOpen && modalState.type === "password"} handleModal={closeModal}>
         <div className="w-[450px] min-w-[380px] bg-orange-50 border-2 border-orange-200 shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center">
           <p className="font-semibold text-xl mb-6 flex justify-center">Changer le mot de passe</p>
           
-          <div className="space-y-3 mb-4">
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Mot de passe actuel</label>
+          <form onSubmit={(e) => { e.preventDefault(); handleChangePassword(); }} className="flex flex-col gap-6">
+            <div className="flex flex-col gap-2">
+              <label className="text-md font-medium">Mot de passe actuel</label>
               <input
                 type="password"
+                required
                 value={passwordData.currentPassword}
                 onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
-                className="w-full rounded-lg border border-slate-300 px-4 py-2 text-slate-700 outline-none focus:ring-2 focus:ring-orange-500"
+                className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2"
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Nouveau mot de passe</label>
+            <div className="flex flex-col gap-2">
+              <label className="text-md font-medium">Nouveau mot de passe</label>
               <input
                 type="password"
+                required
                 value={passwordData.newPassword}
                 onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
-                className="w-full rounded-lg border border-slate-300 px-4 py-2 text-slate-700 outline-none focus:ring-2 focus:ring-orange-500"
+                className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2"
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Confirmer le mot de passe</label>
+            <div className="flex flex-col gap-2">
+              <label className="text-md font-medium">Confirmer le mot de passe</label>
               <input
                 type="password"
+                required
                 value={passwordData.confirmPassword}
                 onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
-                className="w-full rounded-lg border border-slate-300 px-4 py-2 text-slate-700 outline-none focus:ring-2 focus:ring-orange-500"
+                className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2"
               />
             </div>
-          </div>
 
-          <div className="flex justify-end gap-4 mt-8">
-            <button
-              onClick={closeModal}
-              className="px-4 py-2 rounded-md border border-orange-300 hover:bg-orange-100"
-            >
-              Annuler
-            </button>
-            <button
-              onClick={handleChangePassword}
-              className="px-4 py-2 rounded-md bg-orange-500 text-white hover:bg-orange-600"
-            >
-              Confirmer
-            </button>
-          </div>
+            <div className="flex justify-end gap-4 mt-4">
+              <button
+                type="button"
+                onClick={closeModal}
+                className="px-4 py-2 rounded-md border border-orange-300 hover:bg-orange-100"
+              >
+                Annuler
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 rounded-md bg-orange-500 text-white hover:bg-orange-600"
+              >
+                Confirmer
+              </button>
+            </div>
+          </form>
         </div>
       </ModalLayout>
 
       {/* Modal Gestion Image */}
-      <ModalLayout isOpen={modalState.isOpen && modalState.type === "manageImage"} onClose={closeModal}>
+      <ModalLayout isOpen={modalState.isOpen && modalState.type === "manageImage"} handleModal={closeModal}>
         <div className="w-[450px] min-w-[380px] bg-orange-50 border-2 border-orange-200 shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center">
           <p className="font-semibold text-xl mb-6 flex justify-center">Photo de profil</p>
           
@@ -318,7 +325,7 @@ function Profil() {
 
           <div className="flex flex-col gap-3">
             <label className="w-full cursor-pointer">
-              <div className="px-4 py-2 rounded-md bg-orange-500 text-white hover:bg-orange-600 text-center">
+              <div className="px-4 py-2 rounded-md bg-orange-500 text-white hover:bg-orange-600 text-center font-medium">
                 {user?.image ? "Remplacer la photo" : "Ajouter une photo"}
               </div>
               <input
@@ -345,7 +352,7 @@ function Profil() {
                     console.error("Erreur lors de la suppression:", error)
                   }
                 }}
-                className="px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-600"
+                className="px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-600 font-medium"
               >
                 Supprimer la photo
               </button>
@@ -353,9 +360,9 @@ function Profil() {
 
             <button
               onClick={closeModal}
-              className="px-4 py-2 rounded-md border border-orange-300 hover:bg-orange-100"
+              className="px-4 py-2 rounded-md border border-orange-300 hover:bg-orange-100 font-medium"
             >
-              Annuler
+              Fermer
             </button>
           </div>
         </div>
