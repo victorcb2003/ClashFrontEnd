@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom"
-import Sidebar from "../components/Sidebar.jsx"
 import { FaUsers, FaCalendarAlt, FaComments, FaShieldAlt, FaMapMarkerAlt, FaChartBar } from "react-icons/fa"
 import Header from "../components/Header.jsx"
 

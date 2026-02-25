@@ -1,4 +1,5 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import Register from "./pages/Register";
 import Home2 from "./pages/Home2"; // Temporary
 import About from "./pages/Login";
@@ -12,8 +13,16 @@ import Match from "./pages/Match";
 import Confirmation from "./pages/Confirmation";
 import Profil from "./pages/Profil";
 import Admin from "./pages/Admin";
+import { setupInterceptors, setInterceptorNavigate } from "./services/interceptor";
 
 function App() {
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    // Initialiser les interceptors avec la fonction navigate
+    setInterceptorNavigate(navigate)
+    setupInterceptors()
+  }, [navigate])
 
   return (
     <Routes>
