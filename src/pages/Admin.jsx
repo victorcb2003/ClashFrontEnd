@@ -67,7 +67,7 @@ export default function Admin() {
 		)
 	}
 
-	if (!user.type == "Admin") {
+	if (!user?.type == "Admin") {
 		return null
 	}
 
