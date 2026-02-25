@@ -137,7 +137,7 @@ function Profil() {
               </div>
               <button
                 onClick={() => openModal("edit", { prenom: user?.prenom, nom: user?.nom, email: user?.email })}
-                className="rounded-xl bg-indigo-600 px-6 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700"
+                className="rounded- px-6 py-2 text-sm font-semibold bg-orange-500 text-white hover:bg-orange-600 shadow-sm rounded-md transition"
               >
                 Modifier
               </button>
@@ -167,7 +167,7 @@ function Profil() {
               </div>
               <button
                 onClick={() => openModal("password")}
-                className="mt-4 w-full rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-red-700"
+                className="mt-4 w-full px-4 py-2 rounded-md bg-orange-500 text-white hover:bg-orange-600 shadow-sm transition"
               >
                 Changer le mot de passe
               </button>

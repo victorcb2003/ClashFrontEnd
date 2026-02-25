@@ -133,7 +133,7 @@ export default function Match() {
                                 >
                                     <div>
                                         <div className="text-white font-semibold">
-                                            {equipes?.filter((e)=>e.id == m?.Equipe1_id)[0].nom} VS {equipes.filter((e)=> e.id == m?.Equipe2_id)[0].nom}
+                                            {equipes?.filter((e)=>e.id == m?.Equipe1_id)[0]?.nom} VS {equipes.filter((e)=> e.id == m?.Equipe2_id)[0]?.nom}
                                         </div>
                                         <div className="text-white/60 text-sm">
                                             {m?.lieu || "Lieu à définir"} • {m?.date_heure ? new Date(m.date_heure).toLocaleString() : "Date à définir"}
