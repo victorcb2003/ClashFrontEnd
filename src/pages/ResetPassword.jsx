@@ -8,6 +8,7 @@ function ResetPassword() {
 
     const [email, setEmail] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
+    const [successMessage, setSuccessMessage] = useState("")
 
     const [searchParams] = useSearchParams()
     const token = searchParams.get("token")
@@ -20,8 +21,12 @@ function ResetPassword() {
         e.preventDefault()
         try {
             const response = await resetPassword({ email: email })
-            console.log(response)
-            navigate("/login")
+            setSuccessMessage("Email de réinitialisation envoyé, vérifiez votre boîte de réception.")
+            setIsOpen(true)
+            setTimeout(() => {
+                setIsOpen(false)
+                navigate("/login")
+            }, 3000);
         } catch (err) {
             console.log(err)
             setIsOpen(true)
@@ -62,10 +67,17 @@ function ResetPassword() {
                 </div>
             </div>
             <ModalLayout handleModal={handleModal} isOpen={isOpen}>
-                <div className="h-12 rounded-md backdrop-blur-sm" style={{ backgroundColor: "hsla(130, 10%, 85%, 0.45)" }}>
-                    <div className="bg-red-500 min-h-2 rounded-t-md" />
-                    <p className="px-6 pt-2 pb-4 text-red-50">{errorMessage}</p>
-                </div>
+                {successMessage ? (
+                    <div className="h-12 rounded-md backdrop-blur-sm" style={{ backgroundColor: "hsla(130, 10%, 85%, 0.45)" }}>
+                        <div className="bg-green-500 min-h-2 rounded-t-md" />
+                        <p className="px-6 pt-2 pb-4 text-green-50">{successMessage}</p>
+                    </div>
+                ) : (
+                    <div className="h-12 rounded-md backdrop-blur-sm" style={{ backgroundColor: "hsla(130, 10%, 85%, 0.45)" }}>
+                        <div className="bg-red-500 min-h-2 rounded-t-md" />
+                        <p className="px-6 pt-2 pb-4 text-red-50">{errorMessage}</p>
+                    </div>
+                )}
             </ModalLayout>
         </>
     )

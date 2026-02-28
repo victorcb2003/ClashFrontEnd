@@ -9,6 +9,7 @@ function ConfirmResetPassword() {
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
+    const [successMessage, setSuccessMessage] = useState("")
 
     const [searchParams] = useSearchParams()
     const token = searchParams.get("token")
@@ -22,8 +23,12 @@ function ConfirmResetPassword() {
         if (password === confirmPassword) {
             try {
                 const response = await confirmResetPassword({ token: token, password: password })
-                console.log(response)
-                navigate("/login")
+                setSuccessMessage("Mot de passe réinitialisé avec succès.")
+                setIsOpen(true)
+                setTimeout(() => {
+                    setIsOpen(false)
+                    navigate("/login")
+                }, 3000);
             } catch (err) {
                 console.log(err)
                 setIsOpen(true)
@@ -76,10 +81,17 @@ function ConfirmResetPassword() {
                 </div>
             </div>
             <ModalLayout handleModal={handleModal} isOpen={isOpen}>
-                <div className="h-12 rounded-md backdrop-blur-sm" style={{ backgroundColor: "hsla(130, 10%, 85%, 0.45)" }}>
-                    <div className="bg-red-500 min-h-2 rounded-t-md" />
-                    <p className="px-6 pt-2 pb-4 text-red-50">{errorMessage}</p>
-                </div>
+                {successMessage ? (
+                    <div className="h-12 rounded-md backdrop-blur-sm" style={{ backgroundColor: "hsla(130, 10%, 85%, 0.45)" }}>
+                        <div className="bg-green-500 min-h-2 rounded-t-md" />
+                        <p className="px-6 pt-2 pb-4 text-green-50">{successMessage}</p>
+                    </div>
+                ) : (
+                    <div className="h-12 rounded-md backdrop-blur-sm" style={{ backgroundColor: "hsla(130, 10%, 85%, 0.45)" }}>
+                        <div className="bg-red-500 min-h-2 rounded-t-md" />
+                        <p className="px-6 pt-2 pb-4 text-red-50">{errorMessage}</p>
+                    </div>
+                )}
             </ModalLayout>
         </>
     )
