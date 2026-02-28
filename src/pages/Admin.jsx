@@ -30,7 +30,6 @@ export default function Admin() {
         (async()=>{
             try {
                 const verifData = (await getVerif()).results
-                console.log(verifData)
                 setUsers(verifData)
             } catch (err) {
                 setError("Impossible de charger la liste des utilisateurs")
