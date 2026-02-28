@@ -14,6 +14,8 @@ import Confirmation from "./pages/Confirmation";
 import Profil from "./pages/Profil";
 import Admin from "./pages/Admin";
 import { setupInterceptors, setInterceptorNavigate } from "./services/interceptor";
+import ConfirmResetPassword from "./pages/ConfirmResetPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   const navigate = useNavigate()
@@ -38,6 +40,8 @@ function App() {
       <Route path="/confirmation" element={<Confirmation />} />
       <Route path="/profil" element={<Profil/>} />
       <Route path="/admin" element={<Admin/>} />
+      <Route path="/confirm-reset-password" element={<ConfirmResetPassword/>}/>
+      <Route path="/reset-password" element={<ResetPassword/>}/>
     </Routes>
   )
 }

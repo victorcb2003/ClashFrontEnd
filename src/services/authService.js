@@ -142,3 +142,28 @@ export const putVerif = async (data) => {
         throw error
     }
 }
+
+export const resetPassword = async (data) => {
+    try {
+        const response = await axios.post(`${baseUrl}/form/reset-password`, {
+            email: data.email
+        })
+        return response.data
+    } catch (error) {
+        console.error("Erreur lors de la réinitialisation du mot de passe", error)
+        throw error
+    }
+}
+
+export const confirmResetPassword = async (data) => {
+    try {
+        const response = await axios.post(`${baseUrl}/form/confirm-reset-password`, {
+            token: data.token,
+            password: data.password
+        })
+        return response.data
+    } catch (error) {
+        console.error("Erreur lors de la confirmation de la réinitialisation du mot de passe", error)
+        throw error
+    }
+}
