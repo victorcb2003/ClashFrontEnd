@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { Link } from "react-router-dom"
 import { login } from "../services/authService"
 import Sidebar from "../components/Sidebar"
 import { useNavigate } from "react-router-dom"
@@ -79,6 +80,9 @@ function Login() {
                         </div>
                         <div className="w-full flex justify-end">
                             <button type="submit" className="px-4 py-2 rounded-md bg-green-800 text-white hover:bg-green-700 transition-all" >Se connecter</button>
+                        </div>
+                        <div className="w-full justify-center flex mt-4">
+                            <Link to="/reset-password" className="absolute bottom-6 text-sm text-white/70 hover:text-white transition">Mot de passe oublié ?</Link>
                         </div>
                     </form>
                 </div>
