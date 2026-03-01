@@ -8,7 +8,7 @@ export const getTournaments = async () => {
 
         return response.data.Tournois;
     } catch (error) {
-        console.error("Erreur lors du changement du nom de l'equipe :", error);
+        console.error("Erreur lors de la récupération des tournois :", error);
         throw error;
     }
 };
@@ -22,7 +22,7 @@ export const findTournoisById = async (id) => {
 
         return response;
     } catch (error) {
-        console.error("Erreur lors de la creation de l'equipe :", error);
+        console.error("Erreur lors de la récupération du tournois :", error);
         throw error;
     }
 }
@@ -38,7 +38,7 @@ export const createTournois = async (data) => {
 
         return response;
     } catch (error) {
-        console.error("Erreur lors de la creation de l'equipe :", error);
+        console.error("Erreur lors de la creation du tournois :", error);
         throw error;
     }
 }

@@ -1,4 +1,5 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import Register from "./pages/Register";
 import Home2 from "./pages/Home2"; // Temporary
 import About from "./pages/Login";
@@ -6,11 +7,19 @@ import Home from "./pages/Home";
 import Tournois from "./pages/Tournois";
 import Equipe from "./pages/Equipe";
 import EquipeDisplay from "./pages/EquipeDisplay";
+import MatchDisplay from "./pages/MatchDisplay";
+import "./App.css"
 import Match from "./pages/Match";
 import "./App.css"
-import Calendrier from "./pages/Calendrier";
 
 function App() {
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    // Initialiser les interceptors avec la fonction navigate
+    setInterceptorNavigate(navigate)
+    setupInterceptors()
+  }, [navigate])
 
   return (
     <Routes>
@@ -22,7 +31,6 @@ function App() {
       <Route path="/equipe/" element={<Equipe/>}/>
       <Route path="/equipe/:id" element={<EquipeDisplay/>}/>
       <Route path="/match/:id" element={<Match/>}/>
-      <Route path="/Calendrier" element={<Calendrier/>}/>
     </Routes>
   )
 }

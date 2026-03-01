@@ -1,7 +1,6 @@
 const baseUrl = "https://clashofleagues.fr/api/but"
 import axios from "axios";
 
-
 export const createBut = async (data) => {
     try {
         return (await axios.post(`${baseUrl}/create/`,
