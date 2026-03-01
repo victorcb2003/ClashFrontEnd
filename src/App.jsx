@@ -8,6 +8,7 @@ import Equipe from "./pages/Equipe";
 import EquipeDisplay from "./pages/EquipeDisplay";
 import Match from "./pages/Match";
 import "./App.css"
+import Calendrier from "./pages/Calendrier";
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
       <Route path="/equipe/" element={<Equipe/>}/>
       <Route path="/equipe/:id" element={<EquipeDisplay/>}/>
       <Route path="/match/:id" element={<Match/>}/>
+      <Route path="/Calendrier" element={<Calendrier/>}/>
     </Routes>
   )
 }

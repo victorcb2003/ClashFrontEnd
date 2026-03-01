@@ -21,7 +21,7 @@ function Home() {
       
       <div className="relative z-10 ml-16 p-6 space-y-6">
         <div className="w-full">
-          <Calendar />
+          <Calendar compact />
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-4">

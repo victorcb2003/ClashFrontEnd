@@ -40,7 +40,7 @@ function Sidebar() {
   const menuItems = [
     { icon: FaHome, text: 'Accueil', path: '/home' },
     { icon: FaUser, text: 'Profil', path: '/' },
-    { icon: FaCalendarAlt, text: 'Calendrier', path: '/' },
+    { icon: FaCalendarAlt, text: 'Calendrier', path: '/calendrier' },
     { icon: FaUsers, text: 'Équipe', path: '/equipe' },
     { icon: FaTrophy, text: 'Tournois', path: '/tournois' },
     { icon: FaGamepad, text: 'Matches', path: '/' },
