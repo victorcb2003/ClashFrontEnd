@@ -16,6 +16,7 @@ import Admin from "./pages/Admin";
 import { setupInterceptors, setInterceptorNavigate } from "./services/interceptor";
 import ConfirmResetPassword from "./pages/ConfirmResetPassword";
 import ResetPassword from "./pages/ResetPassword";
+import Calendrier from "./pages/Calendrier";
 
 function App() {
   const navigate = useNavigate()
@@ -42,6 +43,7 @@ function App() {
       <Route path="/admin" element={<Admin/>} />
       <Route path="/confirm-reset-password" element={<ConfirmResetPassword/>}/>
       <Route path="/reset-password" element={<ResetPassword/>}/>
+      <Route path="/calendrier" element={<Calendrier />} />
     </Routes>
   )
 }
