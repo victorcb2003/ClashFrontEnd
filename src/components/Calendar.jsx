@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from 'react-icons/fa'
 import Sidebar from '../components/Sidebar'
-import { getTournaments } from '../services/tournoisService'
-import { findMatchByTournoisId } from '../services/matchService'
+import { getUser } from '../services/authService'
+import { findAllEquipe } from '../services/equipeService'
 
 const DAYS_LONG = ['LUN', 'MAR', 'MER', 'JEU', 'VEN', 'SAM', 'DIM']
 const DAYS_SHORT = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim']
@@ -26,6 +26,7 @@ function Calendar({ compact = false }) {
   const navigate = useNavigate()
 
   const [matchs, setMatchs] = useState([])
+  const [equipes, setEquipes] = useState([])
   const [currentYear, setCurrentYear] = useState(today.getFullYear())
   const [currentMonth, setCurrentMonth] = useState(today.getMonth())
   const [selectedDate, setSelectedDate] = useState(today)
@@ -34,16 +35,19 @@ function Calendar({ compact = false }) {
   useEffect(() => {
     (async () => {
       try {
-        const tournois = (await getTournaments()) || []
-        const results = await Promise.all(
-          tournois.map(t => findMatchByTournoisId(t.id).then(r => r.data.matchs || []))
-        )
-        setMatchs(results.flat())
+        const [userData, equipesData] = await Promise.all([
+          getUser(),
+          findAllEquipe()
+        ])
+        setMatchs(userData?.match || [])
+        setEquipes(equipesData?.equipes || [])
       } catch (err) {
         console.log(err)
       }
     })()
   }, [])
+
+  const getEquipeName = (id) => equipes.find(e => e.id == id)?.nom || `Équipe #${id}`
 
   // notre calendrier de la page d'acceuil
   if (compact) {
@@ -84,9 +88,9 @@ function Calendar({ compact = false }) {
                       <p className="text-green-400 text-xs font-bold text-center mb-0.5">
                         {new Date(m.date_heure).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
                       </p>
-                      <p className="text-white text-xs text-center leading-tight font-medium">{m.equipe1}</p>
+                      <p className="text-white text-xs text-center leading-tight font-medium">{getEquipeName(m.Equipe1_id)}</p>
                       <p className="text-white/30 text-xs text-center">vs</p>
-                      <p className="text-white text-xs text-center leading-tight font-medium">{m.equipe2}</p>
+                      <p className="text-white text-xs text-center leading-tight font-medium">{getEquipeName(m.Equipe2_id)}</p>
                     </div>
                   ))
                 )}
@@ -171,7 +175,7 @@ function Calendar({ compact = false }) {
                       {new Date(m.date_heure).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
                     </div>
                     <div className="text-white/80 text-sm">
-                      {m.equipe1}<span className="text-green-400 mx-1 text-xs font-bold">VS</span>{m.equipe2}
+                      {getEquipeName(m.Equipe1_id)}<span className="text-green-400 mx-1 text-xs font-bold">VS</span>{getEquipeName(m.Equipe2_id)}
                     </div>
                     <div className="text-white/30 text-xs mt-1">{m.lieu}</div>
                   </div>
