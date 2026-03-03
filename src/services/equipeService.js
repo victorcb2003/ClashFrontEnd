@@ -137,10 +137,33 @@ export const equipeMe = async () => {
         const response = await axios.get(
             `${baseUrl}/me`
         );
-        console.log(response.data)
         return response.data;
     } catch (error) {
         console.error("Erreur lors du changement du nom de l'equipe :", error);
         throw error;
+    }
+}
+
+export const deleteImage = async (id) =>{
+    try {
+        const response = await axios.delete(
+            `${baseUrl}/image/${id}`
+        );
+        return response.data;
+    } catch (err) {
+        console.error("Erreur lors de la suppression de l'image de l'equipe :",err)
+        throw err
+    }
+}
+
+export const postImage = async (data) =>{
+    try {
+        const response = await axios.post(
+            `${baseUrl}/image/${data.id}`, data.imageFile
+        );
+        return response.data;
+    } catch (err) {
+        console.error("Erreur lors de la suppression de l'image de l'equipe :",err)
+        throw err
     }
 }
