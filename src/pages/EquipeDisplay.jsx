@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import Sidebar from "../components/Sidebar"
 import Avatar from "../components/Avatar"
-import { addjoueurEquipe, findAllJoueur, infoEquipe, removejoueurEquipe, renameEquipe, deleteEquipe } from "../services/equipeService"
+import { addjoueurEquipe, findAllJoueur, infoEquipe, removejoueurEquipe, renameEquipe, deleteEquipe, postImage, deleteImage } from "../services/equipeService"
 import { getUser } from "../services/authService"
 import { FaEdit, FaTrashAlt } from "react-icons/fa"
 import { IoMdAdd } from "react-icons/io"
@@ -20,7 +20,9 @@ export default function EquipeDisplay() {
   const [openModalRename, setOpenModalRename] = useState(false)
   const [nouveauNom, setNouveauNom] = useState("")
   const [openModalDeleteEquipe, setOpenModalDeleteEquipe] = useState(false)
+  const [openModalImage, setOpenModalImage] = useState(false)
   const [refresh, setRefresh] = useState(false)
+  const fileInputRef = useRef(null)
 
   const { id: equipe_id } = useParams()
   const navigate = useNavigate()
@@ -56,9 +58,28 @@ export default function EquipeDisplay() {
     }
   }
 
+  async function handleImageChange(e) {
+    const file = e.target.files[0]
+    console.log("a")
+    if (!file) return
+
+    try {
+      console.log("Fichier sélectionné:", file)
+      const formDataImage = new FormData()
+      formDataImage.append("image", file)
+      await postImage({ id: equipe.id, imageFile: formDataImage })
+      setRefresh(!refresh)
+      fileInputRef.current.value = null
+    } catch (error) {
+      console.error("Erreur lors de l'upload:", error)
+    }
+  }
+
   useEffect(() => {
     (async () => {
-      setUser(await getUser())
+      const user = await getUser()
+      console.log(user)
+      setUser(user)
     })()
   }, [])
 
@@ -71,21 +92,22 @@ export default function EquipeDisplay() {
 
   useEffect(() => {
     (async () => {
-      setEquipe(await infoEquipe({ Equipe_id: equipe_id }))
+      const equipeData = await infoEquipe({ Equipe_id: equipe_id })
+      setEquipe(equipeData)
     })()
   }, [refresh, equipe_id])
 
-  const canManage = user && (user.user[0].type == "Selectionneurs" && equipe?.Sellectionneurs_id == user.user[0].id || user.user[0].type == "Admin")
+  const canManage = user && (user.user[0].type == "Selectionneurs" && equipe?.Selectionneur?.id == user.user[0].id || user.user[0].type == "Admin")
 
   return (
     <div className="relative w-full min-h-screen">
       <Sidebar />
-      
+
       <div className="absolute inset-0 z-0 pointer-events-none">
         <img
-            src="/Pelouse.png"
-            alt="background"
-            className="fixed w-full h-full object-cover brightness-70"
+          src="/Pelouse.png"
+          alt="background"
+          className="fixed w-full h-full object-cover brightness-70"
         />
       </div>
 
@@ -97,7 +119,9 @@ export default function EquipeDisplay() {
               <div className="backdrop-blur-md bg-white/20 rounded-xl border border-white/10 p-6 shadow-lg mb-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <Avatar equipe={equipe} size="lg" className="shadow-xl" />
+                    <div onClick={() => { canManage && setOpenModalImage(true) }}>
+                      <Avatar equipe={equipe} size="lg" className="shadow-xl" />
+                    </div>
                     <div>
                       <h1 className="text-3xl font-bold text-white">{equipe.nom}</h1>
                       <p className="text-white/70 text-sm mt-1">
@@ -107,17 +131,17 @@ export default function EquipeDisplay() {
                   </div>
                   {canManage && (
                     <div className="flex gap-2">
-                      <button 
-                      onClick={() => { setOpenModalRename(true) }}
-                      className="rounded-lg bg-green-700 px-4 py-2 text-white hover:bg-green-600 transition flex items-center gap-2"
-                    >
-                      <FaEdit size={16} /> Renommer
-                    </button>
-                      <button 
+                      <button
+                        onClick={() => { setOpenModalRename(true) }}
+                        className="rounded-lg px-4 py-2 text-white hover:bg-orange-600 transition flex items-center gap-2"
+                      >
+                        <FaEdit size={32} />
+                      </button>
+                      <button
                         onClick={() => { setOpenModalDeleteEquipe(true) }}
                         className="rounded-lg px-4 py-2 text-white hover:bg-red-600 transition flex items-center gap-2"
                       >
-                        <FaTrashAlt size={32} /> 
+                        <FaTrashAlt size={32} />
                       </button>
                     </div>
                   )}
@@ -128,7 +152,7 @@ export default function EquipeDisplay() {
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-xl font-semibold text-white">Joueurs ({equipe.Joueurs?.length || 0})</h2>
                   {canManage && (
-                    <button 
+                    <button
                       onClick={() => { setOpenModalAdd(true) }}
                       className="rounded-lg bg-green-700 px-4 py-2 text-white hover:bg-green-600 transition flex items-center gap-2"
                     >
@@ -140,7 +164,7 @@ export default function EquipeDisplay() {
                 <div className="space-y-2">
                   {equipe.Joueurs && equipe.Joueurs.length > 0 ? (
                     equipe.Joueurs.map((joueur) => (
-                      <div 
+                      <div
                         key={joueur.id}
                         className="bg-white/10 rounded-lg p-4 flex items-center justify-between hover:bg-white/20 transition"
                       >
@@ -152,7 +176,7 @@ export default function EquipeDisplay() {
                           </div>
                         </div>
                         {canManage && (
-                          <button 
+                          <button
                             onClick={() => { setRemoveJoueur(joueur); setOpenModalRemove(true) }}
                             className="rounded-lg bg-red-500/70 px-3 py-2 text-white hover:bg-red-600 transition"
                           >
@@ -195,10 +219,10 @@ export default function EquipeDisplay() {
                     <form onSubmit={(e) => { e.preventDefault(); handleAddJoueur() }} className="flex flex-col gap-6">
                       <div className="flex flex-col gap-2">
                         <label className="text-md font-medium">Joueur</label>
-                        <select 
+                        <select
                           required
-                          name="addJoueur" 
-                          defaultValue="" 
+                          name="addJoueur"
+                          defaultValue=""
                           onChange={(e) => setAddJoueurId(e.target.value)}
                           className="px-3 py-2 rounded-sm outline outline-1 outline-green-800 hover:outline-2"
                         >
@@ -229,10 +253,10 @@ export default function EquipeDisplay() {
                   <form onSubmit={(e) => { e.preventDefault(); handleRename() }} className="flex flex-col gap-6">
                     <div className="flex flex-col gap-2">
                       <label className="text-md font-medium">Nouveau nom</label>
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         required
-                        defaultValue={equipe.nom} 
+                        defaultValue={equipe.nom}
                         onChange={(e) => { setNouveauNom(e.target.value) }}
                         className="px-3 py-2 rounded-sm outline outline-1 outline-green-800 hover:outline-2" 
                       />
@@ -265,12 +289,65 @@ export default function EquipeDisplay() {
                   </div>
                 </div>
               </ModalLayout>
+
             </>
           ) : (
             <div className="backdrop-blur-md bg-white/20 rounded-xl border border-white/10 p-6 shadow-lg text-center">
               <p className="text-white/70">Équipe introuvable avec cet identifiant.</p>
             </div>
           )}
+          <ModalLayout isOpen={openModalImage} handleModal={() => setOpenModalImage(false)}>
+            <div className="w-[450px] min-w-[380px] bg-orange-50 border-2 border-orange-200 shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center">
+              <p className="font-semibold text-xl mb-6 flex justify-center">Photo de profil</p>
+
+              <div className="flex justify-center mb-6">
+                <Avatar equipe={equipe} size="xl" className="shadow-xl" />
+              </div>
+
+              <div className="flex flex-col gap-3">
+                <label className="w-full cursor-pointer">
+                  <div className="px-4 py-2 rounded-md bg-orange-500 text-white hover:bg-orange-600 text-center font-medium">
+                    {equipe?.img_url ? "Remplacer la photo" : "Ajouter une photo"}
+                  </div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={async (e) => {
+                      await handleImageChange(e)
+                      setOpenModalImage(false)
+                    }}
+                    ref={fileInputRef}
+                    className="hidden"
+                  />
+                </label>
+
+                {equipe?.img_url && (
+                  <button
+                    onClick={async () => {
+                      try {
+                        await deleteImage({ id: equipe.id })
+                        const equi = await getUser()
+                        setUser(userData?.user?.[0])
+                        setOpenModalImage(false)
+                      } catch (error) {
+                        console.error("Erreur lors de la suppression:", error)
+                      }
+                    }}
+                    className="px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-600 font-medium"
+                  >
+                    Supprimer la photo
+                  </button>
+                )}
+
+                <button
+                  onClick={() => setOpenModalImage(false)}
+                  className="px-4 py-2 rounded-md border border-orange-300 hover:bg-orange-100 font-medium"
+                >
+                  Fermer
+                </button>
+              </div>
+            </div>
+          </ModalLayout>
         </div>
       </div>
     </div>

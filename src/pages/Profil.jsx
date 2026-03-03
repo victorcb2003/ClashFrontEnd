@@ -18,7 +18,6 @@ function Profil() {
   const [modalState, setModalState] = useState({ type: null, isOpen: false })
   const [formData, setFormData] = useState({})
   const [passwordData, setPasswordData] = useState({ currentPassword: "", newPassword: "", confirmPassword: "" })
-  const [imageFile, setImageFile] = useState(null)
   const fileInputRef = useRef(null)
 
   useEffect(() => {
