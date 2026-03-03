@@ -97,7 +97,7 @@ export default function EquipeDisplay() {
                   {canManage && (
                     <button 
                       onClick={() => { setOpenModalRename(true) }}
-                      className="rounded-lg bg-orange-500 px-4 py-2 text-white hover:bg-orange-600 transition flex items-center gap-2"
+                      className="rounded-lg bg-green-700 px-4 py-2 text-white hover:bg-green-600 transition flex items-center gap-2"
                     >
                       <FaEdit size={16} /> Renommer
                     </button>
@@ -111,7 +111,7 @@ export default function EquipeDisplay() {
                   {canManage && (
                     <button 
                       onClick={() => { setOpenModalAdd(true) }}
-                      className="rounded-lg bg-orange-500 px-4 py-2 text-white hover:bg-orange-600 transition flex items-center gap-2"
+                      className="rounded-lg bg-green-700 px-4 py-2 text-white hover:bg-green-600 transition flex items-center gap-2"
                     >
                       <IoMdAdd size={18} /> Ajouter
                     </button>
@@ -152,13 +152,13 @@ export default function EquipeDisplay() {
 
               {removeJoueur != null && (
                 <ModalLayout isOpen={openModalRemove} handleModal={() => setOpenModalRemove(!openModalRemove)}>
-                  <div className="w-[450px] min-w-[380px] bg-orange-50 border-2 border-orange-200 shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center">
+                  <div className="w-[450px] min-w-[380px] shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center text-white backdrop-blur-sm" style={{ backgroundColor: "hsla(130, 10%, 25%, 0.65)" }}>
                     <p className="font-semibold text-xl mb-6 flex justify-center">Supprimer un joueur</p>
                     <p className="text-center text-slate-700 mb-6">
                       Êtes-vous sûr de vouloir supprimer <span className="font-semibold">{removeJoueur.prenom} {removeJoueur.nom}</span> de l'équipe <span className="font-semibold">{equipe.nom}</span> ?
                     </p>
                     <div className="flex justify-end gap-4 mt-4">
-                      <button onClick={() => { setOpenModalRemove(false) }} className="px-4 py-2 rounded-md border border-orange-300 hover:bg-orange-100">
+                      <button onClick={() => { setOpenModalRemove(false) }} className="px-4 py-2 rounded-md border border-green-300 hover:bg-green-900">
                         Annuler
                       </button>
                       <button onClick={() => handleRemoveJoueur()} className="px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-600">
@@ -171,7 +171,7 @@ export default function EquipeDisplay() {
 
               {joueurs != [] && (
                 <ModalLayout isOpen={openModalAdd} handleModal={() => setOpenModalAdd(!openModalAdd)}>
-                  <div className="w-[450px] min-w-[380px] bg-orange-50 border-2 border-orange-200 shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center">
+                  <div className="w-[450px] min-w-[380px] shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center text-white backdrop-blur-sm" style={{ backgroundColor: "hsla(130, 10%, 25%, 0.65)" }}>
                     <p className="font-semibold text-xl mb-6 flex justify-center">Ajouter un joueur</p>
                     <form onSubmit={(e) => { e.preventDefault(); handleAddJoueur() }} className="flex flex-col gap-6">
                       <div className="flex flex-col gap-2">
@@ -181,7 +181,7 @@ export default function EquipeDisplay() {
                           name="addJoueur" 
                           defaultValue="" 
                           onChange={(e) => setAddJoueurId(e.target.value)}
-                          className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2"
+                          className="px-3 py-2 rounded-sm outline outline-1 outline-green-800 hover:outline-2"
                         >
                           <option value="" disabled>Sélectionner un joueur</option>
                           {joueurs.map(j =>
@@ -192,10 +192,10 @@ export default function EquipeDisplay() {
                         </select>
                       </div>
                       <div className="flex justify-end gap-4 mt-4">
-                        <button type="button" onClick={() => { setOpenModalAdd(false) }} className="px-4 py-2 rounded-md border border-orange-300 hover:bg-orange-100">
+                        <button type="button" onClick={() => { setOpenModalAdd(false) }} className="px-4 py-2 rounded-md border border-green-300 hover:bg-green-900">
                           Annuler
                         </button>
-                        <button type="submit" className="px-4 py-2 rounded-md bg-orange-500 text-white hover:bg-orange-600">
+                        <button type="submit" className="px-4 py-2 rounded-md bg-green-700 text-white hover:bg-green-600">
                           Ajouter
                         </button>
                       </div>
@@ -205,7 +205,7 @@ export default function EquipeDisplay() {
               )}
 
               <ModalLayout isOpen={openModalRename} handleModal={() => setOpenModalRename(!openModalRename)}>
-                <div className="w-[450px] min-w-[380px] bg-orange-50 border-2 border-orange-200 shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center">
+                <div className="w-[450px] min-w-[380px] shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center text-white backdrop-blur-sm" style={{ backgroundColor: "hsla(130, 10%, 25%, 0.65)" }}>
                   <p className="font-semibold text-xl mb-6 flex justify-center">Renommer l'équipe</p>
                   <form onSubmit={(e) => { e.preventDefault(); handleRename() }} className="flex flex-col gap-6">
                     <div className="flex flex-col gap-2">
@@ -215,14 +215,14 @@ export default function EquipeDisplay() {
                         required
                         defaultValue={equipe.nom} 
                         onChange={(e) => { setNouveauNom(e.target.value) }}
-                        className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2" 
+                        className="px-3 py-2 rounded-sm outline outline-1 outline-green-800 hover:outline-2" 
                       />
                     </div>
                     <div className="flex justify-end gap-4 mt-4">
-                      <button type="button" onClick={() => { setOpenModalRename(false) }} className="px-4 py-2 rounded-md border border-orange-300 hover:bg-orange-100">
+                      <button type="button" onClick={() => { setOpenModalRename(false) }} className="px-4 py-2 rounded-md border border-green-300 hover:bg-green-900">
                         Annuler
                       </button>
-                      <button type="submit" className="px-4 py-2 rounded-md bg-orange-500 text-white hover:bg-orange-600">
+                      <button type="submit" className="px-4 py-2 rounded-md bg-green-700 text-white hover:bg-green-600">
                         Confirmer
                       </button>
                     </div>

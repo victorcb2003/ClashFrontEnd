@@ -23,6 +23,7 @@ function Login() {
                 email: email,
                 password: password,
             })
+            
             navigate("/home")
         } catch (error) {
             setIsOpen(true)

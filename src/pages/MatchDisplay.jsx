@@ -293,11 +293,11 @@ export default function MatchDisplay() {
                                         <div className="mt-2 flex items-center gap-2">
                                             <span>{match.date_heure ? new Date(match.date_heure).toLocaleString() : "Non définie"}</span>
                                             {currentUser && match && (match.Organisateur_id == currentUser.id || currentUser.type == "Admin") && (
-                                                <button onClick={() => { 
+                                                <button onClick={() => {
                                                     const dateObj = match.date_heure ? new Date(match.date_heure) : new Date();
                                                     const localDateTime = new Date(dateObj.getTime() - dateObj.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
-                                                    setEditDate(localDateTime); 
-                                                    setShowEditDateModal(true); 
+                                                    setEditDate(localDateTime);
+                                                    setShowEditDateModal(true);
                                                 }} className="rounded-md bg-white/10 px-2 py-1 text-white hover:bg-white/20">
                                                     <FaEdit />
                                                 </button>
@@ -395,224 +395,222 @@ export default function MatchDisplay() {
                             <h2 className="text-white/70">aucun match avec cette id</h2>
                         )}
                     </div>
-                    <ModalLayout isOpen={showAddBut != 0} handleModal={() => setShowAddBut(0)} onClose={() => setShowAddBut(0)}>
-                        <div className="w-[450px] min-w-[380px] bg-orange-50 border-2 border-orange-200 shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center">
-                            <p className="font-semibold text-xl mb-6 flex justify-center">Ajouter un but</p>
-                            <form onSubmit={(e) => handleSubmitBut(e)} className="flex flex-col gap-6">
-                                <div className="flex flex-col gap-2">
-                                    <label className="text-md font-medium">Joueur</label>
-                                    <select
-                                        defaultValue={"Selectionner un Joueur"}
-                                        name="butteur"
-                                        required
-                                        onChange={e => { setForm({ ...form, User_id: e.target.value }) }}
-                                        className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2"
-                                    >
-                                        <option value="Selectionner un Joueur" disabled>
-                                            Selectionner un Joueur
-                                        </option>
-                                        {showAddBut == 1 ? equipe1?.Joueurs.map(joueur =>
-                                            <option value={joueur.id} key={joueur.id}>
-                                                {joueur.prenom} - {joueur.nom}
-                                            </option>
-                                        ) : equipe2?.Joueurs.map(joueur =>
-                                            <option value={joueur.id} key={joueur.id}>
-                                                {joueur.prenom} - {joueur.nom}
-                                            </option>
-                                        )}
-                                    </select>
-                                </div>
-
-                                <div className="flex flex-col gap-2">
-                                    <label className="text-md font-medium">Type de but</label>
-                                    <select
-                                        name="type"
-                                        required
-                                        value={form.Type_But}
-                                        onChange={e => setForm({ ...form, Type_But: e.target.value })}
-                                        defaultValue={"Type de but"}
-                                        className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2"
-                                    >
-                                        <option value="Type de but" disabled>
-                                            Type de but
-                                        </option>
-                                        <option value="0">Normal</option>
-                                        <option value="1">Penalty</option>
-                                    </select>
-                                </div>
-
-                                <div className="flex flex-col gap-2">
-                                    <label className="text-md font-medium">Minute du but</label>
-                                    <input
-                                        type="number"
-                                        min={0}
-                                        max={200}
-                                        required
-                                        placeholder='Minute du but...'
-                                        value={form.date_heure}
-                                        onChange={e => setForm({ ...form, date_heure: e.target.value })}
-                                        className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2"
-                                    />
-                                </div>
-
-                                <div className="flex justify-end gap-4 mt-4">
-                                    <button type="button" onClick={() => setShowAddBut(false)} className="px-4 py-2 rounded-md border border-orange-300 hover:bg-orange-100">
-                                        Annuler
-                                    </button>
-                                    <button type="submit" className="px-4 py-2 rounded-md bg-orange-500 text-white hover:bg-orange-600">
-                                        Ajouter
-                                    </button>
-                                </div>
-                            </form>
-                        </div>  
-                    </ModalLayout>
-
-                    <ModalLayout isOpen={!!error} handleModal={() => setError(null)} onClose={() => { setTimer(null) }}>
-                        <div className="w-[450px] min-w-[380px] bg-orange-50 border-2 border-orange-200 shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center">
-                            <p className="font-semibold text-xl mb-6 flex justify-center text-red-600">Erreur</p>
-                            <ul className="space-y-2 mb-6 text-slate-700">
-                                {error?.map((e, index) =>
-                                    <li key={index} className="flex items-start gap-2">
-                                        <span className="text-red-500 font-bold">•</span>
-                                        <span>{e}</span>
-                                    </li>
-                                )}
-                            </ul>
-                            <div className="flex justify-end">
-                                <button onClick={() => { setError(null); setTimer(null); }} className="px-4 py-2 rounded-md bg-orange-500 text-white hover:bg-orange-600">
-                                    OK
-                                </button>
-                            </div>
-                        </div>
-                    </ModalLayout>
-
-                    <ModalLayout isOpen={deleteButId != null} handleModal={() => setDeleteButId(null)} onClose={() => { setDeleteButId(null) }}>
-                        <div className="w-[450px] min-w-[380px] bg-orange-50 border-2 border-orange-200 shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center">
-                            <p className="font-semibold text-xl mb-6 flex justify-center">Supprimer le but</p>
-                            <p className="text-center mb-6 text-slate-700">Êtes-vous sûr de vouloir supprimer ce but ?</p>
-                            <div className="flex justify-end gap-4">
-                                <button onClick={() => { setDeleteButId(null) }} className="px-4 py-2 rounded-md border border-orange-300 hover:bg-orange-100">Annuler</button>
-                                <button onClick={() => { handleDeleteBut() }} className="px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-600">Supprimer</button>
-                            </div>
-                        </div>
-                    </ModalLayout>
-
-                    <ModalLayout isOpen={editBut != null} handleModal={() => setEditBut(null)} onClose={() => { setEditBut(null) }}>
-                        <div className="w-[450px] min-w-[380px] bg-orange-50 border-2 border-orange-200 shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center">
-                            <p className="font-semibold text-xl mb-6 flex justify-center">Modifier le but</p>
-                            <form onSubmit={(e) => { e.preventDefault(); handleEditBut(); }} className="flex flex-col gap-6">
-                                <div className="flex flex-col gap-2">
-                                    <label className="text-md font-medium">Joueur</label>
-                                    <select
-                                        name="User_id"
-                                        value={editBut?.User_id}
-                                        defaultValue={editBut?.User_id}
-                                        onChange={(e) => { setEditBut({ ...editBut, User_id: e.target.value }) }}
-                                        className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2"
-                                    >
-                                        {equipe1?.Joueurs.filter(j => j.id == editBut?.User_id).length != 0 ? (
-                                            <>
-                                                {equipe1?.Joueurs.map((joueur, key) =>
-                                                    <option value={joueur.id} key={key}>
-                                                        {joueur.prenom} - {joueur.nom}
-                                                    </option>
-                                                )}
-                                            </>
-                                        ) : (
-                                            <>
-                                                {equipe2?.Joueurs.map((joueur, key) =>
-                                                    <option value={joueur.id} key={key}>
-                                                        {joueur.prenom} - {joueur.nom}
-                                                    </option>
-                                                )}
-                                            </>
-                                        )}
-                                    </select>
-                                </div>
-
-                                <div className="flex flex-col gap-2">
-                                    <label className="text-md font-medium">Type de but</label>
-                                    <select
-                                        name="Type_but"
-                                        defaultValue={editBut?.Type_but}
-                                        value={editBut?.Type_but}
-                                        onChange={(e) => { setEditBut({ ...editBut, Type_but: e.target.value }) }}
-                                        className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2"
-                                    >
-                                        <option value="0">Normal</option>
-                                        <option value="1">Penalty</option>
-                                    </select>
-                                </div>
-
-                                <div className="flex flex-col gap-2">
-                                    <label className="text-md font-medium">Minute du but</label>
-                                    <input
-                                        type="number"
-                                        min={0}
-                                        max={200}
-                                        defaultValue={editBut?.date_heure}
-                                        value={editBut?.date_heure}
-                                        onChange={(e) => { setEditBut({ ...editBut, date_heure: e.target.value }) }}
-                                        className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2"
-                                    />
-                                </div>
-
-                                <div className="flex justify-end gap-4 mt-4">
-                                    <button type="button" onClick={() => { setEditBut(null) }} className="px-4 py-2 rounded-md border border-orange-300 hover:bg-orange-100">Annuler</button>
-                                    <button type="submit" className="px-4 py-2 rounded-md bg-orange-500 text-white hover:bg-orange-600">Confirmer</button>
-                                </div>
-                            </form>
-                        </div>
-                    </ModalLayout>
-
-                    <ModalLayout isOpen={showEditLieuModal} handleModal={() => setShowEditLieuModal(false)}>
-                        <div className="w-[450px] min-w-[380px] bg-orange-50 border-2 border-orange-200 shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center">
-                            <p className="font-semibold text-xl mb-6 flex justify-center">Modifier le lieu</p>
-                            <form onSubmit={(e) => { e.preventDefault(); handleEditLieu(); }} className="flex flex-col gap-6">
-                                <div className="flex flex-col gap-2">
-                                    <label className="text-md font-medium">Lieu du match</label>
-                                    <input 
-                                        type="text" 
-                                        required 
-                                        placeholder="Lieu du match..." 
-                                        value={editLieu || ""} 
-                                        onChange={(e) => setEditLieu(e.target.value)} 
-                                        className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2" 
-                                    />
-                                </div>
-
-                                <div className="flex justify-end gap-4 mt-4">
-                                    <button type="button" onClick={() => setShowEditLieuModal(false)} className="px-4 py-2 rounded-md border border-orange-300 hover:bg-orange-100" >Annuler</button>
-                                    <button type="submit" className="px-4 py-2 rounded-md bg-orange-500 text-white hover:bg-orange-600" >Confirmer</button>
-                                </div>
-                            </form>
-                        </div>
-                    </ModalLayout>
-
-                    <ModalLayout isOpen={showEditDateModal} handleModal={() => setShowEditDateModal(false)}>
-                        <div className="w-[450px] min-w-[380px] bg-orange-50 border-2 border-orange-200 shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center">
-                            <p className="font-semibold text-xl mb-6 flex justify-center">Modifier la date</p>
-                            <form onSubmit={(e) => { e.preventDefault(); handleEditDate(); }} className="flex flex-col gap-6">
-                                <div className="flex flex-col gap-2">
-                                    <label className="text-md font-medium">Date et heure du match</label>
-                                    <input 
-                                        type="datetime-local" 
-                                        required 
-                                        value={editDate || ""} 
-                                        onChange={(e) => setEditDate(e.target.value)} 
-                                        className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2" 
-                                    />
-                                </div>
-
-                                <div className="flex justify-end gap-4 mt-4">
-                                    <button type="button" onClick={() => setShowEditDateModal(false)} className="px-4 py-2 rounded-md border border-orange-300 hover:bg-orange-100" >Annuler</button>
-                                    <button type="submit" className="px-4 py-2 rounded-md bg-orange-500 text-white hover:bg-orange-600" >Confirmer</button>
-                                </div>
-                            </form>
-                        </div>
-                    </ModalLayout>
                 </div>
             </div>
+            <ModalLayout isOpen={showAddBut != 0} handleModal={() => setShowAddBut(0)} onClose={() => setShowAddBut(0)}>
+                <div className="w-[450px] min-w-[380px] shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center backdrop-blur-sm text-white" style={{ backgroundColor: "hsla(130, 10%, 35%, 0.35)" }}>
+                    <p className="font-semibold text-xl mb-6 flex justify-center">Ajouter un but</p>
+                    <form onSubmit={(e) => handleSubmitBut(e)} className="flex flex-col gap-6">
+                        <div className="flex flex-col gap-2">
+                            <label className="text-md font-medium">Joueur</label>
+                            <select
+                                defaultValue={"Selectionner un Joueur"}
+                                name="butteur"
+                                required
+                                onChange={e => { setForm({ ...form, User_id: e.target.value }) }}
+                                className="px-3 py-2 rounded-sm outline outline-1 outline-green-800 hover:outline-2 text-black"
+                            >
+                                <option value="Selectionner un Joueur" disabled>
+                                    Selectionner un Joueur
+                                </option>
+                                {showAddBut == 1 ? equipe1?.Joueurs.map(joueur =>
+                                    <option value={joueur.id} key={joueur.id}>
+                                        {joueur.prenom} - {joueur.nom}
+                                    </option>
+                                ) : equipe2?.Joueurs.map(joueur =>
+                                    <option value={joueur.id} key={joueur.id}>
+                                        {joueur.prenom} - {joueur.nom}
+                                    </option>
+                                )}
+                            </select>
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                            <label className="text-md font-medium">Type de but</label>
+                            <select
+                                name="type"
+                                required
+                                value={form.Type_But}
+                                onChange={e => setForm({ ...form, Type_But: e.target.value })}
+                                defaultValue={"Type de but"}
+                                className="px-3 py-2 rounded-sm outline outline-1 outline-green-800 hover:outline-2 text-black"
+                            >
+                                <option value="Type de but" disabled>
+                                    Type de but
+                                </option>
+                                <option value="0">Normal</option>
+                                <option value="1">Penalty</option>
+                            </select>
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                            <label className="text-md font-medium">Minute du but</label>
+                            <input
+                                type="number"
+                                min={0}
+                                max={200}
+                                required
+                                placeholder='Minute du but...'
+                                value={form.date_heure}
+                                onChange={e => setForm({ ...form, date_heure: e.target.value })}
+                                className="px-3 py-2 rounded-sm outline outline-1 outline-green-800 hover:outline-2 text-black"
+                            />
+                        </div>
+
+                        <div className="flex justify-end gap-4 mt-4">
+                            <button type="button" onClick={() => setShowAddBut(false)} className="px-4 py-2 rounded-md border border-green-300 hover:bg-green-900">
+                                Annuler
+                            </button>
+                            <button type="submit" className="px-4 py-2 rounded-md bg-green-700 text-white hover:bg-green-600">
+                                Ajouter
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </ModalLayout>
+
+            <ModalLayout isOpen={!!error} handleModal={() => setError(null)} onClose={() => { setTimer(null) }}>
+                <div className="w-[450px] min-w-[380px] shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center backdrop-blur-sm text-white" style={{ backgroundColor: "hsla(130, 10%, 35%, 0.35)" }}>
+                    <p className="font-semibold text-xl mb-6 flex justify-center text-red-600">Erreur</p>
+                    <ul className="space-y-2 mb-6 text-slate-700">
+                        {error?.map((e, index) =>
+                            <li key={index} className="flex items-start gap-2">
+                                <span className="text-red-500 font-bold">•</span>
+                                <span>{e}</span>
+                            </li>
+                        )}
+                    </ul>
+                    <div className="flex justify-end">
+                        <button onClick={() => { setError(null); setTimer(null); }} className="px-4 py-2 rounded-md bg-green-700 text-white hover:bg-green-600">OK</button>
+                    </div>
+                </div>
+            </ModalLayout>
+
+            <ModalLayout isOpen={deleteButId != null} handleModal={() => setDeleteButId(null)} onClose={() => { setDeleteButId(null) }}>
+                <div className="w-[450px] min-w-[380px] shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center backdrop-blur-sm text-white" style={{ backgroundColor: "hsla(130, 10%, 35%, 0.45)" }}>
+                    <p className="font-semibold text-xl mb-6 flex justify-center">Supprimer le but</p>
+                    <p className="text-center mb-6 text-slate-700">Êtes-vous sûr de vouloir supprimer ce but ?</p>
+                    <div className="flex justify-end gap-4">
+                        <button onClick={() => { setDeleteButId(null) }} className="px-4 py-2 rounded-md border border-green-300 hover:bg-green-900">Annuler</button>
+                        <button onClick={() => { handleDeleteBut() }} className="px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-600">Supprimer</button>
+                    </div>
+                </div>
+            </ModalLayout>
+
+            <ModalLayout isOpen={editBut != null} handleModal={() => setEditBut(null)} onClose={() => { setEditBut(null) }}>
+                <div className="w-[450px] min-w-[380px] shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center backdrop-blur-sm text-white" style={{ backgroundColor: "hsla(130, 10%, 35%, 0.45)" }}>
+                    <p className="font-semibold text-xl mb-6 flex justify-center">Modifier le but</p>
+                    <form onSubmit={(e) => { e.preventDefault(); handleEditBut(); }} className="flex flex-col gap-6">
+                        <div className="flex flex-col gap-2">
+                            <label className="text-md font-medium">Joueur</label>
+                            <select
+                                name="User_id"
+                                value={editBut?.User_id}
+                                defaultValue={editBut?.User_id}
+                                onChange={(e) => { setEditBut({ ...editBut, User_id: e.target.value }) }}
+                                className="px-3 py-2 rounded-sm outline outline-1 outline-green-800 hover:outline-2 text-black"
+                            >
+                                {equipe1?.Joueurs.filter(j => j.id == editBut?.User_id).length != 0 ? (
+                                    <>
+                                        {equipe1?.Joueurs.map((joueur, key) =>
+                                            <option value={joueur.id} key={key}>
+                                                {joueur.prenom} - {joueur.nom}
+                                            </option>
+                                        )}
+                                    </>
+                                ) : (
+                                    <>
+                                        {equipe2?.Joueurs.map((joueur, key) =>
+                                            <option value={joueur.id} key={key}>
+                                                {joueur.prenom} - {joueur.nom}
+                                            </option>
+                                        )}
+                                    </>
+                                )}
+                            </select>
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                            <label className="text-md font-medium">Type de but</label>
+                            <select
+                                name="Type_but"
+                                defaultValue={editBut?.Type_but}
+                                value={editBut?.Type_but}
+                                onChange={(e) => { setEditBut({ ...editBut, Type_but: e.target.value }) }}
+                                className="px-3 py-2 rounded-sm outline outline-1 outline-green-800 hover:outline-2 text-black"
+                            >
+                                <option value="0">Normal</option>
+                                <option value="1">Penalty</option>
+                            </select>
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                            <label className="text-md font-medium">Minute du but</label>
+                            <input
+                                type="number"
+                                min={0}
+                                max={200}
+                                defaultValue={editBut?.date_heure}
+                                value={editBut?.date_heure}
+                                onChange={(e) => { setEditBut({ ...editBut, date_heure: e.target.value }) }}
+                                className="px-3 py-2 rounded-sm outline outline-1 outline-green-800 hover:outline-2 text-black"
+                            />
+                        </div>
+
+                        <div className="flex justify-end gap-4 mt-4">
+                            <button type="button" onClick={() => { setEditBut(null) }} className="px-4 py-2 rounded-md border border-green-300 hover:bg-green-900">Annuler</button>
+                            <button type="submit" className="px-4 py-2 rounded-md bg-green-700 text-white hover:bg-green-600">Confirmer</button>
+                        </div>
+                    </form>
+                </div>
+            </ModalLayout>
+
+            <ModalLayout isOpen={showEditLieuModal} handleModal={() => setShowEditLieuModal(false)}>
+                <div className="w-[450px] min-w-[380px] shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center backdrop-blur-sm text-white" style={{ backgroundColor: "hsla(130, 10%, 35%, 0.35)" }}>
+                    <p className="font-semibold text-xl mb-6 flex justify-center">Modifier le lieu</p>
+                    <form onSubmit={(e) => { e.preventDefault(); handleEditLieu(); }} className="flex flex-col gap-6">
+                        <div className="flex flex-col gap-2">
+                            <label className="text-md font-medium">Lieu du match</label>
+                            <input
+                                type="text"
+                                required
+                                placeholder="Lieu du match..."
+                                value={editLieu || ""}
+                                onChange={(e) => setEditLieu(e.target.value)}
+                                className="px-3 py-2 rounded-sm outline outline-1 outline-green-800 hover:outline-2 text-black"
+                            />
+                        </div>
+
+                        <div className="flex justify-end gap-4 mt-4">
+                            <button type="button" onClick={() => setShowEditLieuModal(false)} className="px-4 py-2 rounded-md border border-green-300 hover:bg-green-900" >Annuler</button>
+                            <button type="submit" className="px-4 py-2 rounded-md bg-green-700 text-white hover:bg-green-600" >Confirmer</button>
+                        </div>
+                    </form>
+                </div>
+            </ModalLayout>
+
+            <ModalLayout isOpen={showEditDateModal} handleModal={() => setShowEditDateModal(false)}>
+                <div className="w-[450px] min-w-[380px] shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center backdrop-blur-sm text-white" style={{ backgroundColor: "hsla(130, 10%, 35%, 0.35)" }}>
+                    <p className="font-semibold text-xl mb-6 flex justify-center">Modifier la date</p>
+                    <form onSubmit={(e) => { e.preventDefault(); handleEditDate(); }} className="flex flex-col gap-6">
+                        <div className="flex flex-col gap-2">
+                            <label className="text-md font-medium">Date et heure du match</label>
+                            <input
+                                type="datetime-local"
+                                required
+                                value={editDate || ""}
+                                onChange={(e) => setEditDate(e.target.value)}
+                                className="px-3 py-2 rounded-sm outline outline-1 outline-green-800 hover:outline-2 text-black"
+                            />
+                        </div>
+
+                        <div className="flex justify-end gap-4 mt-4">
+                            <button type="button" onClick={() => setShowEditDateModal(false)} className="px-4 py-2 rounded-md border border-green-300 hover:bg-green-900" >Annuler</button>
+                            <button type="submit" className="px-4 py-2 rounded-md bg-green-700 text-white hover:bg-green-600" >Confirmer</button>
+                        </div>
+                    </form>
+                </div>
+            </ModalLayout>
         </div>
     )
 }

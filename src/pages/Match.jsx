@@ -111,10 +111,7 @@ export default function Match() {
                         <h1 className="text-3xl font-bold text-white">Matchs</h1>
                         <p className="text-white/70">Vos derniers matchs et à venir</p>
                     </div>
-                    <button
-                        className="flex items-center text-white font-semibold py-2 px-4 rounded-lg transition hover:bg-white/10"
-                        onClick={handleModal}
-                    >
+                    <button className="flex items-center text-white font-semibold py-2 px-4 rounded-lg transition hover:bg-white/10" onClick={handleModal} >
                         <IoMdAdd size={50} />
                     </button>
                     </div>
@@ -147,7 +144,7 @@ export default function Match() {
             </div>
 
             <ModalLayout isOpen={modalOpen} handleModal={handleModal}>
-                <div className="w-[450px] min-w-[380px] bg-orange-50 border-2 border-orange-200 shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center">
+                <div className="w-[450px] min-w-[380px] shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center backdrop-blur-sm text-white" style={{ backgroundColor: "hsla(130, 10%, 35%, 0.45)" }}>
                     <p className="font-semibold text-xl mb-6 flex justify-center">Créer un match</p>
                     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
 
@@ -157,7 +154,7 @@ export default function Match() {
                                 required 
                                 value={formData.Equipe1_id}
                                 onChange={(e) => setFormData({ ...formData, Equipe1_id: e.target.value })}
-                                className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2"
+                                className="px-3 py-2 rounded-sm outline outline-1 outline-green-800 hover:outline-2 text-black"
                             >
                                 <option value="" disabled>Sélectionner une équipe</option>
                                 {equipes.filter(e => e.id !== formData.Equipe2_id).map((equipe) => (
@@ -174,7 +171,7 @@ export default function Match() {
                                 required 
                                 value={formData.Equipe2_id}
                                 onChange={(e) => setFormData({ ...formData, Equipe2_id: e.target.value })}
-                                className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2"
+                                className="px-3 py-2 rounded-sm outline outline-1 outline-green-800 hover:outline-2 text-black"
                             >
                                 <option value="" disabled>Sélectionner une équipe</option>
                                 {equipes.filter(e => e.id !== formData.Equipe1_id).map((equipe) => (
@@ -193,7 +190,7 @@ export default function Match() {
                                 placeholder="Lieu du match..." 
                                 value={formData.lieu}
                                 onChange={(e) => setFormData({ ...formData, lieu: e.target.value })}
-                                className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2" 
+                                className="px-3 py-2 rounded-sm outline outline-1 outline-green-800 hover:outline-2 text-black" 
                             />
                         </div>
 
@@ -204,13 +201,13 @@ export default function Match() {
                                 required 
                                 value={formData.date_heure}
                                 onChange={(e) => setFormData({ ...formData, date_heure: e.target.value })}
-                                className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2" 
+                                className="px-3 py-2 rounded-sm outline outline-1 outline-green-800 hover:outline-2 text-black" 
                             />
                         </div>
 
                         <div className="flex justify-end gap-4 mt-4">
-                            <button type="button" onClick={handleModal} className="px-4 py-2 rounded-md border border-orange-300 hover:bg-orange-100">Annuler</button>
-                            <button type="submit" className="px-4 py-2 rounded-md bg-orange-500 text-white hover:bg-orange-600">Créer</button>
+                            <button type="button" onClick={handleModal} className="px-4 py-2 rounded-md border border-green-300 hover:bg-green-900">Annuler</button>
+                            <button type="submit" className="px-4 py-2 rounded-md bg-green-700 text-white hover:bg-green-600">Créer</button>
                         </div>
                     </form>
                 </div>

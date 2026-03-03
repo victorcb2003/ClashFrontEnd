@@ -46,7 +46,7 @@ export default function Equipe() {
                                         <div className="flex items-center gap-3">
                                             <Avatar equipe={equipe} size="sm" className="shadow-xl" />
                                             <div className="flex-1">
-                                                <p className="text-white font-semibold group-hover:text-orange-300 transition">
+                                                <p className="text-white font-semibold group-hover:text-green-100 transition">
                                                     {equipe.nom}
                                                 </p>
                                                 <p className="text-white/60 text-sm">
