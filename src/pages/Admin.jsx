@@ -30,6 +30,7 @@ export default function Admin() {
         (async()=>{
             try {
                 const verifData = (await getVerif()).results
+				console.log(verifData)
                 setUsers(verifData)
             } catch (err) {
                 setError("Impossible de charger la liste des utilisateurs")
@@ -121,7 +122,7 @@ export default function Admin() {
 													{u?.prenom} {u?.nom}
 												</div>
 												<div className="text-white/60 text-sm">{u?.email}</div>
-												<div className="text-white/60 text-xs">{u?.type}</div>
+												<div className="text-white/60 text-xs">{u?.Utype}</div>
 											</div>
 										</div>
 

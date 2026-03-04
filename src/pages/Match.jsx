@@ -27,9 +27,10 @@ export default function Match() {
         ;(async () => {
             try {
                 const userData = await getUser()
+                console.log(userData)
+                console.log(userData.user[0].type)
                 setUser(userData?.user?.[0])
                 setMatches(userData?.match)
-                console.log(userData?.match)
             } catch (error) {
                 console.error("Erreur lors du chargement des matchs:", error)
             } finally {
@@ -43,7 +44,6 @@ export default function Match() {
             try {
                 const equipesData = await findAllEquipe()
                 setEquipes(equipesData.equipes || [])
-                console.log(equipesData.equipes)
             } catch (error) {
                 console.error("Erreur lors du chargement des équipes:", error)
             }
@@ -76,7 +76,6 @@ export default function Match() {
                 date_heure: formattedDate
             })
 
-            console.log("Match créé:", response.data)
             handleModal()
             setRefresh(!refresh)
         } catch (error) {
@@ -111,9 +110,12 @@ export default function Match() {
                         <h1 className="text-3xl font-bold text-white">Matchs</h1>
                         <p className="text-white/70">Vos derniers matchs et à venir</p>
                     </div>
+                    {user && (user?.type == "Organisateurs" || user?.type == "Admin") && (
                     <button className="flex items-center text-white font-semibold py-2 px-4 rounded-lg transition hover:bg-white/10" onClick={handleModal} >
                         <IoMdAdd size={50} />
                     </button>
+                    )}
+                    
                     </div>
 
                     <div className="backdrop-blur-md bg-white/20 rounded-xl border border-white/10 p-6 shadow-lg">
