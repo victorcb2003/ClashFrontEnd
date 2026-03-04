@@ -12,6 +12,7 @@ import "./App.css"
 import Match from "./pages/Match";
 import Confirmation from "./pages/Confirmation";
 import Profil from "./pages/Profil";
+import NotFound from "./pages/NotFound";
 import Admin from "./pages/Admin";
 import { setupInterceptors, setInterceptorNavigate } from "./services/interceptor";
 import ConfirmResetPassword from "./pages/ConfirmResetPassword";
@@ -44,6 +45,7 @@ function App() {
       <Route path="/confirm-reset-password" element={<ConfirmResetPassword/>}/>
       <Route path="/reset-password" element={<ResetPassword/>}/>
       <Route path="/calendrier" element={<Calendrier />} />
+      <Route path="/*" element={<NotFound />} />
     </Routes>
   )
 }
