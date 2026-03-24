@@ -16,13 +16,11 @@ import { IoMailSharp } from "react-icons/io5";
 import { getUser, logout } from '../services/authService';
 import { MdOutlineSignpost } from "react-icons/md";
 import { MdAdminPanelSettings } from "react-icons/md";
-import Message from './Message';
 
 function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
-  const [displayMessage, setDisplayMessage] = useState(false)
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -75,7 +73,8 @@ function Sidebar() {
         backdrop-blur-md bg-green-900/60 border-r border-green-600/40
         text-green-100 transition-all duration-300 ease-in-out
         shadow-[inset_0_0_20px_rgba(0,255,100,0.15)]
-        ${isOpen ? displayMessage ? 'w-[40vw]' : 'w-64' : 'w-16'}`}
+        ${isOpen ? 'w-64' : 'w-16'}
+        `}
       >
         {/* HEADER */}
         <div onClick={() => navigate('/home')} className={`flex items-center h-14 cursor-pointer transition-all text-green-100 hover:bg-green-700/40 hover:text-lime-300 border-b border-green-600/40 ${isOpen ? 'px-6' : 'px-5'}`} >
@@ -96,7 +95,7 @@ function Sidebar() {
                     : 'text-green-100 hover:bg-green-700/40 hover:text-lime-300'
                   }
                   ${isOpen ? 'px-6' : 'px-5'}
-                  ${displayMessage ? "opacity-0 h-0 absolute" : "opacity-100 h-14"}`}
+                  opacity-100 h-14`}
                 >
                   <MdAdminPanelSettings className="text-xl min-w-[20px]" />
                   <span className={`ml-4 text-base font-medium whitespace-nowrap transition-all ${isOpen ? "opacity-100" : "opacity-0 "}`}>Admin</span>
@@ -116,39 +115,18 @@ function Sidebar() {
                     : 'text-green-100 hover:bg-green-700/40 hover:text-lime-300'
                   }
                   ${isOpen ? 'px-6' : 'px-5'}
-                  ${displayMessage ? "opacity-0 h-0 absolute" : "opacity-100 h-14"}`}
+                  opacity-100 h-14`}
                 >
                   <Icon className="text-xl min-w-[20px]" />
                   <span className={`ml-4 text-base font-medium whitespace-nowrap transition-all ${isOpen ? "opacity-100" : "opacity-0 "}`}>{item.text}</span>
                 </div>
                 );
               })}
-              <div
-                onClick={() => setDisplayMessage(!displayMessage)}
-                className={`flex items-center h-14 cursor-pointer transition-all text-green-100 hover:bg-green-700/40 hover:text-lime-300
-                    
-                  ${isOpen ? 'px-6' : 'px-5'}
-                 ${displayMessage ? "opacity-0 h-0 absolute" : "opacity-100 h-14"}`}
-              >
-                <IoIosMail className="text-xl min-w-[20px]" />
-                <span className={`ml-4 text-base font-medium whitespace-nowrap transition-all ${isOpen ? "opacity-100" : "opacity-0 "}`}>Messages</span>
-              </div>
-              <div
-                  onClick={()=>setDisplayMessage(!displayMessage)}
-                  className={`flex items-center h-14 cursor-pointer transition-all text-green-100 hover:bg-green-700/40 hover:text-lime-300
-                    
-                  ${isOpen ? 'px-6' : 'px-5'}
-                  ${displayMessage ? "opacity-100" : "opacity-0"}`}
-                >
-                  <MdOutlineSignpost className="text-xl min-w-[20px]" />
-                  <span className={`ml-4 text-base font-medium whitespace-nowrap transition-all ${isOpen ? "opacity-100" : "opacity-0 "}`}>Navigation</span>
-                </div>
             </>
 
           }
         </nav>
 
-        <Message displayMessage={displayMessage} isOpen={isOpen} />
 
         {/* FOOTER */}
         {isConnected ? (
