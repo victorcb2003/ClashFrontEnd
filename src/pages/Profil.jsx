@@ -181,10 +181,10 @@ function Profil() {
           </div>
 
           {/* Équipes */}
-          {equipe && (
+          {equipe.length && (
             <div className="backdrop-blur-md bg-white/20 rounded-xl border border-white/10 p-6 shadow-lg">
             <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-              <GiSoccerBall /> Équipe
+              <GiSoccerBall /> {user.Pending_Equipe!= null ? "Demande en attente pour :" : "Équipe :" }
             </h2>
             <div className="space-y-3">
               <div className="bg-white/10 rounded-lg p-4 flex items-center justify-between hover:bg-white/20 transition cursor-pointer" onClick={() => navigate("/equipe/" + equipe?.id)}>

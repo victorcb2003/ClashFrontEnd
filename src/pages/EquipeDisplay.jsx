@@ -2,24 +2,24 @@ import { useEffect, useState, useRef } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import Sidebar from "../components/Sidebar"
 import Avatar from "../components/Avatar"
-import { addjoueurEquipe, findAllJoueur, infoEquipe, removejoueurEquipe, renameEquipe, deleteEquipe, postImage, deleteImage } from "../services/equipeService"
+import { addjoueurEquipe, findAllJoueur, infoEquipe, removejoueurEquipe, renameEquipe, deleteEquipe, postImage, deleteImage, deletePendingEquipe, setPendingEquipe, acceptJoueur, rejectJoueur, quiteEquipe } from "../services/equipeService"
 import { getUser } from "../services/authService"
 import { FaEdit, FaTrashAlt } from "react-icons/fa"
 import { IoMdAdd } from "react-icons/io"
+import { MdCheckCircle, MdCancel, MdLogout } from "react-icons/md"
 import ModalLayout from "../components/ModalLayout"
 
 export default function EquipeDisplay() {
 
   const [equipe, setEquipe] = useState(null)
   const [user, setUser] = useState(null)
-  const [joueurs, setJoueurs] = useState([])
+  const [pending, setPending] = useState([])
   const [openModalRemove, setOpenModalRemove] = useState(false)
   const [removeJoueur, setRemoveJoueur] = useState(null)
-  const [addJoueurId, setAddJoueurId] = useState(null)
-  const [openModalAdd, setOpenModalAdd] = useState(null)
   const [openModalRename, setOpenModalRename] = useState(false)
   const [nouveauNom, setNouveauNom] = useState("")
   const [openModalDeleteEquipe, setOpenModalDeleteEquipe] = useState(false)
+  const [openModalQuitEquipe, setOpenModalQuitEquipe] = useState(false)
   const [openModalImage, setOpenModalImage] = useState(false)
   const [refresh, setRefresh] = useState(false)
   const fileInputRef = useRef(null)
@@ -31,13 +31,6 @@ export default function EquipeDisplay() {
     await removejoueurEquipe({ Equipe_id: equipe_id, Joueur_id: removeJoueur.id })
     setRemoveJoueur(null)
     setOpenModalRemove(false)
-    setRefresh(!refresh)
-  }
-
-  async function handleAddJoueur() {
-    await addjoueurEquipe({ Equipe_id: equipe_id, Joueur_id: addJoueurId })
-    setAddJoueurId(null)
-    setOpenModalAdd(false)
     setRefresh(!refresh)
   }
 
@@ -75,18 +68,29 @@ export default function EquipeDisplay() {
     }
   }
 
+  async function handleAcceptJoueur(joueur) {
+    try {
+      await acceptJoueur({ Equipe_id: equipe_id, User_id: joueur.id })
+      setRefresh(!refresh)
+    } catch (error) {
+      console.error("Erreur lors de l'acceptation du joueur:", error)
+    }
+  }
+
+  async function handleRejectJoueur(joueur) {
+    try {
+      await rejectJoueur({ Equipe_id: equipe_id, User_id: joueur.id })
+      setRefresh(!refresh)
+    } catch (error) {
+      console.error("Erreur lors du rejet du joueur:", error)
+    }
+  }
+
   useEffect(() => {
     (async () => {
       const user = await getUser()
       console.log(user)
       setUser(user)
-    })()
-  }, [])
-
-  useEffect(() => {
-    (async () => {
-      const joueurNonTrié = (await findAllJoueur()).Joueurs
-      setJoueurs(joueurNonTrié.filter(j => j.Equipe_id == null))
     })()
   }, [refresh])
 
@@ -98,6 +102,17 @@ export default function EquipeDisplay() {
   }, [refresh, equipe_id])
 
   const canManage = user && (user.user[0].type == "Selectionneurs" && equipe?.Selectionneur?.id == user.user[0].id || user.user[0].type == "Admin")
+  const isPlayerInTeam = user?.user?.[0]?.type == "Joueurs" && equipe?.Joueurs?.some(joueur => joueur.id == user?.user?.[0]?.id)
+
+  async function handleQuitEquipe() {
+    try {
+      await quiteEquipe()
+      setOpenModalQuitEquipe(false)
+      setRefresh(!refresh)
+    } catch (error) {
+      console.error("Erreur lors du départ de l'équipe:", error)
+    }
+  }
 
   return (
     <div className="relative w-full min-h-screen">
@@ -148,16 +163,36 @@ export default function EquipeDisplay() {
                 </div>
               </div>
 
-              <div className="backdrop-blur-md bg-white/20 rounded-xl border border-white/10 p-6 shadow-lg">
+              <div className="backdrop-blur-md bg-white/20 rounded-xl border border-white/10 p-6 shadow-lg mb-6">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-xl font-semibold text-white">Joueurs ({equipe.Joueurs?.length || 0})</h2>
-                  {canManage && (
-                    <button
-                      onClick={() => { setOpenModalAdd(true) }}
-                      className="rounded-lg bg-green-700 px-4 py-2 text-white hover:bg-green-600 transition flex items-center gap-2"
-                    >
-                      <IoMdAdd size={18} /> Ajouter
-                    </button>
+                  {user?.user?.[0]?.type == "Joueurs" && (
+                    <>
+                    {isPlayerInTeam ? (
+                        <button
+                          onClick={() => setOpenModalQuitEquipe(true)}
+                          className="rounded-lg bg-red-700 px-4 py-2 text-white hover:bg-red-600 transition flex items-center gap-2"
+                        >
+                          <MdLogout size={18} /> Quitter l'équipe
+                        </button>
+                      ) : 
+                      
+                      equipe?.Pending?.filter(j => j.id == user?.user?.[0]?.id).length != 0 ? (
+                        <button
+                          onClick={async () => { await deletePendingEquipe(); setRefresh(!refresh) }}
+                          className="rounded-lg bg-red-700 px-4 py-2 text-white hover:bg-red-600 transition flex items-center gap-2"
+                        > annuler la demande de recrutement
+                        </button>
+                      ) : (
+                        <button
+                          onClick={async () => { await setPendingEquipe({Equipe_id:equipe.id});setRefresh(!refresh) }}
+                          className="rounded-lg bg-green-700 px-4 py-2 text-white hover:bg-green-600 transition flex items-center gap-2"
+                        >
+                           Demande de recrutement
+                        </button>
+                      )
+                    }
+                    </>
                   )}
                 </div>
 
@@ -192,12 +227,59 @@ export default function EquipeDisplay() {
                   )}
                 </div>
               </div>
+              {canManage && (
+                <div className="backdrop-blur-md bg-white/20 rounded-xl border border-white/10 p-6 shadow-lg">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-semibold text-white">Pending ({equipe.Pending?.length || 0})</h2>
+                </div>
+
+                <div className="space-y-2">
+                  {equipe.Pending && equipe.Pending.length > 0 ? (
+                    equipe.Pending.map((joueur) => (
+                      <div
+                        key={joueur.id}
+                        className="bg-white/10 rounded-lg p-4 flex items-center justify-between hover:bg-white/20 transition"
+                      >
+                        <div className="flex items-center gap-3">
+                          <Avatar user={joueur} size="sm" />
+                          <div>
+                            <p className="text-white font-medium">{joueur.prenom} {joueur.nom}</p>
+                            <p className="text-white/60 text-xs">Joueur</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                           <button
+                            onClick={() => { handleAcceptJoueur(joueur) }}
+                            className="rounded-lg bg-green-500 px-3 py-2 text-white hover:bg-green-600 transition flex items-center gap-1"
+                            title="Accepter le joueur"
+                          >
+                            <MdCheckCircle size={18} /> Accepter
+                          </button>
+                          <button
+                            onClick={() => { handleRejectJoueur(joueur) }}
+                            className="rounded-lg bg-red-500/70 px-3 py-2 text-white hover:bg-red-600 transition flex items-center gap-1"
+                            title="Rejeter le joueur"
+                          >
+                            <MdCancel size={18} /> Rejeter
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center text-white/70 py-8">
+                      Aucun joueur en attente de recrutement.
+                    </div>
+                  )}
+                </div>
+              </div>
+              )}
+
 
               {removeJoueur != null && (
                 <ModalLayout isOpen={openModalRemove} handleModal={() => setOpenModalRemove(!openModalRemove)}>
                   <div className="w-[450px] min-w-[380px] shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center text-white backdrop-blur-sm" style={{ backgroundColor: "hsla(130, 10%, 25%, 0.65)" }}>
                     <p className="font-semibold text-xl mb-6 flex justify-center">Supprimer un joueur</p>
-                    <p className="text-center text-slate-700 mb-6">
+                    <p className="text-center text-white mb-6">
                       Êtes-vous sûr de vouloir supprimer <span className="font-semibold">{removeJoueur.prenom} {removeJoueur.nom}</span> de l'équipe <span className="font-semibold">{equipe.nom}</span> ?
                     </p>
                     <div className="flex justify-end gap-4 mt-4">
@@ -208,41 +290,6 @@ export default function EquipeDisplay() {
                         Supprimer
                       </button>
                     </div>
-                  </div>
-                </ModalLayout>
-              )}
-
-              {joueurs != [] && (
-                <ModalLayout isOpen={openModalAdd} handleModal={() => setOpenModalAdd(!openModalAdd)}>
-                  <div className="w-[450px] min-w-[380px] shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center text-white backdrop-blur-sm" style={{ backgroundColor: "hsla(130, 10%, 25%, 0.65)" }}>
-                    <p className="font-semibold text-xl mb-6 flex justify-center">Ajouter un joueur</p>
-                    <form onSubmit={(e) => { e.preventDefault(); handleAddJoueur() }} className="flex flex-col gap-6">
-                      <div className="flex flex-col gap-2">
-                        <label className="text-md font-medium">Joueur</label>
-                        <select
-                          required
-                          name="addJoueur"
-                          defaultValue=""
-                          onChange={(e) => setAddJoueurId(e.target.value)}
-                          className="px-3 py-2 rounded-sm outline outline-1 outline-green-800 hover:outline-2"
-                        >
-                          <option value="" disabled>Sélectionner un joueur</option>
-                          {joueurs.map(j =>
-                            <option value={j.id} key={j.id}>
-                              {j.prenom} - {j.nom}
-                            </option>
-                          )}
-                        </select>
-                      </div>
-                      <div className="flex justify-end gap-4 mt-4">
-                        <button type="button" onClick={() => { setOpenModalAdd(false) }} className="px-4 py-2 rounded-md border border-green-300 hover:bg-green-900">
-                          Annuler
-                        </button>
-                        <button type="submit" className="px-4 py-2 rounded-md bg-green-700 text-white hover:bg-green-600">
-                          Ajouter
-                        </button>
-                      </div>
-                    </form>
                   </div>
                 </ModalLayout>
               )}
@@ -258,7 +305,7 @@ export default function EquipeDisplay() {
                         required
                         defaultValue={equipe.nom}
                         onChange={(e) => { setNouveauNom(e.target.value) }}
-                        className="px-3 py-2 rounded-sm outline outline-1 outline-green-800 hover:outline-2" 
+                        className="px-3 py-2 rounded-sm outline outline-1 outline-green-800 hover:outline-2"
                       />
                     </div>
                     <div className="flex justify-end gap-4 mt-4">
@@ -285,6 +332,23 @@ export default function EquipeDisplay() {
                     </button>
                     <button onClick={() => handleDeleteEquipe()} className="px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-600">
                       Supprimer l'équipe
+                    </button>
+                  </div>
+                </div>
+              </ModalLayout>
+
+              <ModalLayout isOpen={openModalQuitEquipe} handleModal={() => setOpenModalQuitEquipe(false)}>
+                <div className="w-[450px] min-w-[380px] bg-orange-50 border-2 border-orange-200 shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center">
+                  <p className="font-semibold text-xl mb-6 flex justify-center text-red-600">Quitter l'équipe</p>
+                  <p className="text-center text-slate-700 mb-6">
+                    Êtes-vous sûr de vouloir quitter l'équipe <span className="font-semibold">{equipe.nom}</span> ?
+                  </p>
+                  <div className="flex justify-end gap-4 mt-4">
+                    <button onClick={() => setOpenModalQuitEquipe(false)} className="px-4 py-2 rounded-md border border-orange-300 hover:bg-orange-100">
+                      Annuler
+                    </button>
+                    <button onClick={handleQuitEquipe} className="px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-600">
+                      Quitter
                     </button>
                   </div>
                 </div>
@@ -325,10 +389,9 @@ export default function EquipeDisplay() {
                   <button
                     onClick={async () => {
                       try {
-                        await deleteImage({ id: equipe.id })
-                        const equi = await getUser()
-                        setUser(userData?.user?.[0])
+                        await deleteImage(equipe.id)
                         setOpenModalImage(false)
+                        setRefresh(!refresh)
                       } catch (error) {
                         console.error("Erreur lors de la suppression:", error)
                       }
