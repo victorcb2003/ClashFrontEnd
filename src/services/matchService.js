@@ -62,3 +62,18 @@ export const getMatchById = async (id) => {
         throw error;
     }
 }
+
+
+export const findMatchByTournoisId = async (id) => {
+
+    try {
+        const response = await axios.get(
+            `${baseUrl}/findByTournoisId/${data.id}`
+        );
+
+        return response;
+    } catch (error) {
+        console.error("Erreur lors de la creation de l'equipe :", error);
+        throw error;
+    }
+}

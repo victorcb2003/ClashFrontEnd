@@ -2,6 +2,22 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 const baseUrl = "https://clashofleagues.fr/api/equipe"
 
+
+export const createEquipe = async (data) => {
+    // data = {nom : "nom"}
+    try {
+        const response = await axios.post(
+            `${baseUrl}/create`,
+            data
+        );
+
+        return response;
+    } catch (error) {
+        console.error("Erreur lors de la creation de l'equipe :", error);
+        throw error;
+    }
+};
+
 export const renameEquipe = async (data) => {
     // data = {Equipe_id : "Equipe_id",nom : "nom"}
     try {
@@ -88,7 +104,7 @@ export const findAllJoueur = async (data) =>{
     
     try{
         const response = await axios.get(
-            `http://localhost:8080/api/joueur/findAll`
+            `https://clashofleagues.fr/api/joueur/findAll`
         )
 
         return response.data;
@@ -106,10 +122,6 @@ export const removejoueurEquipe = async (data) => {
             {data}
         );
 
-        // const response = await axios.delete(
-        //     `${baseUrl}/removeJoueur/?Equipe_id=${data.Equipe_id}&Joueur_id=${data.Joueur_id}`, 
-        // );
-
         return response.data;
     } catch (error) {
         console.error(
@@ -120,3 +132,99 @@ export const removejoueurEquipe = async (data) => {
     }
 };
 
+export const equipeMe = async () => {
+    try {
+        const response = await axios.get(
+            `${baseUrl}/me`
+        );
+        return response.data;
+    } catch (error) {
+        console.error("Erreur lors du changement du nom de l'equipe :", error);
+        throw error;
+    }
+}
+
+export const deleteImage = async (id) =>{
+    try {
+        const response = await axios.delete(
+            `${baseUrl}/image/${id}`
+        );
+        return response.data;
+    } catch (err) {
+        console.error("Erreur lors de la suppression de l'image de l'equipe :",err)
+        throw err
+    }
+}
+
+export const postImage = async (data) =>{
+    try {
+        const response = await axios.post(
+            `${baseUrl}/image/${data.id}`, data.imageFile
+        );
+        return response.data;
+    } catch (err) {
+        console.error("Erreur lors de la suppression de l'image de l'equipe :",err)
+        throw err
+    }
+}
+
+export const setPendingEquipe = async (data) =>{
+    //{Equipe_id : Equipe_id}
+    try {
+        const response = await axios.post(
+            `https://clashofleagues.fr/api/joueur/setPendingEquipe`, data
+        );
+        return response.data;
+    } catch (err) {
+        console.error(err)
+        throw err
+    }
+}
+
+export const deletePendingEquipe = async () =>{
+    try {
+        const response = await axios.delete(
+            `https://clashofleagues.fr/api/joueur/deletePendingEquipe`, 
+        );
+        return response.data;
+    } catch (err) {
+        console.error(err)
+        throw err
+    }
+}
+
+export const acceptJoueur = async (data) =>{
+    //{Equipe_id : Equipe_id, User_id : User_id}
+    try {
+        const response = await axios.post(
+            `https://clashofleagues.fr/api/selectionneur/accept`, data
+        );
+        return response.data;
+    } catch (err) {
+        console.error(err)
+        throw err
+    }
+}
+export const rejectJoueur = async (data) =>{
+    //{Equipe_id : Equipe_id, User_id : User_id}
+    try {
+        const response = await axios.post(
+            `https://clashofleagues.fr/api/selectionneur/accept`, {User_id : data.User_id, Equipe_id : null}
+        );
+        return response.data;
+    } catch (err) {
+        console.error(err)
+        throw err
+    }
+}
+export const quiteEquipe = async () =>{
+    try {
+        const response = await axios.delete(
+            `https://clashofleagues.fr/api/joueur/quitEquipe`
+        );
+        return response.data;
+    } catch (err) {
+        console.error(err)
+        throw err
+    }
+}

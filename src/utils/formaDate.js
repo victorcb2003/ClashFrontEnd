@@ -9,7 +9,7 @@ const formaDate = (date) => {
     }
 
     if (date_obj.mois.length == 1) {
-        date_obj.mois = "0" + date_obj.jour
+        date_obj.mois = "0" + date_obj.mois
     }
 
     if (date_obj.jour.length == 1) {
