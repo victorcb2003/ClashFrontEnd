@@ -3,6 +3,9 @@ import Calendar from "../components/Calendar"
 import MatchSummaryCard from "../components/MatchSummaryCard"
 import NewsCard from "../components/NewsCard"
 import Sidebar from "../components/Sidebar"
+import { useEffect, useState } from "react"
+import { getUser } from "../services/authService"
+import { getEquipeById } from "../services/equipeService"
 
 function Home() {
   const navigate = useNavigate()
