@@ -86,7 +86,7 @@ function Home() {
                 </p>
 
                 <ul className="space-y-6">
-                  {[1, 2, 3].map((n, i) => (
+                  {[1, 2].map((n, i) => (
                     <li key={i} className="flex gap-4">
                       <span className="w-8 h-8 flex items-center justify-center rounded-full bg-green-600 text-white font-bold">
                         {n}
@@ -94,13 +94,11 @@ function Home() {
                       <div>
                         <h4 className="font-semibold">
                           {n === 1 && "Centralisez vos informations"}
-                          {n === 2 && "Communiquez facilement"}
-                          {n === 3 && "Suivez vos compétitions"}
+                          {n === 2 && "Suivez vos compétitions"}
                         </h4>
                         <p className="text-neutral-600">
                           {n === 1 && "Équipes, matchs, résultats."}
-                          {n === 2 && "Notifications et messages."}
-                          {n === 3 && "Classements et stats."}
+                          {n === 2 && "Classements et stats."}
                         </p>
                       </div>
                     </li>
@@ -130,9 +128,7 @@ function Home() {
               {[
                 { icon: FaUsers, title: "GESTION DES ÉQUIPES" },
                 { icon: FaCalendarAlt, title: "ORGANISATION DE MATCHS" },
-                { icon: FaComments, title: "MESSAGERIE INTERNE" },
                 { icon: FaShieldAlt, title: "RÔLES ET PERMISSIONS" },
-                { icon: FaMapMarkerAlt, title: "RÉSERVATION DE TERRAINS" },
                 { icon: FaChartBar, title: "STATISTIQUES ET CLASSEMENTS" },
               ].map((item, i) => {
                 const Icon = item.icon
@@ -168,13 +164,6 @@ function Home() {
                     className="px-6 py-3 bg-green-600 text-white font-semibold rounded-md hover:bg-green-700 transition"
                   >
                     Créer mon compte →
-                  </button>
-
-                  <button
-                    onClick={() => navigate("/contact")}
-                    className="px-6 py-3 border border-white text-white rounded-md hover:bg-white hover:text-black transition"
-                  >
-                    Nous contacter
                   </button>
                 </div>
               </div>
