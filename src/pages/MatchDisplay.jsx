@@ -30,6 +30,9 @@ export default function MatchDisplay() {
     const [currentUser, setCurrentUser] = useState(null)
     const [showEditLieuModal, setShowEditLieuModal] = useState(false)
     const [showEditDateModal, setShowEditDateModal] = useState(false)
+    const [joueurState, setJoueurState] = useState("Selectionner un Joueur")
+    const [butState, setButState] = useState("Type de but")
+    const [minuteState, setMinuteState] = useState(null)
 
     const [refresh, setRefresh] = useState(false)
     const { id: matchId } = useParams()
@@ -99,6 +102,21 @@ export default function MatchDisplay() {
         showSuccess(response.data.message)
     }
 
+    const handleJoueurState = (state) => {
+        setJoueurState(state)
+        setForm({ ...form, User_id: state })
+    }
+
+    const handleButState = (state) => {
+        setButState(state)
+        setForm({ ...form, Type_But: state })
+    }
+
+    const handleMinuteState = (state) => {
+        setMinuteState(state)
+        setForm({ ...form, date_heure: state })
+    }
+
     function getUserById(id) {
         const joueur = [...equipe1.Joueurs, ...equipe2.Joueurs]
         const joueurr = joueur.filter(j => j.id == id)[0]
@@ -132,7 +150,10 @@ export default function MatchDisplay() {
         setShowAddBut(false)
 
         if (response.error) showError([response.error.message])
-
+        
+        setJoueurState("Selectionner un Joueur")
+        setButState("Type de but")
+        setMinuteState(null)
         setRefresh(!refresh)
         showSuccess(response.data.message)
     }
@@ -404,10 +425,10 @@ export default function MatchDisplay() {
                         <div className="flex flex-col gap-2">
                             <label className="text-md font-medium">Joueur</label>
                             <select
-                                defaultValue={"Selectionner un Joueur"}
+                                value={joueurState}
                                 name="butteur"
                                 required
-                                onChange={e => { setForm({ ...form, User_id: e.target.value }) }}
+                                onChange={e => handleJoueurState(e.target.value)}
                                 className="px-3 py-2 rounded-sm outline outline-1 outline-green-800 hover:outline-2 text-black"
                             >
                                 <option value="Selectionner un Joueur" disabled>
@@ -430,8 +451,8 @@ export default function MatchDisplay() {
                             <select
                                 name="type"
                                 required
-                                value={form.Type_But}
-                                onChange={e => setForm({ ...form, Type_But: e.target.value })}
+                                value={butState}
+                                onChange={e => handleButState(e.target.value)}
                                 defaultValue={"Type de but"}
                                 className="px-3 py-2 rounded-sm outline outline-1 outline-green-800 hover:outline-2 text-black"
                             >
@@ -452,7 +473,7 @@ export default function MatchDisplay() {
                                 required
                                 placeholder='Minute du but...'
                                 value={form.date_heure}
-                                onChange={e => setForm({ ...form, date_heure: e.target.value })}
+                                onChange={e => handleMinuteState(e.target.value)}
                                 className="px-3 py-2 rounded-sm outline outline-1 outline-green-800 hover:outline-2 text-black"
                             />
                         </div>
@@ -472,7 +493,7 @@ export default function MatchDisplay() {
             <ModalLayout isOpen={!!error} handleModal={() => setError(null)} onClose={() => { setTimer(null) }}>
                 <div className="w-[450px] min-w-[380px] shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center backdrop-blur-sm text-white" style={{ backgroundColor: "hsla(130, 10%, 35%, 0.35)" }}>
                     <p className="font-semibold text-xl mb-6 flex justify-center text-red-600">Erreur</p>
-                    <ul className="space-y-2 mb-6 text-slate-700">
+                    <ul className="space-y-2 mb-6 text-slate-200">
                         {error?.map((e, index) =>
                             <li key={index} className="flex items-start gap-2">
                                 <span className="text-red-500 font-bold">•</span>

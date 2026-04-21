@@ -129,25 +129,25 @@ function MatchSummaryCard() {
                         <div className={`absolute border-l-4 border-t-4 border-r-4 px-4 py-2 border border-b-0 rounded-t-2xl w-full min-w-[380px] xl:min-w-[650px] inset-0 opacity-85 -z-10 backdrop-blur-lg`}
                             style={{
                                 backgroundColor: `
-                                    ${match.status == "win" ? "hsla(130, 45%, 15%, 0.75)" : ""}
-                                    ${match.status == "loose" ? "hsla(10, 55%, 15%, 0.75)" : ""}
-                                    ${match.status == "tie" ? "hsla(0, 0%, 15%, 0.75)" : ""}
+                                    ${summary.status == "win" ? "hsla(130, 45%, 15%, 0.75)" : ""}
+                                    ${summary.status == "loose" ? "hsla(10, 55%, 15%, 0.75)" : ""}
+                                    ${summary.status == "tie" ? "hsla(0, 0%, 15%, 0.75)" : ""}
                                 `,
                                 borderColor: `
-                                    ${match.status == "win" ? "hsl(130, 45%, 75%)" : ""}
-                                    ${match.status == "loose" ? "hsl(10, 55%, 75%)" : ""}
-                                    ${match.status == "tie" ? "hsl(0, 0%, 65%)" : ""}
+                                    ${summary.status == "win" ? "hsl(130, 45%, 75%)" : ""}
+                                    ${summary.status == "loose" ? "hsl(10, 55%, 75%)" : ""}
+                                    ${summary.status == "tie" ? "hsl(0, 0%, 65%)" : ""}
                                 `
                             }}
                         />
 
-                        <div className="px-4 py-2 z-10 rounded-t-2xl w-full min-w-[380px] xl:min-w-[650px]">
+                        <div className="px-4 py-2 z-10 rounded-t-2xl w-full min-w-[380px] xl:min-w-[650px] text-white">
                             <p>{summary.tournoiName}</p>
 
                             <div className="flex mt-2 justify-center items-center">
                                 <div className="relative">
                                     <div className="absolute right-0 bottom-0 -top-4">
-                                        <div className="flex flex-col text-gray-700 text-sm mr-4 h-[60px] overflow-y-scroll px-1 text-right sm:w-[80px] xl:w-[20vw] md:w-[100px] lg:w-[15vw]">
+                                        <div className="flex flex-col text-gray-200 text-sm mr-4 h-[60px] overflow-y-scroll px-1 text-right sm:w-[80px] xl:w-[20vw] md:w-[100px] lg:w-[15vw]">
                                             {summary.leftScorers.length ? summary.leftScorers.map((s, i) => <p key={i}>{s}</p>) : <p>—</p>}
                                         </div>
                                     </div>
@@ -169,7 +169,7 @@ function MatchSummaryCard() {
 
                                 <div className="relative">
                                     <div className="absolute -top-4 bottom-0">
-                                        <div className="flex flex-col text-gray-700 text-sm ml-4 h-[60px] overflow-y-scroll px-1 sm:w-[80px] xl:w-[20vw] md:w-[100px] lg:w-[15vw]">
+                                        <div className="flex flex-col text-gray-200 text-sm ml-4 h-[60px] overflow-y-scroll px-1 sm:w-[80px] xl:w-[20vw] md:w-[100px] lg:w-[15vw]">
                                             {summary.rightScorers.length ? summary.rightScorers.map((s, i) => <p key={i}>{s}</p>) : <p>—</p>}
                                         </div>
                                     </div>

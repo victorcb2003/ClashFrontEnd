@@ -5,6 +5,7 @@ import { getUser } from "../services/authService"
 import { findTournoisById } from "../services/tournoisService"
 import TournamentSummaryCard from "../components/TournamentSummaryCard"
 import ModalLayout from "../components/ModalLayout"
+import { findByTournoisId } from "../services/matchService"
 
 function Tournois() {
     const [currentTournaments, setCurrentTournaments] = useState([])
@@ -35,7 +36,7 @@ function Tournois() {
             const user = await getUser()
             setCurrentUser(user.user[0])
             const response = await getTournaments()
-            console.log(response,user)
+            console.log(response, user)
             filterTournaments(response, user.user[0])
             await fetchMatchesForTournaments(response.slice(0, 5))
         } catch (err) {
@@ -154,7 +155,7 @@ function Tournois() {
                 <Sidebar />
 
                 <div className="relative z-10 min-h-screen w-full pl-16 py-6">
-                    {myTournaments.length > 0 && (
+                    {myTournaments && (
                         <div className="flex flex-col gap-4 px-12 py-4">
                             <p className="font-bold text-2xl text-green-100">Mes tournois</p>
                             {myTournaments.slice(0, visibleMy).map((tournament) => (

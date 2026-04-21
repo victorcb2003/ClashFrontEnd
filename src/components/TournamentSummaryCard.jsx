@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MatchSummaryCard from "./MatchSummaryCard";
 
@@ -7,21 +7,15 @@ function TournamentSummaryCard({ tournament, matches = [], type = "basic" }) {
    const navigate = useNavigate();
 
    const [isHover, setIsHover] = useState(false)
-   const [currentMatch, setCurrentMatch] = useState({})
-   const [futurMatch, setFuturMatch] = useState([])
-   const [finishedMatch, setFinishedMatch] = useState([])
+   const { current, future, old } = useMemo(() => {
+      return sortMatches(matches, type);
+   }, [matches, type]);
 
-   useEffect(() => {
+   const currentMatch = current || {};
+   const futurMatch = future || [];
+   const finishedMatch = old || [];
 
-      const { current, future, old } = sortMatches(matches);
-
-      setCurrentMatch(current || {})
-      setFuturMatch(future || [])
-      setFinishedMatch(old || [])
-
-   }, [matches]);
-
-   const sortMatches = (matches, type = "basic") => {
+   function sortMatches(matches, type = "basic") {
       const now = new Date()
       const MATCH_DURATION = 2 * 90 * 60 * 1000
 
