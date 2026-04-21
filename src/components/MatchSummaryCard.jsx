@@ -10,53 +10,84 @@ function MatchSummaryCard() {
     const [teamById, setTeamById] = useState({})
     const [goalsByMatchId, setGoalsByMatchId] = useState({})
     const [currentUser, setCurrentUser] = useState(null)
+    const [visibleCount, setVisibleCount] = useState(10)
 
     useEffect(() => {
-        ;(async () => {
+        (async () => {
             try {
                 const userData = await getUser()
-                const fetchedMatches = userData?.match || []
                 setCurrentUser(userData?.user?.[0] || null)
-                setMatches(fetchedMatches)
-
-                const uniqueTeamIds = Array.from(
-                    new Set(
-                        fetchedMatches
-                            .flatMap((m) => [m.Equipe1_id, m.Equipe2_id])
-                            .filter(Boolean),
-                    ),
-                )
-
-                const teams = await Promise.all(uniqueTeamIds.map((id) => getEquipeById(id)))
-                const teamMap = {}
-                teams.forEach((team, idx) => {
-                    const normalizedTeam = team?.equipe || team?.Equipe || team
-                    teamMap[uniqueTeamIds[idx]] = normalizedTeam
-                })
-                setTeamById(teamMap)
-
-                const goalsResults = await Promise.all(
-                    fetchedMatches.map(async (m) => {
-                        const res = await getButByMatch(m.id)
-                        return [m.id, res?.buts || []]
-                    }),
-                )
-
-                const goalsMap = {}
-                goalsResults.forEach(([matchId, goals]) => {
-                    goalsMap[matchId] = goals
-                })
-                setGoalsByMatchId(goalsMap)
+                setMatches(userData?.match || [])
             } catch (error) {
-                console.error("Erreur lors du chargement des résumés de matchs:", error)
+                console.error(error)
             }
         })()
     }, [])
 
+    useEffect(() => {
+        if (!matches.length) return
+
+        const loadData = async () => {
+            try {
+                const visibleMatches = matches.slice(0, visibleCount)
+
+                // 🟡 ÉQUIPES À CHARGER (uniquement celles pas encore en cache)
+                const teamIdsToFetch = Array.from(
+                    new Set(
+                        visibleMatches
+                            .flatMap((m) => [m.Equipe1_id, m.Equipe2_id])
+                            .filter((id) => id && !teamById[id])
+                    )
+                )
+
+                if (teamIdsToFetch.length) {
+                    const teams = await Promise.all(
+                        teamIdsToFetch.map((id) => getEquipeById(id))
+                    )
+
+                    setTeamById((prev) => {
+                        const updated = { ...prev }
+                        teams.forEach((team, idx) => {
+                            const normalized = team?.equipe || team?.Equipe || team
+                            updated[teamIdsToFetch[idx]] = normalized
+                        })
+                        return updated
+                    })
+                }
+
+                // 🔵 BUTS À CHARGER (uniquement ceux pas encore en cache)
+                const matchesToFetchGoals = visibleMatches.filter(
+                    (m) => !goalsByMatchId[m.id]
+                )
+
+                if (matchesToFetchGoals.length) {
+                    const goalsResults = await Promise.all(
+                        matchesToFetchGoals.map(async (m) => {
+                            const res = await getButByMatch(m.id)
+                            return [m.id, res?.buts || []]
+                        })
+                    )
+
+                    setGoalsByMatchId((prev) => {
+                        const updated = { ...prev }
+                        goalsResults.forEach(([matchId, goals]) => {
+                            updated[matchId] = goals
+                        })
+                        return updated
+                    })
+                }
+            } catch (err) {
+                console.error(err)
+            }
+        }
+
+        loadData()
+    }, [matches, visibleCount])
+
     const playerNameById = useMemo(() => {
         const map = {}
         Object.values(teamById).forEach((team) => {
-            ;(team?.Joueurs || []).forEach((p) => {
+            ; (team?.Joueurs || []).forEach((p) => {
                 map[p.id] = `${p.prenom || ""} ${p.nom || ""}`.trim()
             })
         })
@@ -122,7 +153,7 @@ function MatchSummaryCard() {
 
     return (
         <>
-            {matches.map((match) => {
+            {matches.slice(0, visibleCount).map((match) => {
                 const summary = computeSummary(match)
                 return (
                     <div className="relative cursor-pointer" key={match.id} onClick={() => navigate(`/match/${match.id}`)}>
@@ -184,6 +215,11 @@ function MatchSummaryCard() {
                     </div>
                 )
             })}
+            {visibleCount < matches.length && (
+                <div className="mt-4 text-center">
+                    <button onClick={() => setVisibleCount((prev) => prev + 5)} className="px-3 py-1 rounded-md border border-green-600 hover:bg-green-700 bg-green-800 text-green-100 transition-all"> Voir plus </button>
+                </div>
+            )}
         </>
     )
 }

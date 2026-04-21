@@ -16,22 +16,10 @@ function Home() {
 
   const fetchData = async () => {
     try {
-      // const userResponse = await getUser()
-      const userResponse = { data: { equipe: { name: "Loïck" } } }
-      
+      const userResponse = await getUser()
       setUser(userResponse.data)
       
-      // const matchesResponse = await getMatchesSummary({id: userResponse.data.id})
-
-      const matchesResponse = {
-        data: [
-          { id: 0, score: "3-1", equipe1: { id: "0", name: "William" }, equipe2: { id: "0", name: "Loïck" } },
-          { id: 1, score: "0-2", equipe1: { id: "0", name: "Lebeuzz" }, equipe2: { id: "0", name: "Loïck" } },
-          { id: 2, score: "1-1", equipe1: { id: "0", name: "Maxime" }, equipe2: { id: "0", name: "Loïck" } },
-          { id: 3, score: "4-1", equipe1: { id: "0", name: "Loïck" }, equipe2: { id: "0", name: "Cemon" } },
-          { id: 4, score: "2-3", equipe1: { id: "0", name: "Loïck" }, equipe2: { id: "0", name: "Victor" } }
-        ]
-      }
+      const matchesResponse = await getMatchesSummary({id: userResponse.data.id})
       setMatches(matchesResponse.data)
 
     } catch (err) {
