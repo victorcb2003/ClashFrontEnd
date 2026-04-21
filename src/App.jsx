@@ -7,7 +7,6 @@ import Home from "./pages/Home";
 import Tournois from "./pages/Tournois";
 import EquipeDisplay from "./pages/EquipeDisplay";
 import Equipe from "./pages/Equipe";
-import EquipeDisplay from "./pages/EquipeDisplay";
 import MatchDisplay from "./pages/MatchDisplay";
 import "./App.css"
 import Match from "./pages/Match";
@@ -24,7 +23,6 @@ function App() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    // Initialiser les interceptors avec la fonction navigate
     setInterceptorNavigate(navigate)
     setupInterceptors()
   }, [navigate])
