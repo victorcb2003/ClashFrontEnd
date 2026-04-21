@@ -126,11 +126,19 @@ function MatchSummaryCard() {
                 const summary = computeSummary(match)
                 return (
                     <div className="relative cursor-pointer" key={match.id} onClick={() => navigate(`/match/${match.id}`)}>
-                        <div
-                            className={`absolute border-l-4 border-t-4 border-r-4 px-4 py-2 border border-b-0 rounded-t-2xl w-full min-w-[380px] xl:min-w-[650px] inset-0 opacity-85 -z-10
-                            ${summary.status == "win" ? "bg-green-50 border-green-800" : ""}
-                            ${summary.status == "lose" ? "bg-red-50 border-red-800" : ""}
-                            ${summary.status == "tie" ? "bg-gray-50 border-gray-800" : ""}`}
+                        <div className={`absolute border-l-4 border-t-4 border-r-4 px-4 py-2 border border-b-0 rounded-t-2xl w-full min-w-[380px] xl:min-w-[650px] inset-0 opacity-85 -z-10 backdrop-blur-lg`}
+                            style={{
+                                backgroundColor: `
+                                    ${match.status == "win" ? "hsla(130, 45%, 15%, 0.75)" : ""}
+                                    ${match.status == "loose" ? "hsla(10, 55%, 15%, 0.75)" : ""}
+                                    ${match.status == "tie" ? "hsla(0, 0%, 15%, 0.75)" : ""}
+                                `,
+                                borderColor: `
+                                    ${match.status == "win" ? "hsl(130, 45%, 75%)" : ""}
+                                    ${match.status == "loose" ? "hsl(10, 55%, 75%)" : ""}
+                                    ${match.status == "tie" ? "hsl(0, 0%, 65%)" : ""}
+                                `
+                            }}
                         />
 
                         <div className="px-4 py-2 z-10 rounded-t-2xl w-full min-w-[380px] xl:min-w-[650px]">

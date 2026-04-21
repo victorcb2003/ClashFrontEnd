@@ -10,10 +10,12 @@ function Tournois() {
     const [currentTournaments, setCurrentTournaments] = useState([])
     const [futurTournaments, setFuturTournaments] = useState([])
     const [myTournaments, setMyTournaments] = useState([])
+    const [finishedTournaments, setFinishedTournaments] = useState([])
 
-    const [visibleMy, setVisibleMy] = useState(5)
-    const [visibleCurrent, setVisibleCurrent] = useState(5)
-    const [visibleFuture, setVisibleFuture] = useState(5)
+    const [visibleMy, setVisibleMy] = useState(3)
+    const [visibleCurrent, setVisibleCurrent] = useState(3)
+    const [visibleFuture, setVisibleFuture] = useState(3)
+    const [visibleFinished, setVisibleFinished] = useState(3)
 
     const [currentUser, setCurrentUser] = useState(null)
     const [matches, setMatches] = useState({})
@@ -47,8 +49,9 @@ function Tournois() {
 
             await Promise.all(
                 tournamentsList.map(async (t) => {
-                    const res = await findTournoisById(t.id )
-                    matchesByTournament[t.id] = res
+                    const res = await findByTournoisId({ id: t.id })
+                    matchesByTournament[t.id] = res.data.matchs
+
                 })
             )
 
@@ -67,6 +70,7 @@ function Tournois() {
         const my = []
         const current = []
         const future = []
+        const finished = []
 
         tournamentsList.forEach(t => {
             const isMine = t.Organisateurs.id === user.id
@@ -103,7 +107,7 @@ function Tournois() {
     const handleSeeMore = (type) => {
         switch (type) {
             case "My":
-                const nextVisibleMy = visibleMy + 5
+                const nextVisibleMy = visibleMy + 3
 
                 const myTournamentsToFetch = myTournaments.slice(
                     visibleMy,
@@ -113,7 +117,7 @@ function Tournois() {
                 fetchMatchesForTournaments(myTournamentsToFetch)
                 break
             case "Current":
-                const nextVisibleCurrent = visibleCurrent + 5
+                const nextVisibleCurrent = visibleCurrent + 3
 
                 const currentTournamentsToFetch = currentTournaments.slice(
                     visibleCurrent,
@@ -123,7 +127,7 @@ function Tournois() {
                 fetchMatchesForTournaments(currentTournamentsToFetch)
                 break
             case "Future":
-                const nextVisibleFuture = visibleCurrent + 5
+                const nextVisibleFuture = visibleCurrent + 3
 
                 const futureTournamentsToFetch = futurTournaments.slice(
                     visibleFuture,
@@ -145,41 +149,41 @@ function Tournois() {
         <>
             <div className="relative min-h-screen w-full overflow-hidden">
                 <div className="absolute inset-0 z-0 pointer-events-none">
-                    <img src="/Pelouse.png" alt="background" className="fixed w-full h-full object-cover brightness-50" />
+                    <img src="/Pelouse.png" alt="background" className="fixed w-full h-full object-cover brightness-75" />
                 </div>
                 <Sidebar />
 
                 <div className="relative z-10 min-h-screen w-full pl-16 py-6">
                     {myTournaments.length > 0 && (
                         <div className="flex flex-col gap-4 px-12 py-4">
-                            <p className="font-bold text-2xl text-green-400">Mes tournois</p>
+                            <p className="font-bold text-2xl text-green-100">Mes tournois</p>
                             {myTournaments.slice(0, visibleMy).map((tournament) => (
-                                <TournamentSummaryCard key={tournament.id} tournament={tournament} />
+                                <TournamentSummaryCard key={tournament.id} tournament={tournament} matches={matches[tournament.id]} />
                             ))}
-                            {visibleMy < myTournaments.length && (
-                                <div className="flex justify-center mt-4">
-                                    <button onClick={() => handleSeeMore("My")} className="px-4 py-2 rounded-md border border-green-500 text-green-500 hover:bg-green-100" >Voir plus</button>
-                                </div>
-                            )}
+                            <div className="flex gap-3 justify-center mt-4">
+                                {visibleMy < myTournaments.length && (
+                                    <button onClick={() => handleSeeMore("My")} className="px-3 py-1 rounded-md border border-green-600 hover:bg-green-700 bg-green-800 text-green-100 transition-all" >Voir plus</button>
+                                )}
+                                {currentUser?.type === "Organisateurs" &&
+                                    <button onClick={() => handleModal()} className="px-3 py-1 rounded-md border border-green-600 hover:bg-green-700 bg-green-800 text-green-100 transition-all">Créer un évenement</button>
+                                }
+                            </div>
                         </div>
 
                     )}
-                    <div className="flex justify-center items-center">
-                        <button onClick={() => handleModal()} className="px-3 py-1 rounded-md border-2 border-green-600 bg-green-100 text-green-800 font-semibold">Créer un évenement</button>
-                    </div>
 
                     {myTournaments.length > 0 && currentTournaments.length > 0 && (
                         <span className="block my-10 border-b border-green-500/40 w-4/5 mx-auto" />
                     )}
                     {currentTournaments.length > 0 && (
                         <div className="flex flex-col gap-4 px-12 py-4">
-                            <p className="font-bold text-2xl text-green-400">Tournois en cours</p>
+                            <p className="font-bold text-2xl text-green-100">Tournois en cours</p>
                             {currentTournaments.slice(0, visibleCurrent).map((tournament) => (
-                                <TournamentSummaryCard key={tournament.id} tournament={tournament} />
+                                <TournamentSummaryCard key={tournament.id} tournament={tournament} matches={matches[tournament.id]} />
                             ))}
                             {visibleCurrent < currentTournaments.length && (
                                 <div className="flex justify-center mt-4">
-                                    <button onClick={() => handleSeeMore("Current")} className="px-4 py-2 rounded-md border border-green-500 text-green-500 hover:bg-green-100" >Voir plus</button>
+                                    <button onClick={() => handleSeeMore("Current")} className="px-3 py-1 rounded-md border border-green-600 hover:bg-green-700 bg-green-800 text-green-100 transition-all" >Voir plus</button>
                                 </div>
                             )}
                         </div>
@@ -190,45 +194,48 @@ function Tournois() {
                     )}
                     {futurTournaments.length > 0 && (
                         <div className="flex flex-col gap-4 px-12 py-4">
-                            <p className="font-bold text-2xl text-green-400">Tournois à venir</p>
+                            <p className="font-bold text-2xl text-green-100">Tournois à venir</p>
                             {futurTournaments.slice(0, visibleCurrent).map((tournament) => (
-                                <TournamentSummaryCard key={tournament.id} tournament={tournament} />
+                                <TournamentSummaryCard key={tournament.id} tournament={tournament} matches={matches[tournament.id]} />
                             ))}
                             {visibleFuture < futurTournaments.length && (
                                 <div className="flex justify-center mt-4">
-                                    <button onClick={() => handleSeeMore("Future")} className="px-4 py-2 rounded-md border border-green-500 text-green-500 hover:bg-green-100" >Voir plus</button>
+                                    <button onClick={() => handleSeeMore("Future")} className="px-3 py-1 rounded-md border border-green-600 hover:bg-green-700 bg-green-800 text-green-100 transition-all" >Voir plus</button>
                                 </div>
                             )}
                         </div>
                     )}
                 </div>
-
             </div>
+
+            {/* MODAL */}
             <ModalLayout isOpen={modalOpen} handleModal={handleModal}>
-                <div className="w-[450px] min-w-[380px] bg-orange-50 border-2 border-orange-200 shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center">
-                    <p className="font-semibold text-xl mb-12 flex justify-center">Créer un tournoi</p>
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+                <div className="relative">
+                    <div className="absolute inset-0 w-[450px] min-w-[380px] -z-10 shadow-xl border-green-700 rounded-lg border-2 backdrop-blur-sm" style={{ backgroundColor: "hsla(130, 25%, 13%, 0.65)" }} />
+                    <div className="w-[450px] min-w-[380px] text-green-50 px-10 py-8 flex flex-col justify-center">
+                        <p className="font-semibold text-xl mb-12 flex justify-center">Créer un tournoi</p>
+                        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+                            <div className="flex flex-col gap-2">
+                                <label className="text-md font-medium">Nom du tournoi</label>
+                                <input type="text" required placeholder="Nom du tournoi..." value={modalNom} onChange={(e) => setModalNom(e.target.value)} className="px-3 py-2 rounded-sm outline outline-1 outline-green-700 hover:outline-green-600 focus:outline-green-500 focus:outline-2 hover:outline-2" style={{ backgroundColor: "hsl(130, 25%, 20%)" }} />
+                            </div>
 
-                        <div className="flex flex-col gap-2">
-                            <label className="text-md font-medium">Nom du tournoi</label>
-                            <input type="text" required placeholder="Nom du tournoi..." value={modalNom} onChange={(e) => setModalNom(e.target.value)} className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2" />
-                        </div>
+                            <div className="flex flex-col gap-2">
+                                <label className="text-md font-medium">Date de début</label>
+                                <input type="date" required value={modalDate} onChange={(e) => setModalDate(e.target.value)} className="px-3 py-2 rounded-sm outline outline-1 outline-green-700 hover:outline-green-600 focus:outline-green-500 focus:outline-2 hover:outline-2" style={{ backgroundColor: "hsl(130, 25%, 20%)" }} />
+                            </div>
 
-                        <div className="flex flex-col gap-2">
-                            <label className="text-md font-medium">Date de début</label>
-                            <input type="date" required value={modalDate} onChange={(e) => setModalDate(e.target.value)} className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2" />
-                        </div>
+                            <div className="flex flex-col gap-2">
+                                <label className="text-md font-medium">Lieu</label>
+                                <input type="text" required placeholder="Lieu du tournoi..." value={modalLieu} onChange={(e) => setModalLieu(e.target.value)} className="px-3 py-2 rounded-sm outline outline-1 outline-green-700 hover:outline-green-600 focus:outline-green-500 focus:outline-2 hover:outline-2" style={{ backgroundColor: "hsl(130, 25%, 20%)" }} />
+                            </div>
 
-                        <div className="flex flex-col gap-2">
-                            <label className="text-md font-medium">Lieu</label>
-                            <input type="text" required placeholder="Lieu du tournoi..." value={modalLieu} onChange={(e) => setModalLieu(e.target.value)} className="px-3 py-2 rounded-sm outline outline-1 outline-orange-800 hover:outline-2" />
-                        </div>
-
-                        <div className="flex justify-end gap-4 mt-8">
-                            <button type="button" onClick={handleModal} className="px-4 py-2 rounded-md border border-orange-300 hover:bg-orange-100" >Annuler</button>
-                            <button type="submit" className="px-4 py-2 rounded-md bg-orange-500 text-white hover:bg-orange-600" >Créer</button>
-                        </div>
-                    </form>
+                            <div className="flex justify-end gap-4 mt-8">
+                                <button type="button" onClick={handleModal} className="px-3 py-1 rounded-md border border-green-600 hover:bg-green-800 bg-green-900 text-green-100 transition-all" >Annuler</button>
+                                <button type="submit" className="px-3 py-1 rounded-md border border-green-600 hover:bg-green-500 bg-green-600 text-green-50 transition-all" >Créer</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
 
             </ModalLayout >
