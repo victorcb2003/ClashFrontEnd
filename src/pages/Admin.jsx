@@ -87,7 +87,7 @@ export default function Admin() {
 				<div className="w-full max-w-6xl mx-auto space-y-6">
 					<div className="backdrop-blur-md bg-white/20 rounded-xl border border-white/10 p-6 shadow-lg">
 						<h1 className="text-3xl font-bold text-white">Administration</h1>
-						<p className="text-white/70">Gestion des comptes et vérifications</p>
+						<p className="text-white/70">Vérifications des utilisateurs</p>
 					</div>
 
 					<div className="backdrop-blur-md bg-white/20 rounded-xl border border-white/10 p-6 shadow-lg">
