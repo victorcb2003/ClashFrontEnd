@@ -46,7 +46,12 @@ export default function Match() {
                 setEquipes(equipesData.equipes || [])
             } catch (error) {
                 console.error("Erreur lors du chargement des équipes:", error)
-            }
+            }const data = await findAllEquipe()
+            // findAllEquipe retourne { Equipes: [...] }
+            const liste = data?.Equipes ?? data ?? []
+            // Exclure celles déjà inscrites
+            const inscritesIds = equipes.map(e => e.id)
+            setAllEquipes(liste.filter(e => !inscritesIds.includes(e.id)))
         })()
     }, [])
 

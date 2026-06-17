@@ -13,11 +13,21 @@ export const setupInterceptors = () => {
     axios.interceptors.response.use(
         (response) => response,
         (error) => {
+            console.log("Interceptor triggered", {
+                status: error.response?.status,
+                url: error.config?.url,
+                navigate: !!navigate,
+                currentPath: window.location.pathname,
+                isExcluded: excludedPaths.includes(window.location.pathname)
+            })
             if (error.response?.status === 401) {
                 const currentPath = window.location.pathname
-                const isExcluded = excludedPaths.some(path => currentPath.startsWith(path))
+                const isExcluded = excludedPaths.includes(currentPath)
                 
+                console.log(isExcluded)
+
                 if (navigate && !isExcluded) {
+                    console.log("Calling navigate('/login')")
                     navigate('/login')
                 }
             }

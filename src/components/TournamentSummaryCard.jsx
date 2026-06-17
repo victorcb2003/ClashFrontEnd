@@ -67,40 +67,7 @@ function TournamentSummaryCard({ tournament, matches = [], type = "basic" }) {
             {matches.length != 0 ?
                <div className="flex w-full mt-6 justify-center items-center gap-4 px-6">
                   <div className="flex flex-col gap-2 w-1/2">
-                     {type == "finished" ?
-                        <>
-                           <p className="font-bold">Final</p>
-                           <MatchSummaryCard matches={[currentMatch]} />
-                        </>
-                        :
-                        <>
-                           {Object.keys(currentMatch).length != 0 ? <>
-                              <p className="font-bold">Match actuel</p>
-                              <MatchSummaryCard matches={[currentMatch]} />
-                           </>
-                              :
-                              <p className="font-bold">Aucun match actuel</p>
-                           }
-                        </>
-                     }
-                  </div>
-                  <div className="flex flex-col gap-2 w-1/4">
-                     {futurMatch.length != 0 ? <>
-                        <p className="font-bold">Match à venirs</p>
-                        <MatchSummaryCard matches={futurMatch} size="small" />
-                     </>
-                        :
-                        <p className="font-bold">Aucun match à venir</p>
-                     }
-                  </div>
-                  <div className="flex flex-col gap-2 w-1/4">
-                     {finishedMatch.length != 0 ? <>
-                        <p className="font-bold">Match terminé</p>
-                        {/* <MatchSummaryCard matches={finishedMatch} size="small" /> */}
-                     </>
-                        :
-                        <p className="font-bold">Aucun match terminé</p>
-                     }
+
                   </div>
                </div>
                :
