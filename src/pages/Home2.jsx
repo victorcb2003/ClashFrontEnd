@@ -4,10 +4,8 @@ import NewsCard from "../components/NewsCard"
 import Sidebar from "../components/Sidebar"
 import { useEffect, useState } from "react"
 import { getUser } from "../services/authService"
-import { getEquipeById } from "../services/equipeService"
 
 function Home() {
-  const [matches, setMatches] = useState([]) 
   const [user, setUser] = useState({})
 
   useEffect(() => {
@@ -19,8 +17,6 @@ function Home() {
       const userResponse = await getUser()
       setUser(userResponse.data)
       
-      const matchesResponse = await getMatchesSummary({id: userResponse.data.id})
-      setMatches(matchesResponse.data)
 
     } catch (err) {
       console.error("Erreur lors de la récupération des informations", err)
@@ -45,12 +41,8 @@ function Home() {
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-4">
-            <MatchSummaryCard matches={matches} user={user} />
+            <MatchSummaryCard/>
           </div>
-          <div>
-            <NewsCard />
-          </div>
-
         </div>
 
       </div>

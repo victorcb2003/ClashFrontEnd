@@ -134,7 +134,7 @@ function MatchSummaryCard() {
         return {
             team1Name: team1?.nom || "Équipe 1",
             team2Name: team2?.nom || "Équipe 2",
-            tournoiName: match?.Tournois?.nom || match?.tournoi_nom || "Match amical",
+            tournoiName: match?.nom || "Match amical",
             score1,
             score2,
             leftScorers,

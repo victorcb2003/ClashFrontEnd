@@ -77,7 +77,7 @@ export default function MatchDisplay() {
         if (!editBut.User_id) {
             errors.push("Veuillez selectionner un joueur")
         }
-        if (![0, 1].includes(editBut.Type_but)) {
+        if (![0, 1].includes(editBut.Type_But)) {
             errors.push("Veuillez selectionner un type de but")
         }
         if (!editBut.date_heure) {
@@ -92,7 +92,7 @@ export default function MatchDisplay() {
 
         const date_heure = formaDate(date)
 
-        const response = await updateBut({ But_id: editBut.But_id, date_heure: date_heure, User_id: editBut.User_id, Type_But: editBut.Type_But, Match_id: matchId })
+        const response = await updateBut({ But_id: editBut.id, date_heure: date_heure, User_id: editBut.User_id, Type_but: editBut.Type_But, Match_id: matchId })
 
         setEditBut(null)
 
@@ -215,7 +215,7 @@ export default function MatchDisplay() {
                     buts.forEach(but => {
                         if (equipe1Id.includes(but.User_id)) {
                             but1.push(but)
-                        } else if (true) {
+                        } else {
                             but2.push(but)
                         }
                     });
@@ -356,9 +356,10 @@ export default function MatchDisplay() {
                                                         <div className="flex gap-2">
                                                             <button onClick={() => {
                                                                 setEditBut({
+                                                                    id: but.id,
                                                                     User_id: but.User_id,
                                                                     date_heure: (new Date(but.date_heure).getTime() - new Date(match.date_heure).getTime()) / 60000,
-                                                                    Type_but: but.Type_but
+                                                                    Type_But: but.Type_but,
                                                                 })
                                                             }} className="rounded-md bg-white/10 px-2 py-1 text-white hover:bg-white/20">
                                                                 <FaEdit />
@@ -396,7 +397,8 @@ export default function MatchDisplay() {
                                                                 setEditBut({
                                                                     User_id: but.User_id,
                                                                     date_heure: (new Date(but.date_heure).getTime() - new Date(match.date_heure).getTime()) / 60000,
-                                                                    Type_but: but.Type_but
+                                                                    Type_But: but.Type_but,
+                                                                    id: but.id
                                                                 })
                                                             }} className="rounded-md bg-white/10 px-2 py-1 text-white hover:bg-white/20">
                                                                 <FaEdit />
@@ -453,7 +455,6 @@ export default function MatchDisplay() {
                                 required
                                 value={butState}
                                 onChange={e => handleButState(e.target.value)}
-                                defaultValue={"Type de but"}
                                 className="px-3 py-2 rounded-sm outline outline-1 outline-green-800 hover:outline-2 text-black"
                             >
                                 <option value="Type de but" disabled>
@@ -491,7 +492,7 @@ export default function MatchDisplay() {
             </ModalLayout>
 
             <ModalLayout isOpen={!!error} handleModal={() => setError(null)} onClose={() => { setTimer(null) }}>
-                <div className="w-[450px] min-w-[380px] shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center backdrop-blur-sm text-white" style={{ backgroundColor: "hsla(130, 10%, 35%, 0.35)" }}>
+                <div className="w-[450px] min-w-[380px] shadow-xl px-10 py-8 rounded-lg flex flex-col justify-center backdrop-blur-sm text-white z-10" style={{ backgroundColor: "hsla(130, 10%, 35%, 0.35)" }}>
                     <p className="font-semibold text-xl mb-6 flex justify-center text-red-600">Erreur</p>
                     <ul className="space-y-2 mb-6 text-slate-200">
                         {error?.map((e, index) =>
@@ -527,7 +528,6 @@ export default function MatchDisplay() {
                             <select
                                 name="User_id"
                                 value={editBut?.User_id}
-                                defaultValue={editBut?.User_id}
                                 onChange={(e) => { setEditBut({ ...editBut, User_id: e.target.value }) }}
                                 className="px-3 py-2 rounded-sm outline outline-1 outline-green-800 hover:outline-2 text-black"
                             >
@@ -555,7 +555,6 @@ export default function MatchDisplay() {
                             <label className="text-md font-medium">Type de but</label>
                             <select
                                 name="Type_but"
-                                defaultValue={editBut?.Type_but}
                                 value={editBut?.Type_but}
                                 onChange={(e) => { setEditBut({ ...editBut, Type_but: e.target.value }) }}
                                 className="px-3 py-2 rounded-sm outline outline-1 outline-green-800 hover:outline-2 text-black"
@@ -571,7 +570,7 @@ export default function MatchDisplay() {
                                 type="number"
                                 min={0}
                                 max={200}
-                                defaultValue={editBut?.date_heure}
+                                // defaultValue={editBut?.date_heure}
                                 value={editBut?.date_heure}
                                 onChange={(e) => { setEditBut({ ...editBut, date_heure: e.target.value }) }}
                                 className="px-3 py-2 rounded-sm outline outline-1 outline-green-800 hover:outline-2 text-black"

@@ -18,6 +18,7 @@ import { setupInterceptors, setInterceptorNavigate } from "./services/intercepto
 import ConfirmResetPassword from "./pages/ConfirmResetPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Calendrier from "./pages/Calendrier";
+import TournoisDisplay from "./pages/TournoisDisplay";
 
 function App() {
   const navigate = useNavigate()
@@ -34,6 +35,7 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/home" element={<Home2 />} />
       <Route path="/tournois" element={<Tournois />} />
+      <Route path="/tournois/:id" element={<TournoisDisplay />} />
       <Route path="/equipe/:id" element={<EquipeDisplay/>}/>
       <Route path="/equipe" element={<Equipe/>}/>
       <Route path="/match/:id" element={<MatchDisplay/>}/>

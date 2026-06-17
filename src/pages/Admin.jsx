@@ -103,7 +103,7 @@ export default function Admin() {
 
 						<div className="space-y-3">
 							{users.length === 0 && (
-								<div className="text-white/70">Aucun utilisateur à afficher.
+								<div className="text-white/70">Aucun utilisateur en attente de verification.
                                     {console.log(users)}
                                 </div>
 							)}
