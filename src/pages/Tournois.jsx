@@ -15,11 +15,13 @@ export default function Tournois() {
     const [myTournaments, setMyTournaments] = useState([])
     const [currentTournaments, setCurrentTournaments] = useState([])
     const [futurTournaments, setFuturTournaments] = useState([])
+    const [finishedTournaments, setFinishedTournaments] = useState([])
     const [matches, setMatches] = useState({})
 
     const [visibleMy, setVisibleMy] = useState(3)
     const [visibleCurrent, setVisibleCurrent] = useState(3)
     const [visibleFuture, setVisibleFuture] = useState(3)
+    const [visibleFinished, setVisibleFinished] = useState(3)
 
     const [loading, setLoading] = useState(true)
 
@@ -46,12 +48,14 @@ export default function Tournois() {
             ])
             const user = userRes.user[0]
             setCurrentUser(user)
-            const { my, current, future } = filterTournaments(tournoiRes, user)
-            // Charger les matchs des 5 premiers de chaque catégorie
+            const { my, current, future, finished } = filterTournaments(tournoiRes, user)
+            // Charger les matchs des 3 premiers de chaque catégorie
+            console.log(current)
             await fetchMatchesForTournaments([
                 ...my.slice(0, 3),
                 ...current.slice(0, 3),
                 ...future.slice(0, 3),
+                ...finished.slice(0, 3)
             ])
         } catch (err) {
             console.error(err)
@@ -62,16 +66,60 @@ export default function Tournois() {
 
     const fetchMatchesForTournaments = async (list) => {
         if (!list.length) return
+
         try {
             const results = await Promise.all(
                 list.map(async (t) => {
                     const res = await findByTournoisId({ id: t.id })
-                    return { id: t.id, matchs: res?.data?.matchs ?? [] }
+                    return { id: t.id, tournoi: t, matchs: res?.data?.matchs ?? [] }
                 })
             )
+
             const map = {}
-            results.forEach(({ id, matchs }) => { map[id] = matchs })
+            const finished = []
+
+            results.forEach(({ id, tournoi, matchs }) => {
+                map[id] = matchs
+
+                const teams = new Set()
+                matchs.forEach(m => {
+                    if (m.Equipe1_id) teams.add(m.Equipe1_id)
+                    if (m.Equipe2_id) teams.add(m.Equipe2_id)
+                })
+
+                const teamCount = teams.size
+
+                if (teamCount > 1) {
+                    const expectedMatchCount = teamCount - 1
+
+                    if (matchs.length === expectedMatchCount) {
+                        finished.push(tournoi)
+                    }
+                }
+            })
+
             setMatches(prev => ({ ...prev, ...map }))
+
+            if (finished.length) {
+                setFinishedTournaments(prev => {
+                    const ids = new Set(prev.map(t => t.id))
+                    return [
+                        ...finished.filter(t => !ids.has(t.id)),
+                        ...prev
+                    ]
+                })
+
+                const remove = (list) =>
+                    list.filter(t => !finished.some(f => f.id === t.id))
+
+                setMyTournaments(prev => remove(prev))
+                setCurrentTournaments(prev => remove(prev))
+                setFuturTournaments(prev => remove(prev))
+                setVisibleMy(prev => Math.min(prev, myTournaments.length))
+                setVisibleCurrent(prev => Math.min(prev, currentTournaments.length))
+                setVisibleFuture(prev => Math.min(prev, futurTournaments.length))
+            }
+
         } catch (err) {
             console.error("Erreur lors du chargement des matchs", err)
         }
@@ -79,13 +127,14 @@ export default function Tournois() {
 
     const filterTournaments = (list, user) => {
         const now = new Date()
-        const my = [], current = [], future = []
+        const my = [], current = [], future = [], finished = []
 
         list.forEach(t => {
-            if (t.Organisateurs?.id === user.id) {
+            if (t.Organisateurs[0]?.id === user.id) {
                 my.push(t)
                 return
             }
+
             if (new Date(t.date) <= now) current.push(t)
             else future.push(t)
         })
@@ -93,7 +142,9 @@ export default function Tournois() {
         setMyTournaments(my)
         setCurrentTournaments(current)
         setFuturTournaments(future)
-        return { my, current, future }
+        setFinishedTournaments([])
+
+        return { my, current, future, finished }
     }
 
     // ─── Voir plus ────────────────────────────────────────────────────────────
@@ -111,6 +162,10 @@ export default function Tournois() {
             const next = visibleFuture + 3
             fetchMatchesForTournaments(futurTournaments.slice(visibleFuture, next))
             setVisibleFuture(next)
+        } else if (type === "Finished") {
+            const next = visibleFinished + 3
+            fetchMatchesForTournaments(finishedTournaments.slice(visibleFinished, next))
+            setVisibleFinished(next)
         }
     }
 
@@ -208,11 +263,6 @@ export default function Tournois() {
                                 </>
                             )}
 
-                            {/* ── SÉPARATEURS ── */}
-                            {myTournaments.length > 0 && currentTournaments.length > 0 && (
-                                <span className="block my-8 border-b border-green-500/40 w-4/5 mx-auto" />
-                            )}
-
                             {/* ── EN COURS ── */}
                             {currentTournaments.length > 0 && (
                                 <Section
@@ -223,10 +273,6 @@ export default function Tournois() {
                                 />
                             )}
 
-                            {futurTournaments.length > 0 && currentTournaments.length > 0 && (
-                                <span className="block my-8 border-b border-green-500/40 w-4/5 mx-auto" />
-                            )}
-
                             {/* ── À VENIR ── */}
                             {futurTournaments.length > 0 && (
                                 <Section
@@ -234,6 +280,16 @@ export default function Tournois() {
                                     list={futurTournaments}
                                     visible={visibleFuture}
                                     type="Future"
+                                />
+                            )}
+
+                            {/* ── FINIT ── */}
+                            {finishedTournaments.length > 0 && (
+                                <Section
+                                    title="Tournois terminés"
+                                    list={finishedTournaments}
+                                    visible={1000}
+                                    type="Finished"
                                 />
                             )}
 
