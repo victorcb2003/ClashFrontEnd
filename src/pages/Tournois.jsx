@@ -45,9 +45,9 @@ export default function Tournois() {
                 getTournaments(),
             ])
             const user = userRes.user[0]
+            console.log("user", user)
             setCurrentUser(user)
             const { my, current, future } = filterTournaments(tournoiRes, user)
-            // Charger les matchs des 5 premiers de chaque catégorie
             await fetchMatchesForTournaments([
                 ...my.slice(0, 3),
                 ...current.slice(0, 3),
@@ -186,7 +186,7 @@ export default function Tournois() {
                     ) : (
                         <>
                             {/* ── MES TOURNOIS ── */}
-                            {(myTournaments.length > 0 || currentUser?.type === "Organisateurs") && (
+                            {(myTournaments.length > 0 || currentUser?.type === "Organisateurs" || currentUser?.type == "Admin") && (
                                 <>
                                     <Section
                                         title="Mes tournois"
@@ -194,7 +194,7 @@ export default function Tournois() {
                                         visible={visibleMy}
                                         type="My"
                                     />
-                                    {currentUser?.type === "Organisateurs" && (
+                                    {currentUser?.type == "Organisateurs" ||  currentUser?.type == 'Admin' && (
                                         <div className="flex justify-center px-12 mt-2 mb-4">
                                             <button
                                                 onClick={openModal}
